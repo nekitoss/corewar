@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="corewar"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="corewar">
+				<Option output="/nfs/2016/r/rhulam/corewar/corewar" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 corewar"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="corewar/fast">
+				<Option output="/nfs/2016/r/rhulam/corewar/corewar" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 corewar/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libft.a">
+				<Option output="/nfs/2016/r/rhulam/corewar/cmake-build-debug/liblibft.a.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 libft.a"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="libft.a/fast">
+				<Option output="/nfs/2016/r/rhulam/corewar/cmake-build-debug/liblibft.a.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/r/rhulam/corewar/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 libft.a/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/r/rhulam/corewar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/corewar.h">
+			<Option target="corewar"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_atoi.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_bzero.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isalnum.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isalpha.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isascii.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isdigit.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isprint.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_isspace.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_itoa.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstadd.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstdel.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstdelone.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstget_node.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstiter.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstmap.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstnew.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_lstpush_back.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memalloc.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memccpy.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memchr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memcmp.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memcpy.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memdel.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memmove.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_memset.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/convert.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/convert_count.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/do.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/ft_alloc.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/ft_itoa_ubase.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/ft_printf.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/ft_printf.h">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/ft_wcslen.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/fta.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/is.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/not_valid_type.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_c.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_d.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_d_2.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_f.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_o.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_p.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_per.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_s.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_str.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_u.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/print_x.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_printf/zero.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putchar.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putchar_fd.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putendl.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putendl_fd.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putnbr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putnbr_fd.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putstr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_putstr_fd.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strcat.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strchr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strclr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strcmp.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strcpy.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strdel.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strdup.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strequ.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_striter.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_striteri.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strjoin.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strlcat.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strlen.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strmap.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strmapi.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strncat.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strncmp.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strncpy.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strnequ.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strnew.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strnstr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strrchr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strrev.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strsplit.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strstr.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strsub.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_strtrim.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_to_lower_case.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_tolower.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/ft_toupper.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/get_next_line/get_next_line.c">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/get_next_line/get_next_line.h">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/libft/libft.h">
+			<Option target="libft.a"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/main.c">
+			<Option target="corewar"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/op.c">
+			<Option target="corewar"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/op.h">
+			<Option target="corewar"/>
+		</Unit>
+		<Unit filename="/nfs/2016/r/rhulam/corewar/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

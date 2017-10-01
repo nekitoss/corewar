@@ -1,0 +1,125 @@
+#******************************************************************************#
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rhulam <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2016/11/25 17:28:09 by rhulam            #+#    #+#              #
+#    Updated: 2017/05/05 12:23:56 by rhulam           ###   ########.fr        #
+#                                                                              #
+#******************************************************************************#
+
+NAME = libft.a
+PRINTF_PATH = ./ft_printf/
+GET_PATH = ./get_next_line/
+SRC = ft_memset.o \
+    ft_bzero.o \
+    ft_memcpy.o \
+    ft_memccpy.o \
+    ft_memmove.o \
+    ft_memchr.o \
+    ft_memcmp.o \
+    ft_strlen.o \
+    ft_strdup.o \
+    ft_strcpy.o \
+    ft_strncpy.o \
+    ft_strcat.o \
+    ft_strncat.o \
+    ft_strlcat.o \
+    ft_strchr.o \
+    ft_strrchr.o \
+    ft_strstr.o \
+    ft_strnstr.o \
+    ft_strcmp.o \
+    ft_strncmp.o \
+    ft_atoi.o \
+    ft_isalpha.o \
+    ft_isdigit.o \
+    ft_isalnum.o \
+    ft_isascii.o \
+    ft_isprint.o \
+    ft_toupper.o \
+    ft_tolower.o \
+        ft_strtrim.o \
+        ft_strsub.o \
+        ft_strsplit.o \
+        ft_strnew.o \
+        ft_strequ.o \
+        ft_strmapi.o \
+        ft_strmap.o \
+        ft_strjoin.o \
+        ft_striter.o \
+        ft_striteri.o \
+        ft_strnequ.o \
+        ft_strdel.o \
+		ft_strclr.o \
+        ft_putstr.o \
+        ft_putstr_fd.o \
+        ft_putnbr.o \
+        ft_putnbr_fd.o \
+        ft_putendl.o \
+        ft_putendl_fd.o \
+        ft_putchar.o \
+        ft_putchar_fd.o \
+        ft_memdel.o \
+        ft_memalloc.o \
+        ft_itoa.o \
+        ft_lstdelone.o \
+        ft_lstnew.o \
+        ft_lstdel.o \
+        ft_lstadd.o \
+        ft_lstiter.o \
+        ft_lstmap.o \
+			ft_isspace.o \
+			ft_strrev.o \
+			ft_lstget_node.o \
+			ft_lstpush_back.o \
+			ft_to_lower_case.o
+P_SRC = convert.o \
+        do.o \
+        ft_itoa_ubase.o \
+        ft_printf.o \
+        ft_wcslen.o \
+        is.o \
+        print_c.o \
+        print_d.o \
+        print_f.o \
+        print_o.o \
+        print_p.o \
+        print_s.o \
+        print_str.o \
+        print_u.o \
+        print_x.o \
+        print_per.o \
+        not_valid_type.o \
+        ft_alloc.o \
+        convert_count.o \
+        zero.o \
+        print_d_2.o \
+        fta.o
+G_SRC = get_next_line.o
+P_FILES = $(addprefix $(PRINTF_PATH), $(P_SRC))
+G_FILES = $(addprefix $(GET_PATH), $(G_SRC))
+OBJ = $(SRC) $(P_SRC) $(G_SRC)
+FLAGS = -Wall -Wextra -Werror
+$(NAME): $(OBJ)
+		ar rc $(NAME) $(OBJ)
+		ranlib $(NAME)
+
+$(P_SRC): %.o: $(PRINTF_PATH)%.c
+		@$(CC) -c $(FLAGS) -I $(PRINTF_PATH) $< -o $@
+
+$(SRC): %.o: %.c
+		@$(CC) -c $(FLAGS) -I . $< -o $@
+
+$(G_SRC): %.o: $(GET_PATH)%.c
+		@$(CC) -c $(FLAGS) -I $(GET_PATH) $< -o $@
+
+clean:
+		rm -f $(OBJ) libft.h.gch
+
+fclean: clean
+		rm -f $(NAME)
+
+re: fclean all
