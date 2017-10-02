@@ -16,25 +16,32 @@
 # include "op.h"
 # include <fcntl.h>
 
-typedef struct		s_validation
+typedef struct			s_validation
 {
-	int				count_name;
-	int				count_comment;
-}					t_validation;
+	int					count_name;
+	int					count_comment;
+}						t_validation;
 
-typedef	struct 		s_label
+typedef	struct 			s_label
 {
-	char			*name;
-	int 			byte;
-	struct s_label	*next;
-}					t_label;
+	char				*name;
+	int 				byte_num;
+	struct s_label		*next;
+}						t_label;
 
-typedef struct 		s_comands
+typedef struct 			s_commands
 {
-	char 			*comand_name;
-	char 			*label_name;
-	int				codage;
-	int 			size;
-};
+	char	 			*command_name;
+	char	 			*label_name;
+	int					codage;
+	int 				size;
+	struct s_commands	*next;
+}						t_commands;
 
+typedef	struct 			s_asm
+{
+	t_label				*labels;
+	t_commands			*commands;
+	int 				count_byte;
+}						t_asm;
 #endif

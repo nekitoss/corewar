@@ -6,6 +6,33 @@ void error(char *str)
 	exit(1);
 }
 
+t_label		*new_labels()
+{
+	t_label	*ret;
+
+	ret = (t_label*)malloc(sizeof(t_label));
+	ft_bzero(ret, sizeof(t_label));
+	return (ret);
+}
+
+t_commands		*new_commands()
+{
+	t_commands	*ret;
+
+	ret = (t_commands*)malloc(sizeof(t_commands));
+	ft_bzero(ret, sizeof(t_commands));
+	return (ret);
+}
+
+t_asm	*new_struct()
+{
+	t_asm	*ret;
+
+	ret = (t_asm*)malloc(sizeof(t_asm));
+	ret->labels = new_labels();
+	ret->commands = new_commands();
+}
+
 t_validation *new_valid()
 {
 	t_validation *ret;
@@ -50,6 +77,7 @@ char	*read_file(int fd)
 		free(free_ptr);
 		free(s);
 	}
+	ft_printf("%s<-|",str);
 	return (str);
 }
 
@@ -207,13 +235,20 @@ void	del_com(char **s)
 	}
 }
 
-void	valid_code(char *str, header_t *head)
+
+
+void	valid_code(t_asm *masm, char *str, header_t *head)
 {
 	int fdwrite;
 
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
+	//set_memory(masm, str)
+
+
+
+
 	ft_printf("\n----->%s\n", str);
 	write(fdwrite, str, ft_strlen(str));
 	close(fdwrite);
@@ -224,6 +259,7 @@ int main(int argc, char **argv)
 	int fd;
 	char *file;
 	header_t *head;
+	t_asm		*main_struc;
 
 	if (argc <= 1)
 		error("No filename. Usage: ./asm filename.");
@@ -231,7 +267,8 @@ int main(int argc, char **argv)
 	file = read_file(fd);
 	ft_printf("%s\n", file);
 	head = new_head();
-	valid_code(file, head);
+	main_struc = new_struct();
+	valid_code(main_struc, file, head);
 
 
 //	valid = new_valid();

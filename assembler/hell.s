@@ -156,4 +156,4 @@ cc_live:
 
 	st		r3, -1
 cc_live:
-	live	%0    
+	live	%0

@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug"/>
+				<Option working_dir="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug"/>
+				<Option working_dir="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug"/>
+				<Option working_dir="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="untitled1">
-				<Option output="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/untitled1" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug"/>
+				<Option output="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/untitled1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -53,15 +53,15 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled1"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled1"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="untitled1/fast">
-				<Option output="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/untitled1" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug"/>
+				<Option output="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/untitled1" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -75,23 +75,23 @@
 					<Add directory="/Library/Frameworks"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled1/fast"/>
-					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/CLionProjects/CorewaR/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 untitled1/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/asm.h">
+		<Unit filename="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/asm.h">
 			<Option target="untitled1"/>
 		</Unit>
-		<Unit filename="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/libft.h">
+		<Unit filename="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/libft.h">
 			<Option target="untitled1"/>
 		</Unit>
-		<Unit filename="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/main.c">
+		<Unit filename="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/main.c">
 			<Option target="untitled1"/>
 		</Unit>
-		<Unit filename="/nfs/2016/y/yrobotko/CLionProjects/CorewaR/CMakeLists.txt">
+		<Unit filename="/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

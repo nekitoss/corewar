@@ -6,23 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/asm.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/asm.h
 libft.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/libft.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/libft.h
 op.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/op.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/op.h
 fcntl.h
 -
 
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/libft.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/libft.h
 string.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/string.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/string.h
 string.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/string.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/string.h
 stdlib.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/stdlib.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/stdlib.h
 unistd.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/unistd.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/unistd.h
 inttypes.h
 -
 wchar.h
@@ -30,9 +30,9 @@ wchar.h
 stdarg.h
 -
 
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/main.c
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/main.c
 asm.h
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/asm.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/asm.h
 
-/nfs/2016/y/yrobotko/CLionProjects/CorewaR/op.h
+/nfs/2016/y/yrobotko/COREWAR_myteam/assembler/op.h
 
