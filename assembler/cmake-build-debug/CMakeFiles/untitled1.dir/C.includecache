@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/asm.h
+libft.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/libft.h
+op.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/op.h
+fcntl.h
+-
+
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/libft.h
+string.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/string.h
+string.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/string.h
+stdlib.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/stdlib.h
+unistd.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/unistd.h
+inttypes.h
+-
+wchar.h
+-
+stdarg.h
+-
+
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/main.c
+asm.h
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/asm.h
+
+/nfs/2016/y/yrobotko/CLionProjects/CorewaR/op.h
+
