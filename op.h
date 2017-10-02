@@ -57,3 +57,14 @@ typedef struct		header_s
     unsigned int		prog_size;
     char				comment[COMMENT_LENGTH + 1];
 }					header_t;
+
+typedef struct		s_arg
+{
+	int		cnt_arg;
+	int		nm_d;
+	int		nm_n;
+	int		nm_f;
+	int		dump;
+	int		n;
+}					t_arg;
+

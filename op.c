@@ -26,3 +26,9 @@ t_op    op_tab[17] =
 	{"aff", 1, {T_REG}, 16, 2, "aff", 1, 0},
 	{0, 0, {0}, 0, 0, 0, 0, 0}
 };
+
+void	test(void)
+{
+	ft_printf("%s", op_tab[1].name);
+
+}
