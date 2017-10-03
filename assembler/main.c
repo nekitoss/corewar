@@ -130,7 +130,7 @@ int 	count_quotes(char *ptr)
 	return (i);
 }
 
-char	*check_name(char *str, header_t *head)
+char	*check_name(char *str)
 {
 	t_validation *v;
 	char *ptr;
@@ -167,7 +167,7 @@ void cpy(char **dest, char *str)
 	}
 }
 
-char	*check_comment(char *str, header_t *head)
+char	*check_comment(char *str)
 {
 	t_validation *v;
 	char *ptr;
@@ -198,12 +198,12 @@ void valid_head(header_t *head, char **str)
 
 	fdwrite = open("example.cor", O_WRONLY);
 	t = head->prog_name;
-	cpy(&t, check_name(*str, head));
+	cpy(&t, check_name(*str));
 	ft_printf("\nname - %s\n", head->prog_name);
 	if (ft_strlen(t) > 128)
 		error("Too large name");
 	t = head->comment;
-	cpy(&t, check_comment(*str, head));
+	cpy(&t, check_comment(*str));
 	ft_printf("\ncomment - %s\n", head->comment);
 	if (ft_strlen(t) > 2048)
 		error("Too large comment");
@@ -219,6 +219,10 @@ void valid_head(header_t *head, char **str)
 		i++;
 	}
 	(*str)++;
+	while (**str == ' ' || **str == '\n' || **str == '\t')
+		(*str)++;
+	if (**str == '\0')
+		error("ERROR. No comands!");
 }
 
 void	del_com(char **s)
@@ -235,7 +239,34 @@ void	del_com(char **s)
 	}
 }
 
+int		is_command(char *s)
+{
+	int i;
 
+	i = 0;
+//	while (i < 16)
+//	{
+//		//if (ft_strcmp(g_tab[i], s))			/// fix this
+//	}
+}
+
+int 	check_label_or_comm(char *s)			/// label - 0, command - 1
+{
+	while ((*s ==  ' ' || *s == '\t') && *s != '\n')
+		s++;
+	if (!ft_strchr(LABEL_CHARS, *s))
+		error("Lexical error");
+	if (is_command(s))
+		return (1);
+
+}
+
+void	set_memory(t_asm *masm, char *str)
+{
+	int fl;
+
+	fl = check_label_or_comm(str);
+}
 
 void	valid_code(t_asm *masm, char *str, header_t *head)
 {
@@ -244,8 +275,11 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
-	//set_memory(masm, str)
-
+//	while (*str != '\0')				/////check EOF
+//	{
+//		set_memory(masm, str);
+//
+//	}
 
 
 

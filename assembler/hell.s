@@ -1,4 +1,3 @@
-     
 entry:
 	sti		r1, %:beegees_gen, %1
 	sti		r1, %:beegees, %1
@@ -141,19 +140,6 @@ choochoo:
 	st		r3, -1
 cc_live:
 	live	%0
-1:
-	ld		%57672192, r2
-	ld		%318992387, r3
-	ld		%0, r16
-	zjmp	%:choochoo
-
-choochoo:
-	st		r2, 15
-	st		r3, -1
-cc_live:
-	live	%0
-0
-
-	st		r3, -1
+ -1
 cc_live:
 	live	%0
