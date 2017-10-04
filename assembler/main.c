@@ -77,7 +77,6 @@ char	*read_file(int fd)
 		free(free_ptr);
 		free(s);
 	}
-	ft_printf("%s<-|",str);
 	return (str);
 }
 
@@ -239,25 +238,72 @@ void	del_com(char **s)
 	}
 }
 
+int		ft_stcmp(const char *s1, const char *s2)
+{
+	int i;
+
+	i = 0;
+	while (*s1 == *s2 && *s1 && *s2)
+	{
+		i++;
+		s1++;
+		s2++;
+	}
+	if (*s2 == LABEL_CHAR)
+		return (0);
+	return (i);
+}
+
 int		is_command(char *s)
 {
 	int i;
 
 	i = 0;
-//	while (i < 16)
-//	{
-//		//if (ft_strcmp(g_tab[i], s))			/// fix this
-//	}
+	while (i < 16)
+	{
+		if (ft_stcmp((g_tab[i]).name, s) == (int)ft_strlen((g_tab[i]).name))
+			return (i);
+		i++;
+		ft_printf("\n\n");
+	}
+	return (-1);
+}
+
+int		is_label(char *s)
+{
+	while (*s != '\n')
+	{
+		if (!ft_strchr(LABEL_CHARS, *s))
+			break;
+		s++;
+	}
+	if (*s == LABEL_CHAR)
+		return (1);
+	return (0);
 }
 
 int 	check_label_or_comm(char *s)			/// label - 0, command - 1
 {
-	while ((*s ==  ' ' || *s == '\t') && *s != '\n')
+	while (*s ==  ' ' || *s == '\t' || *s == '\n')
 		s++;
 	if (!ft_strchr(LABEL_CHARS, *s))
-		error("Lexical error");
-	if (is_command(s))
+		error("Lexical error in row");
+	if (is_command(s) != -1)
 		return (1);
+	if (is_label(s))
+		return (0);
+	error("Lexical error");
+
+}
+
+void	check_label(t_asm *masm, char **str)
+{
+	char *s;
+
+	s = *str;
+	if (check_label_or_comm(s) == 1)
+		return ;
+
 
 }
 
@@ -265,7 +311,12 @@ void	set_memory(t_asm *masm, char *str)
 {
 	int fl;
 
+	check_label(masm, &str);
 	fl = check_label_or_comm(str);
+	if (fl)
+		ft_printf("COMMAND\n");
+	else
+		ft_printf("LABEL\n");
 }
 
 void	valid_code(t_asm *masm, char *str, header_t *head)
@@ -275,11 +326,14 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
-//	while (*str != '\0')				/////check EOF
-//	{
-//		set_memory(masm, str);
-//
-//	}
+	while (*str != '\0')				/////check EOF
+	{
+		set_memory(masm, str);
+		while (*str != '\n')
+			str++;
+		if (*str == '\n')
+			str++;
+	}
 
 
 
@@ -299,7 +353,6 @@ int main(int argc, char **argv)
 		error("No filename. Usage: ./asm filename.");
 	fd = check_file_name(argv[argc - 1]);
 	file = read_file(fd);
-	ft_printf("%s\n", file);
 	head = new_head();
 	main_struc = new_struct();
 	valid_code(main_struc, file, head);
