@@ -11,7 +11,9 @@ t_label		*new_labels()
 	t_label	*ret;
 
 	ret = (t_label*)malloc(sizeof(t_label));
-	ft_bzero(ret, sizeof(t_label));
+	ret->name = NULL;
+	ret->byte_num = 0;
+	ret->next = NULL;
 	return (ret);
 }
 
@@ -20,7 +22,11 @@ t_commands		*new_commands()
 	t_commands	*ret;
 
 	ret = (t_commands*)malloc(sizeof(t_commands));
-	ft_bzero(ret, sizeof(t_commands));
+	ret->command_name = NULL;
+	ret->label_name = NULL;
+	ret->codage = 0;
+	ret->size = 0;
+	ret->next = NULL;
 	return (ret);
 }
 
@@ -31,6 +37,8 @@ t_asm	*new_struct()
 	ret = (t_asm*)malloc(sizeof(t_asm));
 	ret->labels = new_labels();
 	ret->commands = new_commands();
+	ret->count_byte = 0;
+	return (ret);
 }
 
 t_validation *new_valid()
@@ -249,22 +257,23 @@ int		ft_stcmp(const char *s1, const char *s2)
 		s1++;
 		s2++;
 	}
-	if (*s2 == LABEL_CHAR)
+	if (*s2 == LABEL_CHAR || *s2 != ' ')
 		return (0);
 	return (i);
 }
 
 int		is_command(char *s)
 {
-	int i;
+	int		i;
+	char	*st;
 
 	i = 0;
 	while (i < 16)
 	{
-		if (ft_stcmp((g_tab[i]).name, s) == (int)ft_strlen((g_tab[i]).name))
+		st = (g_tab[i]).name;
+		if (ft_stcmp(st , s) > 0 && (ft_stcmp(st, s) == (int)ft_strlen(st)))
 			return (i);
 		i++;
-		ft_printf("\n\n");
 	}
 	return (-1);
 }
@@ -288,23 +297,86 @@ int 	check_label_or_comm(char *s)			/// label - 0, command - 1
 		s++;
 	if (!ft_strchr(LABEL_CHARS, *s))
 		error("Lexical error in row");
-	if (is_command(s) != -1)
-		return (1);
 	if (is_label(s))
+	{
+		ft_printf("LABEL");
 		return (0);
+	}
+	if (is_command(s) != -1)
+	{
+		ft_printf("COMMAND");
+		return (1);
+	}
 	error("Lexical error");
+}
+
+char	*get_lb_name(char *s)
+{
+	char	*str;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (*s ==  ' ' || *s == '\t' || *s == '\n')
+		s++;
+	while (ft_strchr(LABEL_CHARS, s[i]))
+		i++;
+	str = (char*)malloc(sizeof(char) * (i + 1));
+	while (j < i)
+	{
+		str[j] = s[j];
+		j++;
+	}
+	ft_printf("str = %s\n", str);
+	return (str);
+}
+
+int		add_label(t_asm *masm, char *s)
+{
+	t_label	*lb;
+
+	lb = masm->labels;
+	if (lb->byte_num != -1)
+	{
+		while (lb->next)
+			lb = lb->next;
+		lb->next = new_labels();
+		lb = lb->next;
+	}
+	lb->name = get_lb_name(s);
+	lb->byte_num = masm->count_byte;
+	return ((int)ft_strlen(lb->name));
+}
+
+void	check_command(t_asm *masm, char **str)
+{
 
 }
 
 void	check_label(t_asm *masm, char **str)
 {
 	char *s;
+	int i;
 
 	s = *str;
 	if (check_label_or_comm(s) == 1)
 		return ;
-
-
+	i = add_label(masm, s);
+	(*str) += i + 1;
+	while (**str != LABEL_CHAR)
+		(*str)++;
+	(*str)++;
+	while (**str ==  ' ' || **str == '\t')
+		(*str)++;
+	if (**str == '\n')
+	{
+		(*str)++;
+		return ;
+	}
+	s = *str;
+	if (check_label_or_comm(s))
+		check_command(masm, str);
 }
 
 void	set_memory(t_asm *masm, char *str)
@@ -312,11 +384,11 @@ void	set_memory(t_asm *masm, char *str)
 	int fl;
 
 	check_label(masm, &str);
-	fl = check_label_or_comm(str);
-	if (fl)
-		ft_printf("COMMAND\n");
-	else
-		ft_printf("LABEL\n");
+	//fl = check_label_or_comm(str);
+	//if (fl)
+		//ft_printf("COMMAND\n");
+	//else
+		//ft_printf("LABEL\n");
 }
 
 void	valid_code(t_asm *masm, char *str, header_t *head)
@@ -344,9 +416,9 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 
 int main(int argc, char **argv)
 {
-	int fd;
-	char *file;
-	header_t *head;
+	int			fd;
+	char		*file;
+	header_t	*head;
 	t_asm		*main_struc;
 
 	if (argc <= 1)
@@ -355,6 +427,7 @@ int main(int argc, char **argv)
 	file = read_file(fd);
 	head = new_head();
 	main_struc = new_struct();
+	main_struc->labels->byte_num = -1;
 	valid_code(main_struc, file, head);
 
 
