@@ -1,9 +1,11 @@
-entry:
-	sti		r1, %:beegees_gen, %1
-	sti		r1, %:beegees, %1
+	  	ti r1, %:live, %1
+		and r1, %0, r1
 
-wall_prep:
-	ld		%0, r2
+live:
+		live %1
+		zjmp %:live
+ 
+ld		%0, r2
 	ld		%0, r16
 
 wall:

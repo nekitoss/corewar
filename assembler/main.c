@@ -88,6 +88,26 @@ char	*read_file(int fd)
 	return (str);
 }
 
+unsigned int		reverse_bit(unsigned int a)
+{
+	unsigned int	b;
+	int				i;
+
+	i = 0;
+	b = 0;
+	while (i < 3)
+	{
+		if (i)
+			a = a >> 8;
+		b = b | (a & 255);
+		b = b << 8;
+		i++;
+	}
+	a = a >> 8;
+	b = b | (a & 255);
+	return (b);
+}
+
 header_t	*new_head()
 {
 	header_t *ret;
@@ -96,7 +116,7 @@ header_t	*new_head()
 	ft_bzero(ret->prog_name, sizeof(char) * (PROG_NAME_LENGTH + 1));
 	ft_bzero(ret->comment, sizeof(char) * (COMMENT_LENGTH + 1));
 	ret->prog_size = 0;
-	ret->magic = 0xf383ea00;
+	ret->magic = reverse_bit(COREWAR_EXEC_MAGIC);
 	return (ret);
 }
 
@@ -311,6 +331,7 @@ int 	check_label_or_comm(char *s)			/// label - 0, command - 1
 		return (1);
 	}
 	error("Lexical error");
+	return (0);
 }
 
 char	*get_lb_name(char *s)
@@ -335,41 +356,17 @@ char	*get_lb_name(char *s)
 	return (str);
 }
 
-char		*str_to_lower(char *s)
+int			check_repeat(t_label *lb, char *s)
 {
-	char	*ret;
-	int		i;
-
-	i = 0;
-	ret = (char*)malloc(sizeof(char) * (ft_strlen(s) + 1));
-	while (*s != '\0')
-	{
-		ret[i] = (char)ft_tolower((int)(*s));
-		i++;
-		s++;
-	}
-	ret[i] = '\0';
-	return (ret);
-}
-
-void		check_repeat(t_label *lb, char *s)
-{
-	char	*str1;
-	char	*str2;
-
 	if (!(lb->name))
-		return ;
-	str1 = str_to_lower(s);
+		return (0);
 	while (lb)
 	{
-		str2 = str_to_lower(lb->name);
-		if (ft_strequ(str1, str2))
-		{
-			ft_printf("s1 %s, s2 %s\n", str1, str2);
-			error("ERROR. label can not have same name.");
-		}
+		if (ft_strequ(s, lb->name))
+			return (1);
 		lb = lb->next;
 	}
+	return (0);
 }
 
 int		add_label(t_asm *masm, char *s)
@@ -377,7 +374,8 @@ int		add_label(t_asm *masm, char *s)
 	t_label	*lb;
 
 	lb = masm->labels;
-	check_repeat(lb, get_lb_name(s));
+	if (check_repeat(lb, get_lb_name(s)))
+		return (-1);
 	if (lb->byte_num != -1)
 	{
 		while (lb->next)
@@ -390,13 +388,25 @@ int		add_label(t_asm *masm, char *s)
 	return ((int)ft_strlen(lb->name));
 }
 
+void	check_separator(char *s)
+{
+
+}
+
 void	check_command(t_asm *masm, char **str)
 {
 	char	*s;
+	int 	index;
 
 	s = *str;
 	if (!check_label_or_comm(s))
 		return ;
+	index = is_command(s);
+	//check_separator(s);
+
+
+
+
 
 	while (**str != '\n')
 		(*str)++;
@@ -412,6 +422,8 @@ int			check_label(t_asm *masm, char **str)
 	if (check_label_or_comm(s) == 1)
 		return (1);
 	i = add_label(masm, s);
+	if (i == -1)
+		return (0);
 	(*str) += i + 1;
 	while (**str != LABEL_CHAR)
 		(*str)++;
@@ -426,15 +438,26 @@ int			check_label(t_asm *masm, char **str)
 //		check_command(masm, str);
 }
 
-void	valid_code(t_asm *masm, char *str, header_t *head)
+int		is_empty(char *s)
+{
+	ft_printf("-%s\n", s);
+	while ((*s == ' ' || *s == '\t') && *s != '\n')
+		s++;
+	if (*s == '\0')
+		return (1);
+	return (0);
+}
+
+void	valid_code(t_asm *masm, char *str, header_t *head)			///ERROR
 {
 	int fdwrite;
 
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
-	while (*str != '\0')				/////check EOF
+	while (*str != '\0' && !is_empty(str))				/////check EOF
 	{
+		printf("-->%d\n", is_empty(str));
 		if (check_label(masm, &str))
 			check_command(masm, &str);
 		while (*str != '\n')
