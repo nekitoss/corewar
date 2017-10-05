@@ -251,13 +251,15 @@ int		ft_stcmp(const char *s1, const char *s2)
 	int i;
 
 	i = 0;
+//	ft_printf("strcmp %.18s\n", s1);
+//	ft_printf("strcmp %.18s\n", s2);
 	while (*s1 == *s2 && *s1 && *s2)
 	{
 		i++;
 		s1++;
 		s2++;
 	}
-	if (*s2 == LABEL_CHAR || *s2 != ' ')
+	if (*s1 && *s2 == LABEL_CHAR)
 		return (0);
 	return (i);
 }
@@ -293,18 +295,19 @@ int		is_label(char *s)
 
 int 	check_label_or_comm(char *s)			/// label - 0, command - 1
 {
+	//ft_printf("before-> %.18s\n", s);
 	while (*s ==  ' ' || *s == '\t' || *s == '\n')
 		s++;
 	if (!ft_strchr(LABEL_CHARS, *s))
 		error("Lexical error in row");
 	if (is_label(s))
 	{
-		ft_printf("LABEL");
+		ft_printf("LABEL\n");
 		return (0);
 	}
 	if (is_command(s) != -1)
 	{
-		ft_printf("COMMAND");
+		ft_printf("COMMAND\n");
 		return (1);
 	}
 	error("Lexical error");
@@ -332,11 +335,49 @@ char	*get_lb_name(char *s)
 	return (str);
 }
 
+char		*str_to_lower(char *s)
+{
+	char	*ret;
+	int		i;
+
+	i = 0;
+	ret = (char*)malloc(sizeof(char) * (ft_strlen(s) + 1));
+	while (*s != '\0')
+	{
+		ret[i] = (char)ft_tolower((int)(*s));
+		i++;
+		s++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
+void		check_repeat(t_label *lb, char *s)
+{
+	char	*str1;
+	char	*str2;
+
+	if (!(lb->name))
+		return ;
+	str1 = str_to_lower(s);
+	while (lb)
+	{
+		str2 = str_to_lower(lb->name);
+		if (ft_strequ(str1, str2))
+		{
+			ft_printf("s1 %s, s2 %s\n", str1, str2);
+			error("ERROR. label can not have same name.");
+		}
+		lb = lb->next;
+	}
+}
+
 int		add_label(t_asm *masm, char *s)
 {
 	t_label	*lb;
 
 	lb = masm->labels;
+	check_repeat(lb, get_lb_name(s));
 	if (lb->byte_num != -1)
 	{
 		while (lb->next)
@@ -351,17 +392,25 @@ int		add_label(t_asm *masm, char *s)
 
 void	check_command(t_asm *masm, char **str)
 {
+	char	*s;
 
+	s = *str;
+	if (!check_label_or_comm(s))
+		return ;
+
+	while (**str != '\n')
+		(*str)++;
+	//ft_printf("??|-> %s", *str);
 }
 
-void	check_label(t_asm *masm, char **str)
+int			check_label(t_asm *masm, char **str)
 {
-	char *s;
-	int i;
+	char	*s;
+	int		i;
 
 	s = *str;
 	if (check_label_or_comm(s) == 1)
-		return ;
+		return (1);
 	i = add_label(masm, s);
 	(*str) += i + 1;
 	while (**str != LABEL_CHAR)
@@ -370,25 +419,11 @@ void	check_label(t_asm *masm, char **str)
 	while (**str ==  ' ' || **str == '\t')
 		(*str)++;
 	if (**str == '\n')
-	{
-		(*str)++;
-		return ;
-	}
-	s = *str;
-	if (check_label_or_comm(s))
-		check_command(masm, str);
-}
-
-void	set_memory(t_asm *masm, char *str)
-{
-	int fl;
-
-	check_label(masm, &str);
-	//fl = check_label_or_comm(str);
-	//if (fl)
-		//ft_printf("COMMAND\n");
-	//else
-		//ft_printf("LABEL\n");
+		return (0);
+	return (1);
+//	s = *str;
+//	if (check_label_or_comm(s))
+//		check_command(masm, str);
 }
 
 void	valid_code(t_asm *masm, char *str, header_t *head)
@@ -400,7 +435,8 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 	valid_head(head, &str);
 	while (*str != '\0')				/////check EOF
 	{
-		set_memory(masm, str);
+		if (check_label(masm, &str))
+			check_command(masm, &str);
 		while (*str != '\n')
 			str++;
 		if (*str == '\n')
