@@ -10,8 +10,6 @@ int ft_exit(char *str)
 
 
 
-
-
 int main(int argc, char **argv)
 {
 	if(argc == 1)

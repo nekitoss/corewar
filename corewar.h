@@ -22,6 +22,12 @@ void		test(void);
 int			ft_exit(char *str);
 void		ft_init_struct(t_arg **ptr);
 int			vm_valid(int argc, char **argv);
-int			hndl_valid_file(int argc, char **argv, t_arg *ptr, char *str);
+int			hndl_valid_file(char **argv, t_arg *ptr);
+int			valid_filename(char **argv, t_arg *ptr);
+void		sv_path_player(char *argv, t_arg *ptr);
+int			find_ext_to_end(char *argv);
+int			sv_number_player(char *argv, t_arg *ptr);
+void		set_num_player(t_arg *ptr);
+
 
 #endif

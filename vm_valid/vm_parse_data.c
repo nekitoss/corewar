@@ -6,65 +6,87 @@ int		valid_val_arg(char *argv)
 	int i;
 
 	i = 0;
-	while(argv[i])
+	while (argv[i] != NULL)
 	{
-		if(!ft_isdigit(argv[i]))
+		if (!ft_isdigit(argv[i]))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void	sv_arg(t_arg *ptr, char *arg, char *val, int i)
-{
-	if (!ft_strcmp("-dump",arg))
-	{
-		ptr->nm_d = i;
-		ptr->dump = ft_atoi(val);
-	}
-	else
-	{
-		ptr->nm_n = i;
-		ptr->n = ft_atoi(val);
-
-	}
-}
-
-int		hndl_cmd_arg(int argc, char **argv, t_arg *ptr, char *str)
+int		hndl_cmd_arg_p(char **argv, t_arg *ptr)
 {
 	int i;
+	int fl_n;
+	int cnt_n;
 
+	cnt_n = 0;
+	fl_n = 0;
 	i = 0;
-	while(i < argc)
+	while (argv[i] != NULL)
 	{
-		if (!ft_strcmp(str, argv[i]))
+		if (!ft_strcmp("-n",argv[i]))
 		{
-			if (++i <= argc)
-				if(!valid_val_arg(argv[i]))
+			if ((i + 1) < ptr->cnt_arg)
+			{
+				if (!valid_val_arg(argv[(i + 1)]))
 				{
-					sv_arg(ptr, argv[(i-1)], argv[i], i);
-					return (0);
+					ptr->n = ft_atoi(argv[(i + 1)]);
+					cnt_n++;
 				}
-			return (1);
+			}
+			else
+			{
+				ft_exit("Error: not valid arg");
+			}
 		}
 		i++;
 	}
-	return (1);
+	return (cnt_n);
 }
 
+int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+
+	i = 1;
+	if (!ft_strcmp(str, argv[i]))
+	{
+		if (!valid_val_arg(argv[(i + 1)]))
+		{
+			ptr->dump = ft_atoi(argv[(i + 1)]);
+			return (0);
+		}
+		ft_exit("Error: incorrect val dump");
+	}
+	return (0);
+}
+
+int		vm_valid_arg(int argc, char **argv, t_arg *ptr)
+{
+	ptr->cnt_arg = argc;
+	hndl_cmd_arg_dump(argv, ptr, "-dump");
+	hndl_cmd_arg_p(argv, ptr);
+	if (hndl_valid_file(argv, ptr))
+		ft_exit("Not correct file with bot");
+	set_num_player(ptr);
+}
 
 int		vm_valid(int argc, char **argv)
 {
-	t_arg *ptr;
+	t_arg	*ptr;
+	char	*line;
+	int		fd;
 
 	ft_init_struct(&ptr);
-	ptr->cnt_arg = argc;
-	if(hndl_cmd_arg(argc, argv, ptr, "-dump"))
-		ft_exit("Not correct arg1");
-	if(hndl_cmd_arg(argc, argv, ptr, "-n"))
-		ft_exit("Not correct arg2");
-	if(hndl_valid_file(argc, argv, ptr, ".cor"))
-		ft_exit("Not correct file");
-	return (0);
+	vm_valid_arg(argc, argv, ptr);
+	fd = open(argv[(argc - 1)], O_RDONLY, 0666);
+	while (get_next_line(fd, &line) > 0)
+	{
+		ft_printf("%s\n",line);
+		//vm_valid_data_file(line);
+	}
 
+	return (0);
 }

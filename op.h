@@ -65,6 +65,16 @@ typedef struct		s_arg
 	int		nm_n;
 	int		nm_f;
 	int		dump;
+	int		cnt_player;
+	char	*path_p1;
+	char	*path_p2;
+	char	*path_p3;
+	char	*path_p4;
+	char	*name_p1;
+	char	*name_p2;
+	char	*name_p3;
+	char	*name_p4;
+	int		num[4];
 	int		n;
 }					t_arg;
 
