@@ -65,26 +65,37 @@ int		check_file_name(char *s)
 	return (fd);
 }
 
-char	*read_file(int fd)
+char		*read_file(int fd)      /////ERROR
 {
-	char *s;
-	char *free_ptr;
-	char *str;
+	char	*s;
+	char	*free_ptr;
+	char	*str;
 
 	str = (char*)malloc(1);
 	*str = '\0';
 	free_ptr = (char*)malloc(1);
 	*free_ptr = '\0';
+	printf("->%llu", lseek(4, 0, SEEK_SET));
+	lseek(fd, 0, SEEK_SET);
 	while (get_next_line(fd, &s))
 	{
-		free_ptr = str;
-		str = ft_strjoin(str, s);
-		free(free_ptr);
-		free_ptr = str;
-		str = ft_strjoin(str, "\n");
-		free(free_ptr);
-		free(s);
+		if (s[0] != '\0') //read(fd, NULL, 0)
+		{
+			free_ptr = str;
+			str = ft_strjoin(str, s);
+			free(free_ptr);
+			free_ptr = str;
+			ft_printf("->%d\n", read(fd, NULL, 0));
+//			if (!read(fd, NULL, 0))
+//			{
+				str = ft_strjoin(str, "\n");
+				free(free_ptr);
+				free(s);
+			//}
+		}
 	}
+	//ft_printf("->%s\n", str);
+	//str[ft_strlen(str) - 1] = '\0';
 	return (str);
 }
 
@@ -455,9 +466,8 @@ void	valid_code(t_asm *masm, char *str, header_t *head)			///ERROR
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
-	while (*str != '\0' && !is_empty(str))				/////check EOF
+	while (*str != '\0')//&& !is_empty(str))				/////check EOF
 	{
-		printf("-->%d\n", is_empty(str));
 		if (check_label(masm, &str))
 			check_command(masm, &str);
 		while (*str != '\n')
