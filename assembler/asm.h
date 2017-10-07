@@ -44,4 +44,6 @@ typedef	struct 			s_asm
 	t_commands			*commands;
 	int 				count_byte;
 }						t_asm;
+
+int 	check_label_or_comm(char *s);
 #endif

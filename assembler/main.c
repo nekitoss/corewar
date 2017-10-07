@@ -65,37 +65,26 @@ int		check_file_name(char *s)
 	return (fd);
 }
 
-char		*read_file(int fd)      /////ERROR
+char		*read_file(int fd)
 {
-	char	*s;
-	char	*free_ptr;
-	char	*str;
+	char			*str;
+	long long		len;
 
-	str = (char*)malloc(1);
-	*str = '\0';
-	free_ptr = (char*)malloc(1);
-	*free_ptr = '\0';
-	printf("->%llu", lseek(4, 0, SEEK_SET));
+	len = lseek(fd, 0, SEEK_END);
 	lseek(fd, 0, SEEK_SET);
-	while (get_next_line(fd, &s))
+	str = (char*)malloc(sizeof(char) * (len + 1));
+	read(fd, str, (size_t)len);
+	while (len > 0)
 	{
-		if (s[0] != '\0') //read(fd, NULL, 0)
+		if (str[len - 1] == ' ' || str[len - 1] == '\t')
 		{
-			free_ptr = str;
-			str = ft_strjoin(str, s);
-			free(free_ptr);
-			free_ptr = str;
-			ft_printf("->%d\n", read(fd, NULL, 0));
-//			if (!read(fd, NULL, 0))
-//			{
-				str = ft_strjoin(str, "\n");
-				free(free_ptr);
-				free(s);
-			//}
+			len--;
+			continue;
 		}
+		break;
 	}
-	//ft_printf("->%s\n", str);
-	//str[ft_strlen(str) - 1] = '\0';
+	if (str[len - 1] != '\n')
+		error("No newline at the end of file.");
 	return (str);
 }
 
@@ -282,15 +271,13 @@ int		ft_stcmp(const char *s1, const char *s2)
 	int i;
 
 	i = 0;
-//	ft_printf("strcmp %.18s\n", s1);
-//	ft_printf("strcmp %.18s\n", s2);
-	while (*s1 == *s2 && *s1 && *s2)
+	while (*s1 == *s2 && (*s1 != '\0' || *s2 != '\0'))
 	{
 		i++;
 		s1++;
 		s2++;
 	}
-	if (*s1 && *s2 == LABEL_CHAR)
+	if (*s1 != '\0')
 		return (0);
 	return (i);
 }
@@ -298,15 +285,17 @@ int		ft_stcmp(const char *s1, const char *s2)
 int		is_command(char *s)
 {
 	int		i;
+	int		a;
 	char	*st;
 
-	i = 0;
-	while (i < 16)
+	i = 15;
+	while (i >= 0)
 	{
 		st = (g_tab[i]).name;
-		if (ft_stcmp(st , s) > 0 && (ft_stcmp(st, s) == (int)ft_strlen(st)))
+		a = ft_stcmp(st , s);
+		if (a  > 0 && a == (int)ft_strlen(st))
 			return (i);
-		i++;
+		i--;
 	}
 	return (-1);
 }
@@ -399,7 +388,23 @@ int		add_label(t_asm *masm, char *s)
 	return ((int)ft_strlen(lb->name));
 }
 
-void	check_separator(char *s)
+void	check_separator(char *s, int index)
+{
+	int count;
+
+	count = 0;
+	while (*s != '\n')
+	{
+		if (*s == SEPARATOR_CHAR)
+			count++;
+		s++;
+	}
+	ft_printf("SEPARATOR %d\n", g_tab[index].arg_count);
+	if (g_tab[index].arg_count != (count + 1))
+		error("Separator error");
+}
+
+void	check_arg(char *s, int index)
 {
 
 }
@@ -413,7 +418,11 @@ void	check_command(t_asm *masm, char **str)
 	if (!check_label_or_comm(s))
 		return ;
 	index = is_command(s);
-	//check_separator(s);
+	if (index != -1)
+		check_separator(s, index);
+	else
+		error("Zdes mozhet bit vasha oshibka");
+	check_arg(s, index);
 
 
 
@@ -435,7 +444,7 @@ int			check_label(t_asm *masm, char **str)
 	i = add_label(masm, s);
 	if (i == -1)
 		return (0);
-	(*str) += i + 1;
+	//(*str) += i + 1;
 	while (**str != LABEL_CHAR)
 		(*str)++;
 	(*str)++;
@@ -466,7 +475,7 @@ void	valid_code(t_asm *masm, char *str, header_t *head)			///ERROR
 	fdwrite = open("hell.s", O_WRONLY);
 	del_com(&str);
 	valid_head(head, &str);
-	while (*str != '\0')//&& !is_empty(str))				/////check EOF
+	while (*str != '\0' && !is_empty(str))				/////check EOF
 	{
 		if (check_label(masm, &str))
 			check_command(masm, &str);
