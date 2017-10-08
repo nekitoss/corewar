@@ -266,10 +266,12 @@ void	del_com(char **s)
 	}
 }
 
-int		ft_stcmp(const char *s1, const char *s2)
+int		ft_stcmp(char *s1, char *s2)
 {
 	int i;
+	char *s;
 
+	s = s1;
 	i = 0;
 	while (*s1 == *s2 && (*s1 != '\0' || *s2 != '\0'))
 	{
@@ -279,6 +281,13 @@ int		ft_stcmp(const char *s1, const char *s2)
 	}
 	if (*s1 != '\0')
 		return (0);
+	if (*s2 != ' ' && *s2 != '\t' && *s2 != '%')
+		error("Invalid instruction");
+	if (*s2 == '%')
+		if (ft_strequ(s, "st") || ft_strequ(s, "add")
+			|| ft_strequ(s, "sub") || ft_strequ(s, "sti")
+			|| ft_strequ(s, "aff"))
+			error("Invalid instruction");
 	return (i);
 }
 
@@ -289,6 +298,8 @@ int		is_command(char *s)
 	char	*st;
 
 	i = 15;
+	while (*s == ' ' || *s == '\t')
+		s++;
 	while (i >= 0)
 	{
 		st = (g_tab[i]).name;
@@ -315,7 +326,6 @@ int		is_label(char *s)
 
 int 	check_label_or_comm(char *s)			/// label - 0, command - 1
 {
-	//ft_printf("before-> %.18s\n", s);
 	while (*s ==  ' ' || *s == '\t' || *s == '\n')
 		s++;
 	if (!ft_strchr(LABEL_CHARS, *s))
@@ -388,6 +398,12 @@ int		add_label(t_asm *masm, char *s)
 	return ((int)ft_strlen(lb->name));
 }
 
+void	pass_spaces(char **s)
+{
+	while (**s == '\t' || **s == ' ')
+		(*s)++;
+}
+
 void	check_separator(char *s, int index)
 {
 	int count;
@@ -395,18 +411,45 @@ void	check_separator(char *s, int index)
 	count = 0;
 	while (*s != '\n')
 	{
+		if (*s == SEPARATOR_CHAR && *(s + 1) == SEPARATOR_CHAR)
+			error("Separator error \",,\"");
 		if (*s == SEPARATOR_CHAR)
 			count++;
 		s++;
 	}
-	ft_printf("SEPARATOR %d\n", g_tab[index].arg_count);
 	if (g_tab[index].arg_count != (count + 1))
 		error("Separator error");
 }
 
+void	check_dir(char *s)
+{
+	//if (*s)
+}
+
+void	check_parameter(char **s, int i, int index)
+{
+	if (**s == '%')
+		check_dir(*s);
+}
+
 void	check_arg(char *s, int index)
 {
+	int i;
 
+	i = 0;
+	pass_spaces(&s);
+	ft_printf("#->%.15s\n", s);
+	while (ft_isalpha(*s))
+		s++;
+	if (*s != ' ' && *s != '%' && *s != '\t')
+		error("Parameter error");
+	s++;
+	pass_spaces(&s);
+	while (i < g_tab[index].arg_count)
+	{
+		check_parameter(&s, i, index);
+		i++;
+	}
 }
 
 void	check_command(t_asm *masm, char **str)
@@ -473,8 +516,8 @@ void	valid_code(t_asm *masm, char *str, header_t *head)			///ERROR
 	int fdwrite;
 
 	fdwrite = open("hell.s", O_WRONLY);
-	del_com(&str);
 	valid_head(head, &str);
+	del_com(&str);
 	while (*str != '\0' && !is_empty(str))				/////check EOF
 	{
 		if (check_label(masm, &str))
