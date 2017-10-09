@@ -17,25 +17,26 @@ typedef struct		s_op
 	int				label_size;
 }					t_op;
 
-struct				s_proc //processing
+typedef struct		s_proc
 {
 	size_t			pc;
 	int				reg[REG_NUMBER + 1];
 	char			carry;
-	t_proc			*next;
+	struct s_proc	*next;
 }					t_proc;
 
-struct				s_player
+typedef struct		s_player
 {
 	char			*name;
 	char			*comment;
-	char			*program_code;
+	unsigned char	*program_code;
 	size_t			last_live;
 	unsigned int	sum_lives;
 	int				num;
+	int				code_size;
 }					t_player;
 
-struct				s_core
+typedef struct		s_core
 {
 	size_t			cycle;
 	size_t			gen_lives_in_current_period;
@@ -45,8 +46,7 @@ struct				s_core
 	int				processes;
 	int				cycles_per_second;
 	char			paused;
-
-}					s_core;
-
+	unsigned char	field[MEM_SIZE];
+}					t_core;
 
 #endif
