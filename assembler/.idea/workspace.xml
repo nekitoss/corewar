@@ -21,14 +21,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6091954">
+    <splitter split-orientation="horizontal" split-proportion="0.60477453">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="547">
-                  <caret line="435" column="1" lean-forward="true" selection-start-line="435" selection-start-column="1" selection-end-line="435" selection-end-column="1" />
+                <state relative-caret-position="479">
+                  <caret line="599" column="4" lean-forward="false" selection-start-line="599" selection-start-column="4" selection-end-line="599" selection-end-column="4" />
                   <folding />
                 </state>
               </provider>
@@ -60,11 +60,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="asm.h" pinned="false" current-in-tab="false">
+          <file leaf-file-name="asm.h" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/asm.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="705">
-                  <caret line="47" column="37" lean-forward="false" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
+                <state relative-caret-position="495">
+                  <caret line="33" column="38" lean-forward="true" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
                   <folding>
                     <element signature="e#913#932#0" expanded="true" />
                   </folding>
@@ -72,11 +72,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="op.h" pinned="false" current-in-tab="true">
+          <file leaf-file-name="op.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/op.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="628">
-                  <caret line="72" column="25" lean-forward="false" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
+                <state relative-caret-position="-324">
+                  <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -85,6 +85,11 @@
         </leaf>
       </split-second>
     </splitter>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>==&gt;</find>
+    </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -362,12 +367,13 @@
       <workItem from="1507210803246" duration="13445000" />
       <workItem from="1507304607067" duration="6648000" />
       <workItem from="1507364333088" duration="12325000" />
-      <workItem from="1507460756380" duration="11512000" />
+      <workItem from="1507460756380" duration="11589000" />
+      <workItem from="1507550133747" duration="13706000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66490000" />
+    <option name="totallyTimeSpent" value="80273000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1309" height="1366" extended-state="0" />
@@ -379,7 +385,7 @@
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299923" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32998455" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32998455" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -493,6 +499,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/libft.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2100">
+          <caret line="140" column="24" lean-forward="false" selection-start-line="140" selection-start-column="24" selection-end-line="140" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/asm.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#913#932#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/asm.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -547,6 +579,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/op.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-324">
+          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/asm.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -557,18 +597,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/op.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="628">
-          <caret line="72" column="25" lean-forward="false" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="435" column="1" lean-forward="true" selection-start-line="435" selection-start-column="1" selection-end-line="435" selection-end-column="1" />
+        <state relative-caret-position="479">
+          <caret line="599" column="4" lean-forward="false" selection-start-line="599" selection-start-column="4" selection-end-line="599" selection-end-column="4" />
           <folding />
         </state>
       </provider>

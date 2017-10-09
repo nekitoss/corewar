@@ -23,7 +23,8 @@ t_commands		*new_commands()
 
 	ret = (t_commands*)malloc(sizeof(t_commands));
 	ret->command_name = NULL;
-	ret->label_name = NULL;
+	ret->label_name1 = NULL;
+	ret->label_name2 = NULL;
 	ret->codage = 0;
 	ret->size = 0;
 	ret->next = NULL;
@@ -421,24 +422,143 @@ void	check_separator(char *s, int index)
 		error("Separator error");
 }
 
-void	check_dir(char *s)
+int			check_label_list(t_asm *masm, char **s)	////will help late
 {
-	//if (*s)
+	char	*str;
+	t_label *lb;
+
+	lb = masm->labels;
+	str = *s;
+	(*s)++;
+	ft_printf(">>>%.10s\n", *s);
+	while (ft_strchr(LABEL_CHARS, **s))
+		(*s)++;
+	if (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+		error("ERROR (Direct label)");
+
 }
 
-void	check_parameter(char **s, int i, int index)
+void	check_lb_char(char **s)
 {
+	if (!ft_strchr(LABEL_CHARS, **s))
+		error("Parameter error");
+	while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+	{
+		if (!ft_strchr(LABEL_CHARS, **s))
+			error("Parameter error");
+		(*s)++;
+	}
+}
+
+void	check_dir(char **s)
+{
+	(*s)++;
+	if (ft_isdigit(**s) || **s == '-')
+	{
+		if (**s == '-' && !ft_isdigit(*(*s + 1)))
+			error("Parameter error");
+		(*s)++;
+		if (**s == ' ' || **s == '\t' || **s == ',' || **s == '\n')
+			return ;
+		if (!ft_isdigit(**s))
+			error("Parameter error");
+		while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+		{
+			if (!ft_isdigit(**s))
+				error("Parameter error");
+			(*s)++;
+		}
+	}
+	else if (**s == ':')
+	{
+		(*s)++;
+		check_lb_char(s);
+	}
+	else
+		error("Parameter error");
+}
+
+void		check_reg(char **s)
+{
+	char	*str;
+
+	(*s)++;
+	if (!ft_isdigit(**s))
+		error("Parameter error");
+	str = *s;
+	while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+	{
+		if (!ft_isdigit(**s))
+			error("Parameter error");
+		(*s)++;
+	}
+	if (ft_atoi(str) > 99)
+		error("Incorect register number");
+}
+
+void	check_indir(char **s)
+{
+	(*s)++;
+	if (ft_isdigit(**s) || **s == '-')
+	{
+		if (**s == '-' && !ft_isdigit(*(*s + 1)))
+			error("Parameter error");
+		(*s)++;
+		if (**s == ' ' || **s == '\t' || **s == ',' || **s == '\n')
+			return ;
+		if (!ft_isdigit(**s))
+			error("Parameter error");
+		while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+		{
+			if (!ft_isdigit(**s))
+				error("Parameter error");
+			(*s)++;
+		}
+	}
+	else if (ft_strchr(LABEL_CHARS,**s))
+		check_lb_char(s);
+	else
+		error("Parameter error");
+}
+
+void	check_num(char **s)
+{
+	if (**s == '-' && !ft_isdigit(*(*s + 1)))
+		error("Parameter error");
+	(*s)++;
+	if (**s == ' ' || **s == '\t' || **s == ',' || **s == '\n')
+		return ;
+	if (!ft_isdigit(**s))
+		error("Parameter error");
+	while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+	{
+		if (!ft_isdigit(**s))
+			error("Parameter error");
+		(*s)++;
+	}
+}
+
+void	check_parameter(char **s)
+{
+	ft_printf("==>%.10s\n", *s);
 	if (**s == '%')
-		check_dir(*s);
+		check_dir(s);
+	else if (**s == 'r')
+		check_reg(s);
+	else if (**s == ':')
+		check_indir(s);
+	else if (ft_isdigit(**s) || **s == '-')
+		check_num(s);
+	else
+		error("Parameter error");
 }
 
-void	check_arg(char *s, int index)
+void	check_args(char *s, int index)
 {
 	int i;
 
 	i = 0;
 	pass_spaces(&s);
-	ft_printf("#->%.15s\n", s);
 	while (ft_isalpha(*s))
 		s++;
 	if (*s != ' ' && *s != '%' && *s != '\t')
@@ -447,9 +567,38 @@ void	check_arg(char *s, int index)
 	pass_spaces(&s);
 	while (i < g_tab[index].arg_count)
 	{
-		check_parameter(&s, i, index);
+		check_parameter(&s);
+		while (*s == ' ' || *s == '\t' || *s == ',')
+			s++;
 		i++;
 	}
+}
+
+t_commands		*get_empty_struc(t_asm *masm)
+{
+	t_commands	*c;
+
+	c = masm->commands;
+	while (c)
+	{
+		if (c->command_name == '\0')
+			return (c);
+		c = c->next;
+	}
+	c = new_commands();
+	return (c);
+}
+
+void			add_to_struct(t_asm *masm, int ind, char **s)
+{
+	t_commands	*comm;
+
+	ft_printf("-->%s\n", *s);
+	comm = get_empty_struc(masm);
+	comm->command_name = ft_strdup(g_tab[ind].name);
+	ft_printf("command name:  %s\n", comm->command_name);///
+	*s += ft_strlen(comm->command_name);
+
 }
 
 void	check_command(t_asm *masm, char **str)
@@ -465,15 +614,18 @@ void	check_command(t_asm *masm, char **str)
 		check_separator(s, index);
 	else
 		error("Zdes mozhet bit vasha oshibka");
-	check_arg(s, index);
-
-
-
+	check_args(s, index);
+	pass_spaces(&s);
+	add_to_struct(masm, index, &s);
+	///tyt zapis comandi
 
 
 	while (**str != '\n')
+	{
+		//if (**str != '\t' && **str != ' ')
+			//error("WTF after parameters??");
 		(*str)++;
-	//ft_printf("??|-> %s", *str);
+	}
 }
 
 int			check_label(t_asm *masm, char **str)
@@ -496,14 +648,10 @@ int			check_label(t_asm *masm, char **str)
 	if (**str == '\n')
 		return (0);
 	return (1);
-//	s = *str;
-//	if (check_label_or_comm(s))
-//		check_command(masm, str);
 }
 
 int		is_empty(char *s)
 {
-	ft_printf("-%s\n", s);
 	while ((*s == ' ' || *s == '\t') && *s != '\n')
 		s++;
 	if (*s == '\0')
@@ -511,14 +659,14 @@ int		is_empty(char *s)
 	return (0);
 }
 
-void	valid_code(t_asm *masm, char *str, header_t *head)			///ERROR
+void	valid_code(t_asm *masm, char *str, header_t *head)
 {
 	int fdwrite;
 
 	fdwrite = open("hell.s", O_WRONLY);
 	valid_head(head, &str);
 	del_com(&str);
-	while (*str != '\0' && !is_empty(str))				/////check EOF
+	while (*str != '\0' && !is_empty(str))
 	{
 		if (check_label(masm, &str))
 			check_command(masm, &str);
