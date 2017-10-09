@@ -28,31 +28,33 @@ typedef struct		s_core
 	size_t			cycle_to_die;
 	t_player		**players; //покачто хард-код
 	int				num_of_players;
-	int				processes;
+	int				num_of_processes;
 	int				cycles_per_second;
 	char			paused;
 	unsigned char	field[MEM_SIZE];
+	t_proc			*processes_list;
 }					t_core;
+
+// void				(*func)(t_core *ls, t_proc *proc);
 
 // t_my_op				op_tab[17] =
 // {
-// 	{"live", 	1, {T_DIR},													1,	10,		"alive",								0, 0},
-// 	{"ld", 		2, {T_DIR | T_IND, T_REG},									2,	5,		"load",									1, 0},
-// 	{"st", 		2, {T_REG, T_IND | T_REG},									3,	5,		"store",								1, 0},
-// 	{"add", 	3, {T_REG, T_REG, T_REG},									4,	10,		"addition",								1, 0},
-// 	{"sub", 	3, {T_REG, T_REG, T_REG},									5,	10,		"soustraction",							1, 0},
-// 	{"and", 	3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},	6,	6,		"et (and  r1, r2, r3   r1&r2 -> r3",	1, 0},
-// 	{"or", 		3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	7,	6,		"ou  (or   r1, r2, r3   r1 | r2 -> r3",	1, 0},
-// 	{"xor", 	3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	8,	6,		"ou (xor  r1, r2, r3   r1^r2 -> r3",	1, 0},
-// 	{"zjmp", 	1, {T_DIR},													9,	20,		"jump if zero",							0, 1},
-// 	{"ldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			10,	25,		"load index",							1, 1},
-// 	{"sti", 	3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG},			11,	25,		"store index",							1, 1},
-// 	{"fork", 	1, {T_DIR},													12,	800,	"fork",									0, 1},
-// 	{"lld", 	2, {T_DIR | T_IND, T_REG},									13,	10,		"long load",							1, 0},
-// 	{"lldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			14,	50,		"long load index",						1, 1},
-// 	{"lfork", 	1, {T_DIR},													15,	1000,	"long fork",							0, 1},
-// 	{"aff", 	1, {T_REG},													16,	2,		"aff",									1, 0},
-// 	{0, 0, {0}, 0, 0, 0, 0, 0}
+// 	{"live", 	1, {T_DIR},													1,	10,		"alive",								0, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"ld", 		2, {T_DIR | T_IND, T_REG},									2,	5,		"load",									1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"st", 		2, {T_REG, T_IND | T_REG},									3,	5,		"store",								1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"add", 	3, {T_REG, T_REG, T_REG},									4,	10,		"addition",								1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"sub", 	3, {T_REG, T_REG, T_REG},									5,	10,		"soustraction",							1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"and", 	3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},	6,	6,		"et (and  r1, r2, r3   r1&r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"or", 		3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	7,	6,		"ou  (or   r1, r2, r3   r1 | r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"xor", 	3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	8,	6,		"ou (xor  r1, r2, r3   r1^r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"zjmp", 	1, {T_DIR},													9,	20,		"jump if zero",							0, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"ldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			10,	25,		"load index",							1, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"sti", 	3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG},			11,	25,		"store index",							1, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"fork", 	1, {T_DIR},													12,	800,	"fork",									0, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"lld", 	2, {T_DIR | T_IND, T_REG},									13,	10,		"long load",							1, 0, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"lldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			14,	50,		"long load index",						1, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"lfork", 	1, {T_DIR},													15,	1000,	"long fork",							0, 1, void (*func)(t_core *ls, t_proc *proc)},
+// 	{"aff", 	1, {T_REG},													16,	2,		"aff",									1, 0, void (*func)(t_core *ls, t_proc *proc)},
 // };
 
 
@@ -63,6 +65,9 @@ typedef struct		s_core
 
 size_t				revert_16_bits_size_t(size_t num);
 size_t				revert_32_bits_size_t(size_t num);
+void				coding_byte(t_core *ls, t_proc *proc);
+
+
 
 size_t				read_data_block(t_core *ls, size_t start, int len)
 {
@@ -135,10 +140,10 @@ void				shift_pc(size_t *pc, int value)
 {
 	(*pc) = (*pc) + value;
 	(*pc) = (*pc) % MEM_SIZE;
-	printf("counter = %4zu\n", *pc);
+	// printf("counter = %4zu\n", *pc);
 }				
 
-void				init_my_player(t_core *ls)
+void				init_my_player_and_process(t_core *ls)
 {
 	ls->num_of_players = 1;
 	ls->players = (t_player **)ft_memalloc(sizeof(t_player *) * ls->num_of_players);
@@ -146,15 +151,41 @@ void				init_my_player(t_core *ls)
 	((ls->players)[0])->name = ft_strdup("my_name");
 	(ls->players)[0]->comment = ft_strdup("some_unusefull comment");
 	(ls->players)[0]->num = -1;
+
+	ls->processes_list = ft_memalloc(sizeof(t_proc));
+	ls->processes_list->reg[1] = -1;
+}
+
+void				opcode(t_core *ls, t_proc *proc)
+{
+	unsigned char opcode;
+
+	opcode = read_data_block(ls, proc->pc, 1);
+	printf("opcode = %d\n", opcode);
+	shift_pc(&(proc->pc), 1);
+	if (opcode < 17 && opcode > 0)
+		//goto function
+		coding_byte(ls, ls->processes_list);
+
+}
+
+void				coding_byte(t_core *ls, t_proc *proc)
+{
+	unsigned char coding_byte;
+	coding_byte = read_data_block(ls, proc->pc, 1);
+	printf("coding byte_int=%u, codingbyte_hex=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
+	shift_pc(&(proc->pc), 1);
+
 }
 
 int					main(void)
 {
-	size_t prog_counter = 0;
 	t_core	*ls;
 
+	printf("MEM_SIZE=%d\n", MEM_SIZE);
+
 	ls = ft_memalloc(sizeof(t_core));
-	init_my_player(ls);
+	init_my_player_and_process(ls);
 	
 	int fd = open("/nfs/2016/m/mpochuka/pool/corewar/src/test.cor", O_RDONLY);
 	size_t file_size = lseek(fd, 0, SEEK_END);
@@ -167,31 +198,23 @@ int					main(void)
 	printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	close(fd);
 
-	ft_memcpy((void **)&((ls->field)[prog_counter]), tmp, code_len);
+	ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), tmp, code_len);
 	print_data(tmp, code_len);
 	ft_strdel((char **)&tmp);
 	print_data(ls->field, 32);
 	
-	unsigned int opcode;
-	opcode = read_data_block(ls, prog_counter, 1);
-	printf("opcode = %d\n", opcode);
-	shift_pc(&prog_counter, 1);
-
-	unsigned char coding_byte;
-	coding_byte = read_data_block(ls, prog_counter, 1);
-	printf("coding byte_int=%u, codingbyte_hex=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
-	shift_pc(&prog_counter, 1);
+	opcode(ls, ls->processes_list);
+	
 	
 	unsigned int par1;
-
-	par1 = read_data_block(ls, prog_counter, 4);
-	shift_pc(&prog_counter, 4);
+	par1 = read_data_block(ls, (ls->processes_list->pc), 4);
+	shift_pc(&(ls->processes_list->pc), 4);
 	printf("par1_hex=%#x; %u\n", par1, par1%MEM_SIZE);
 
 	unsigned int par2;
 
-	par2 = read_data_block(ls, prog_counter, 1);
-	shift_pc(&prog_counter, 1);
+	par2 = read_data_block(ls, (ls->processes_list->pc), 1);
+	shift_pc(&(ls->processes_list->pc), 1);
 	printf("par2_hex=%#x; %u\n", par2, par2%MEM_SIZE);
 
 
