@@ -6,7 +6,9 @@ typedef struct		s_proc
 {
 	size_t			pc;
 	int				reg[REG_NUMBER + 1];
+	int				live;
 	char			carry;
+	size_t			next_execution_at;
 	struct s_proc	*next;
 }					t_proc;
 
@@ -35,40 +37,145 @@ typedef struct		s_core
 	t_proc			*processes_list;
 }					t_core;
 
-// void				(*func)(t_core *ls, t_proc *proc);
-
-// t_my_op				op_tab[17] =
-// {
-// 	{"live", 	1, {T_DIR},													1,	10,		"alive",								0, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"ld", 		2, {T_DIR | T_IND, T_REG},									2,	5,		"load",									1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"st", 		2, {T_REG, T_IND | T_REG},									3,	5,		"store",								1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"add", 	3, {T_REG, T_REG, T_REG},									4,	10,		"addition",								1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"sub", 	3, {T_REG, T_REG, T_REG},									5,	10,		"soustraction",							1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"and", 	3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},	6,	6,		"et (and  r1, r2, r3   r1&r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"or", 		3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	7,	6,		"ou  (or   r1, r2, r3   r1 | r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"xor", 	3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	8,	6,		"ou (xor  r1, r2, r3   r1^r2 -> r3",	1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"zjmp", 	1, {T_DIR},													9,	20,		"jump if zero",							0, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"ldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			10,	25,		"load index",							1, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"sti", 	3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG},			11,	25,		"store index",							1, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"fork", 	1, {T_DIR},													12,	800,	"fork",									0, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"lld", 	2, {T_DIR | T_IND, T_REG},									13,	10,		"long load",							1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"lldi", 	3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			14,	50,		"long load index",						1, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"lfork", 	1, {T_DIR},													15,	1000,	"long fork",							0, 1, void (*func)(t_core *ls, t_proc *proc)},
-// 	{"aff", 	1, {T_REG},													16,	2,		"aff",									1, 0, void (*func)(t_core *ls, t_proc *proc)},
-// };
 
 
-// size_t				hexstr_to_dec(char *str, int len)
-// {
-// 	while ()
-// }
+typedef struct		s_my_op
+{
+	void			(*func)(t_core *ls, t_proc *proc, struct s_my_op *func);
+	int				num_of_params;
+	int				type_of_params[3];
+	int				function_num;
+	int				cycles_to_exec;
+	int				is_codage;
+	int				bytes_for_tdir;
+}					t_my_op;
+
+void				f_live(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_ld(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_st(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_add(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_sub(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_and(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_or(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_xor(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_sti(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_fork(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_lld(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_aff(t_core *ls, t_proc *proc, t_my_op *func);
+
+t_my_op				op_tab[17] =
+{
+	{0,			0,	{0, 0, 0},												0,	0,		0,	0},
+	{f_live,	1,	{T_DIR, 0, 0},											1,	10,		0,	4},
+	{f_ld,		2,	{T_DIR | T_IND, T_REG, 0},								2,	5,		1,	4},
+	{f_st,		2,	{T_REG, T_IND | T_REG, 0},								3,	5,		1,	0},
+	{f_add,		3,	{T_REG, T_REG, T_REG},									4,	10,		1,	0},
+	{f_sub,		3,	{T_REG, T_REG, T_REG},									5,	10,		1,	0},
+	{f_and,		3,	{T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},	6,	6,		1,	4},
+	{f_or,		3,	{T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	7,	6,		1,	4},
+	{f_xor,		3,	{T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},	8,	6,		1,	4},
+	{f_zjmp,	1,	{T_DIR, 0, 0},											9,	20,		0,	2},
+	{f_ldi,		3,	{T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			10,	25,		1,	2},
+	{f_sti,		3,	{T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG},			11,	25,		1,	2},
+	{f_fork,	1,	{T_DIR, 0, 0},											12,	800,	0,	2},
+	{f_lld,		2,	{T_DIR | T_IND, T_REG, 0},								13,	10,		1,	4},
+	{f_lldi,	3,	{T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG},			14,	50,		1,	2},
+	{f_lfork,	1,	{T_DIR, 0, 0},											15,	1000,	0,	2},
+	{f_aff,		1,	{T_REG, 0, 0},											16,	2,		1,	0}
+};
+
+
 
 size_t				revert_16_bits_size_t(size_t num);
 size_t				revert_32_bits_size_t(size_t num);
 void				coding_byte(t_core *ls, t_proc *proc);
 
+//#################### funcions
+void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
 
+void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
 
+void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
+{
+	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+}
+
+//#################### funcions
 size_t				read_data_block(t_core *ls, size_t start, int len)
 {
 	int i;
@@ -141,7 +248,14 @@ void				shift_pc(size_t *pc, int value)
 	(*pc) = (*pc) + value;
 	(*pc) = (*pc) % MEM_SIZE;
 	// printf("counter = %4zu\n", *pc);
-}				
+}
+
+void				set_next_ex(size_t *next_execution_at, int value)
+{
+	(*next_execution_at) = (*next_execution_at) + value;
+	// (*next_execution_at) = (*next_execution_at) % MEM_SIZE;
+	// printf("counter = %4zu\n", *pc);
+}
 
 void				init_my_player_and_process(t_core *ls)
 {
@@ -164,8 +278,12 @@ void				opcode(t_core *ls, t_proc *proc)
 	printf("opcode = %d\n", opcode);
 	shift_pc(&(proc->pc), 1);
 	if (opcode < 17 && opcode > 0)
-		//goto function
-		coding_byte(ls, ls->processes_list);
+	{
+		((op_tab[opcode]).func)(ls, ls->processes_list, &(op_tab[opcode]));
+		// coding_byte(ls, ls->processes_list);
+	}
+	else
+		printf("incorrect \n");
 
 }
 
