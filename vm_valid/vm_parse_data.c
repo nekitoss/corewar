@@ -79,14 +79,10 @@ int		vm_valid(int argc, char **argv)
 	char	*line;
 	int		fd;
 
-	ft_init_struct(&ptr);
+	vm_init_struct(&ptr);
 	vm_valid_arg(argc, argv, ptr);
-	fd = open(argv[(argc - 1)], O_RDONLY, 0666);
-	while (get_next_line(fd, &line) > 0)
-	{
-		ft_printf("%s\n",line);
-		//vm_valid_data_file(line);
-	}
+	vm_init_struct_player(&ptr);
+	vm_valid_data_file(ptr);
 
 	return (0);
 }

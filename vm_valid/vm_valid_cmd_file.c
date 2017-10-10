@@ -65,14 +65,8 @@ int		sv_number_player(char *argv, t_arg *ptr)
 
 void 	sv_path_player(char *argv, t_arg *ptr)
 {
-	if (ptr->cnt_player == 0)
-		ptr->path_p1 = ft_strdup(argv);
-	if (ptr->cnt_player == 1)
-		ptr->path_p2 = ft_strdup(argv);
-	if (ptr->cnt_player == 2)
-		ptr->path_p3 = ft_strdup(argv);
-	if (ptr->cnt_player == 3)
-		ptr->path_p4 = ft_strdup(argv);
+	if (ptr->cnt_player <= 3)
+		ptr->path_players[ptr->cnt_player] = ft_strdup(argv);
 	if (ptr->cnt_player > 3)
 		ft_exit("to many bots");
 	ptr->cnt_player++;

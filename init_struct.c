@@ -12,18 +12,19 @@
 
 #include "corewar.h"
 
-void	ft_init_struct(t_arg **ptr)
+void	vm_init_struct(t_arg **ptr)
 {
 	(*ptr) = (t_arg*)malloc(sizeof(t_arg));
 	(*ptr)->cnt_arg = -1;
 	(*ptr)->nm_d = -1;
-	(*ptr)->nm_n = -1;
 	(*ptr)->nm_f = -1;
 	(*ptr)->cnt_player = 0;
-	(*ptr)->name_p1 = NULL;
-	(*ptr)->name_p2 = NULL;
-	(*ptr)->name_p3 = NULL;
-	(*ptr)->name_p4 = NULL;
+	(*ptr)->path_players[0] = NULL;
+	(*ptr)->path_players[1] = NULL;
+	(*ptr)->path_players[2] = NULL;
+	(*ptr)->path_players[3] = NULL;
+	(*ptr)->path_players[4] = NULL;
+	(*ptr)->player = NULL;
 	(*ptr)->dump = -1;
 	(*ptr)->n = -1;
 	(*ptr)->num[0] = 0;
@@ -31,4 +32,30 @@ void	ft_init_struct(t_arg **ptr)
 	(*ptr)->num[2] = 0;
 	(*ptr)->num[3] = 0;
 
+}
+
+int 	vm_init_struct_player(t_arg **ptr)
+{
+	int i;
+	
+	i = 0;
+
+	(*ptr)->player = (t_player**)malloc(sizeof(t_player*) * 4);
+	if ((*ptr)->player == NULL)
+		ft_exit("Could not allocation memory");
+	while (i < (*ptr)->cnt_player)
+	{
+		(*ptr)->player[i] = (t_player*)malloc(sizeof(t_player));
+		if ((*ptr)->player[i] == NULL)
+			ft_exit("Could not allocation memory");
+		(*ptr)->player[i]->name = NULL;
+		(*ptr)->player[i]->comment = NULL;
+		(*ptr)->player[i]->program_code = NULL;
+		(*ptr)->player[i]->last_live = 0;
+		(*ptr)->player[i]->sum_lives = 0;
+		(*ptr)->player[i]->num = 0;
+		(*ptr)->player[i]->fd = 0;
+		i++;
+	}
+	return (0);
 }

@@ -16,6 +16,6 @@ int main(int argc, char **argv)
 		ft_exit("Don't have arg!");
 	vm_valid(argc, argv);
 
- 	test();
+ 	//test();
 	return 0;
 }

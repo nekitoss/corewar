@@ -52,29 +52,33 @@ typedef char	t_arg_type;
 
 typedef struct		header_s
 {
-    unsigned int		magic;
-    char				prog_name[PROG_NAME_LENGTH + 1];
-    unsigned int		prog_size;
-    char				comment[COMMENT_LENGTH + 1];
+	unsigned int		magic;
+	char				prog_name[PROG_NAME_LENGTH + 1];
+	unsigned int		prog_size;
+	char				comment[COMMENT_LENGTH + 1];
 }					header_t;
+
+typedef struct		s_player
+{
+	char			*name;
+	char			*comment;
+	char			*program_code;
+	size_t			last_live;
+	unsigned int	sum_lives;
+	int				num;
+	int				fd;
+}					t_player;
 
 typedef struct		s_arg
 {
-	int		cnt_arg;
-	int		nm_d;
-	int		nm_n;
-	int		nm_f;
-	int		dump;
-	int		cnt_player;
-	char	*path_p1;
-	char	*path_p2;
-	char	*path_p3;
-	char	*path_p4;
-	char	*name_p1;
-	char	*name_p2;
-	char	*name_p3;
-	char	*name_p4;
-	int		num[4];
-	int		n;
+	int			cnt_arg;
+	int			nm_d;
+	int			nm_f;
+	int			dump;
+	int			cnt_player;
+	t_player	**player;
+	char		*path_players[5];
+	int			num[4];
+	int			n;
 }					t_arg;
 
