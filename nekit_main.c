@@ -196,12 +196,6 @@ size_t				read_data_block(t_core *ls, size_t start, int len)
 	return (mem_block);
 }
 
-void				revert_16_bits(unsigned short int *num)
-{
-	*num = ((*num) >> 8) | ((*num) << 8);
-	return ;
-}
-
 size_t				revert_16_bits_size_t(size_t num)
 {
 	num = (num >> 8) | (num << 8);
@@ -212,19 +206,10 @@ size_t				revert_16_bits_size_t(size_t num)
 size_t				revert_32_bits_size_t(size_t num)
 {
 	num = ((num >> 24) & 0xff) | // move byte 3 to byte 0
-                    ((num << 8) & 0xff0000) | // move byte 1 to byte 2
-                    ((num >> 8) & 0xff00) | // move byte 2 to byte 1
-                    ((num << 24) & 0xff000000); // byte 0 to byte 3
+			((num << 8) & 0xff0000) | // move byte 1 to byte 2
+			((num >> 8) & 0xff00) | // move byte 2 to byte 1
+			((num << 24) & 0xff000000); // byte 0 to byte 3
 	return (num);
-}
-
-void				revert_32_bits(unsigned int *num)
-{
-	*num = (((*num) >> 24) & 0xff) | // move byte 3 to byte 0
-                    (((*num) << 8) & 0xff0000) | // move byte 1 to byte 2
-                    (((*num) >> 8) & 0xff00) | // move byte 2 to byte 1
-                    (((*num) << 24) & 0xff000000); // byte 0 to byte 3
-	return ;
 }
 
 void				print_data(unsigned char *str, size_t len)
