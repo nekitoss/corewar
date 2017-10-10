@@ -20,11 +20,23 @@ t_label		*new_labels()
 t_commands		*new_commands()
 {
 	t_commands	*ret;
+	int 		i;
 
+	i = 0;
 	ret = (t_commands*)malloc(sizeof(t_commands));
 	ret->command_name = NULL;
-	ret->label_name1 = NULL;
-	ret->label_name2 = NULL;
+	ret->labels = (char**)malloc(sizeof(char*) * 3);
+	ret->P = (char*)malloc(sizeof(char) * 4);
+	ret->P[3] = '\0';
+	ret->param = (int*)malloc(sizeof(int) * 3);
+	ft_bzero(ret->param, 3 * sizeof(int));
+	while (i < 3)
+	{
+		ret->labels[i] = NULL;
+		ret->param[i] = 0;
+		ret->P[i] = 'O';
+		i++;
+	}
 	ret->codage = 0;
 	ret->size = 0;
 	ret->next = NULL;
@@ -499,23 +511,9 @@ void		check_reg(char **s)
 void	check_indir(char **s)
 {
 	(*s)++;
-	if (ft_isdigit(**s) || **s == '-')
-	{
-		if (**s == '-' && !ft_isdigit(*(*s + 1)))
-			error("Parameter error");
-		(*s)++;
-		if (**s == ' ' || **s == '\t' || **s == ',' || **s == '\n')
-			return ;
-		if (!ft_isdigit(**s))
-			error("Parameter error");
-		while (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
-		{
-			if (!ft_isdigit(**s))
-				error("Parameter error");
-			(*s)++;
-		}
-	}
-	else if (ft_strchr(LABEL_CHARS,**s))
+	if (**s == '-')
+		error("Parameter error");
+	if (ft_strchr(LABEL_CHARS,**s))
 		check_lb_char(s);
 	else
 		error("Parameter error");
@@ -574,31 +572,118 @@ void	check_args(char *s, int index)
 	}
 }
 
-t_commands		*get_empty_struc(t_asm *masm)
+t_commands		*get_empty_struc(t_commands *c)
 {
-	t_commands	*c;
-
-	c = masm->commands;
-	while (c)
-	{
-		if (c->command_name == '\0')
-			return (c);
+	while (c->next)
 		c = c->next;
+	if (ft_strequ(c->command_name, "start"))
+		return c;
+	else
+	{
+		c->next = new_commands();
+		c = c->next;
+		return (c);
 	}
-	c = new_commands();
-	return (c);
 }
 
-void			add_to_struct(t_asm *masm, int ind, char **s)
+int		check_type(char **s, int ind, int index)
 {
-	t_commands	*comm;
+	int i;
 
-	ft_printf("-->%s\n", *s);
-	comm = get_empty_struc(masm);
+	i = 0;
+	if (**s == 'r')
+		i = 1;
+	if (**s == '%')
+		i = 2;
+	if (**s == ':' || ft_isdigit(**s) || **s == '-')
+	{
+		i = 4;
+		if ((ind == 1 && (index == 9 || index == 13)) || (ind == 2 && index == 10))
+			error("Incorect parameter type");
+	}
+	if ((i & g_tab[index].arg[ind]) == 0)
+		error("Incorect parameter type");
+	return (i);
+}
+
+void	goto_next_param(char **s)
+{
+	pass_spaces(s);
+	if (**s == ',')
+	{
+		(*s)++;
+		pass_spaces(s);
+	}
+}
+
+void	add_reg(t_commands *comm, int i, char **s)
+{
+	(*s)++;
+	comm->param[i] = ft_atoi(*s);
+	comm->size += 1;
+	comm->P[i] = 'R';
+}
+
+void	add_indir(t_commands *comm, int i, char **s)
+{
+	(*s)++;
+	comm->P[i] = 'I';
+	comm->size += 2;
+	comm->labels[i] = get_lb_name(*s);
+}
+
+void	add_dir(t_commands *comm, int i, char **s)
+{
+	(*s)++;
+	if (**s == ':')
+	{
+		add_indir(comm, i, s);
+		return ;
+	}
+	comm->param[i] = ft_atoi(*s);
+	if (g_tab[i].dir_size)
+		comm->size += 4;
+	else
+		comm->size += 2;
+	comm->P[i] = 'D';
+}
+
+void			set_param(t_commands *comm, int i, int index, char **s)
+{
+	char 		*str;
+	int 		k;
+
+	str = *s;
+	k = check_type(s, i,  index);
+	if (k == 1)
+		add_reg(comm, i, s);
+	else if (k == 2)
+		add_dir(comm, i, s);
+	else if (k == 4)
+		add_indir(comm, i, s);
+	while (**s != ',' && **s != ' ' && **s != '\t' && **s != '\n')
+		(*s)++;
+}
+
+void			add_to_struct(t_asm *masm, int ind, char **s) {
+	t_commands *comm;
+	int i;
+
+	i = 0;
+	comm = get_empty_struc(masm->commands);
 	comm->command_name = ft_strdup(g_tab[ind].name);
 	ft_printf("command name:  %s\n", comm->command_name);///
 	*s += ft_strlen(comm->command_name);
-
+	pass_spaces(s);
+	while (i < g_tab[ind].arg_count)
+	{
+		ft_printf("-->%s\n", *s);
+		set_param(comm, i, ind, s);
+		goto_next_param(s);
+		i++;
+	}
+	if (**s != '\n')
+		error("ERROR. Incorect symbol after command");
 }
 
 void	check_command(t_asm *masm, char **str)
@@ -608,7 +693,7 @@ void	check_command(t_asm *masm, char **str)
 
 	s = *str;
 	if (!check_label_or_comm(s))
-		return ;
+		error("Syntax error:  LABEL");
 	index = is_command(s);
 	if (index != -1)
 		check_separator(s, index);
@@ -617,8 +702,6 @@ void	check_command(t_asm *masm, char **str)
 	check_args(s, index);
 	pass_spaces(&s);
 	add_to_struct(masm, index, &s);
-	///tyt zapis comandi
-
 
 	while (**str != '\n')
 	{
@@ -697,7 +780,20 @@ int main(int argc, char **argv)
 	head = new_head();
 	main_struc = new_struct();
 	main_struc->labels->byte_num = -1;
+	main_struc->commands->command_name = ft_strdup("start");
 	valid_code(main_struc, file, head);
+
+	t_commands *c;
+	c = main_struc->commands;
+	ft_printf("\n\n\n");
+	while (c)
+	{
+		ft_printf("name = %s  lb1- \"%s\" lb2- \"%s\" lb3- \"%s\"  %c%c%c  pr1- %d pr2- %d pr3- %d size = %d\n",
+				  c->command_name, c->labels[0], c->labels[1], c->labels[2], c->P[0], c->P[1], c->P[2],
+					c->param[0], c->param[1], c->param[2]);
+		ft_printf("NEXT\n");
+		c = c->next;
+	}
 
 
 //	valid = new_valid();

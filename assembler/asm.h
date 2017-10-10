@@ -32,8 +32,9 @@ typedef	struct 			s_label
 typedef struct 			s_commands
 {
 	char	 			*command_name;
-	char	 			*label_name1;
-	char	 			*label_name2;
+	char	 			**labels;
+	char 				*P;
+	int	 				*param;
 	int					codage;
 	int 				size;
 	struct s_commands	*next;
