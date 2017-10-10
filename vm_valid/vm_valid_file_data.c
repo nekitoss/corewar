@@ -40,14 +40,14 @@ int 	vm_power(char *chr, int pow)
 	return (sum);
 }
 
-char	vm_conv_hex_to_ascii(t_player *player, char *name)
+char	vm_conv_hex_to_ascii(t_player *player, char *name, int size)
 {
 
 	int		chr;
 	int		i;
 	int		j;
 	char	*tmp;
-	char 	buffer[129];
+	char 	buffer[size];
 
 	i = 0;
 	j = 0;
@@ -80,12 +80,13 @@ char	vm_conv_hex_to_ascii(t_player *player, char *name)
 		j++;
 		i += 2;
 	}
+	player->name = ft_strdup(buffer);
 }
 
 void	vm_add_name(t_player *player, char *name)
 {
 
-	vm_conv_hex_to_ascii(player, name);
+	vm_conv_hex_to_ascii(player, name, 129);
 
 }
 
