@@ -42,12 +42,12 @@ typedef struct		s_core
 typedef struct		s_my_op
 {
 	void			(*func)(t_core *ls, t_proc *proc, struct s_my_op *func);
-	int				num_of_params;
-	int				type_of_params[3];
-	int				function_num;
+	char			num_of_params;
+	char			type_of_params[3];
+	char			function_num;
 	int				cycles_to_exec;
-	int				is_codage;
-	int				bytes_for_tdir;
+	char			is_codage;
+	char			bytes_for_tdir;
 }					t_my_op;
 
 void				f_live(t_core *ls, t_proc *proc, t_my_op *func);
@@ -92,87 +92,141 @@ t_my_op				op_tab[17] =
 
 size_t				revert_16_bits_size_t(size_t num);
 size_t				revert_32_bits_size_t(size_t num);
-void				coding_byte(t_core *ls, t_proc *proc);
+int					coding_byte(t_core *ls, t_proc *proc, t_my_op *func);
+int					check_coding_byte(t_my_op *func, unsigned char coding_byte);
+
 
 //#################### funcions
 void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+
 }
 
 void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+
 }
 
 void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+
 }
 
 void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+
 }
 
 void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (coding_byte(ls, proc, func))
+	{
+
+	}
 }
 
 //#################### funcions
@@ -268,17 +322,62 @@ void				opcode(t_core *ls, t_proc *proc)
 		// coding_byte(ls, ls->processes_list);
 	}
 	else
-		printf("incorrect \n");
+		printf("incorrect opcode\n");
 
 }
 
-void				coding_byte(t_core *ls, t_proc *proc)
+int					coding_byte(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	unsigned char coding_byte;
 	coding_byte = read_data_block(ls, proc->pc, 1);
 	printf("coding byte_int=%u, codingbyte_hex=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
-	shift_pc(&(proc->pc), 1);
+	if ((check_coding_byte(func, coding_byte)))
+	{
+		printf("params are OK\n");
 
+		
+		
+		return (1);
+	}
+	printf("wrong parameters for this opcode\n");
+	// shift_pc(&(proc->pc), 1);
+	return (0);
+
+}
+
+int					check_coding_byte(t_my_op *func, unsigned char coding_byte)
+{
+	char par;
+
+	par = 0;
+	if (func->num_of_params >= 1)
+	{
+		par = (coding_byte & 0b11000000) >> (6);
+		printf("par1=%02x\n", par);
+		if (par == 3)
+			par = 4;
+		if (!(par & func->type_of_params[0]))
+			return (0);
+	}
+	if (func->num_of_params >= 2)
+	{
+		par = (coding_byte & 0b110000) >> (4);
+		printf("par2=%02x\n", par);
+		if (par == 3)
+			par = 4;
+		if (!(par & func->type_of_params[1]))
+			return (0);
+	}
+	if (func->num_of_params == 3)
+	{
+		par = (coding_byte & 0b1100) >> (2);
+		printf("par3=%02x\n", par);
+		if (par == 3)
+			par = 4;
+		if (!(par & func->type_of_params[2]))
+			return (0);
+	}
+	return (1);
 }
 
 int					main(void)
@@ -309,16 +408,16 @@ int					main(void)
 	opcode(ls, ls->processes_list);
 	
 	
-	unsigned int par1;
-	par1 = read_data_block(ls, (ls->processes_list->pc), 4);
-	shift_pc(&(ls->processes_list->pc), 4);
-	printf("par1_hex=%#x; %u\n", par1, par1%MEM_SIZE);
+	// unsigned int par1;
+	// par1 = read_data_block(ls, (ls->processes_list->pc), 4);
+	// shift_pc(&(ls->processes_list->pc), 4);
+	// printf("par1_hex=%#x; %u\n", par1, par1%MEM_SIZE);
 
-	unsigned int par2;
+	// unsigned int par2;
 
-	par2 = read_data_block(ls, (ls->processes_list->pc), 1);
-	shift_pc(&(ls->processes_list->pc), 1);
-	printf("par2_hex=%#x; %u\n", par2, par2%MEM_SIZE);
+	// par2 = read_data_block(ls, (ls->processes_list->pc), 1);
+	// shift_pc(&(ls->processes_list->pc), 1);
+	// printf("par2_hex=%#x; %u\n", par2, par2%MEM_SIZE);
 
 
 	return (0);
