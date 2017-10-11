@@ -49,4 +49,6 @@ typedef struct		s_op
 // 	unsigned char	field[MEM_SIZE];
 // }					t_core;
 
+// t_
+
 #endif
