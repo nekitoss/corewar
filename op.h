@@ -67,6 +67,7 @@ typedef struct		s_player
 	unsigned int	sum_lives;
 	int				num;
 	int				fd;
+	int				size_code;
 }					t_player;
 
 typedef struct		s_arg
@@ -80,5 +81,6 @@ typedef struct		s_arg
 	char		*path_players[5];
 	int			num[4];
 	int			n;
+
 }					t_arg;
 

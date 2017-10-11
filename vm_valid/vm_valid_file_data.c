@@ -14,30 +14,37 @@
 
 int		vm_check_magic_byte(int fd)
 {
-	char magic_byte[10];
-
-	magic_byte[9] = '\0';
+	int magic_byte;
+	int num;
+//ea83f3
+	magic_byte = 15369203;
 	if (lseek(fd, 0, 0) < 0)
 		ft_exit("Error lseek");
-	if ((read(fd, magic_byte, 10)) < 0)
+	while ()
+	if ((read(fd, &num, 4)) < 0)
 		ft_exit("Cannot read file");
-	//if(!ft_strnstr(magic_byte, "00ea 83f3", 9))
+	//if(magic_byte != num)
 	//	ft_exit("Error: in magic byte, my friend!");
 }
 
-int 	vm_power(char *chr, int pow)
+int 	vm_power(char chr, int pow)
 {
 	int sum;
 	int num;
 
-	num = ft_atoi(chr);
-	while (pow > 0)
+	num = 0;
+	if (chr == '\0')
+		return (num);
+	num = ft_atoi(&chr);
+	sum = 16;
+	while (pow > 1)
 	{
-
-		sum *= num;
+		sum *= 16;
 		pow--;
 	}
-	return (sum);
+	if (pow == 1)
+		sum = 16;
+	return (sum + num);
 }
 
 char	vm_conv_hex_to_ascii(t_player *player, char *name, int size)
@@ -83,12 +90,10 @@ char	vm_conv_hex_to_ascii(t_player *player, char *name, int size)
 	player->name = ft_strdup(buffer);
 }
 
-void	vm_add_name(t_player *player, char *name)
-{
-
-	vm_conv_hex_to_ascii(player, name, 129);
-
-}
+//void	vm_add_name(t_player *player, char *name)
+//{
+//	vm_conv_hex_to_ascii(player, name, 129);
+//}
 
 int 	vm_check_null(char *buffer, int pos1, int pos2)
 {
@@ -98,20 +103,118 @@ int 	vm_check_null(char *buffer, int pos1, int pos2)
 
 void	vm_hndl_name(t_player *player, int fd)
 {
-	char buffer[331];
+	char buffer[129];
 
-	buffer[330] = '\0';
-	lseek(fd, 10, 0);
-	read(fd, buffer, 330);
-	vm_check_null(buffer, 328, 327);
-	vm_add_name(player, buffer);
+	buffer[128] = '\0';
+	lseek(fd, 4, 0);
+	read(fd, buffer, PROG_NAME_LENGTH);
+	///vm_check_null(buffer, 328, 327);
+	player->name = ft_strdup(buffer);
+	//vm_add_name(player, buffer);
+}
+
+void	vm_hndl_comment(t_player *player, int fd)
+{
+	char buffer[COMMENT_LENGTH + 1];
+
+	buffer[COMMENT_LENGTH] = '\0';
+	lseek(fd, 140, 0);
+	read(fd, buffer, COMMENT_LENGTH);
+	player->comment = ft_strdup(buffer);
+	//vm_check_null(buffer, 328, 327);
+
+
+}
+
+void	vm_calc_hex_to_int(char *str)
+{
+	int i;
+	int len;
+	int sum;
+
+	len = 0;
+	i = 0;
+	sum = 0;
+	len = ft_strlen(str);
+	len--;
+	while (str[i] != '\0')
+	{
+
+		sum += vm_power(str[i], len);
+		i++;
+		len--;
+	}
+}
+
+void 	vm_add_size_code(t_player *player, char *buffer)
+{
+	int		i;
+	int		j;
+	char	tmp[9];
+
+	tmp[8] = '\0';
+	i = 0;
+	j = 0;
+
+	while(buffer[i] != NULL)
+	{
+		if (buffer[i] == ' ')
+		{
+			i++;
+			continue;
+		}
+		tmp[j] = buffer[i];
+		j++;
+		i++;
+	}
+	vm_calc_hex_to_int(tmp);
+}
+
+void	vm_hndl_size_code(t_player *player, int fd)
+{
+	int num;
+	int swapped;
+
+	lseek(fd, 136, 0);
+	read(fd, &num, 4);
+	swapped = ((num>>24)&0xff) | // move byte 3 to byte 0
+			  ((num<<8)&0xff0000) | // move byte 1 to byte 2
+			  ((num>>8)&0xff00) | // move byte 2 to byte 1
+			  ((num<<24)&0xff000000);
+	player->size_code = swapped;
+
+}
+
+void 	vm_hndl_code(t_player *player, int fd)
+{
+	char buffer[CHAMP_MAX_SIZE + 1];
+	int byte;
+
+	buffer[CHAMP_MAX_SIZE] = '\0';
+	lseek(fd, 2192, 0);
+	if ((byte = read(fd, buffer, player->size_code)) > 0)
+	{
+		if (read(fd, buffer, 1) != 0)
+			ft_exit("Not correct size code champ bot");
+		player->program_code = (char*)malloc(sizeof(char) * byte + 1);
+		player->program_code[byte] = '\0';
+		ft_memcpy((void*)player->program_code, (void*)buffer, byte);
+	}
+	else
+		ft_exit("Don't have code bot or error of read");
+
 }
 
 void	vm_read_bot_data(t_player *player)
 {
-
 	vm_check_magic_byte(player->fd);
 	vm_hndl_name(player, player->fd);
+	vm_hndl_size_code(player, player->fd);
+	vm_hndl_comment(player, player->fd);
+	vm_hndl_code(player, player->fd);
+
+
+//	vm_hndl_comment(player, player->fd);
 //	while (line[j] != '\0')
 //	{
 //

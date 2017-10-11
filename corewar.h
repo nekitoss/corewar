@@ -2,6 +2,7 @@
 #ifndef COREWAR_COREWAR_H
 #define COREWAR_COREWAR_H
 
+#include <errno.h>
 #include "libft/libft.h"
 #include "op.h"
 
