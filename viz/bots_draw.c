@@ -5,7 +5,7 @@ void    draw_bot(int i, char *name, int color)
     init_pair(i + 2, color, COLOR_BLACK);
     attron(COLOR_PAIR(i + 2));
     attron(A_BOLD);
-    mvprintw(pos + 2, x_s + 2, "Player %d : %s", i + 1, name);
+    mvprintw(pos + 2, x_s + 2, "Player %d : %.50s", i + 1, name);
     attroff(COLOR_PAIR(i + 2));
     mvprintw(pos + 3, x_s + 4, "Last live :                  ");
     mvprintw(pos + 4, x_s + 4, "Lives in current period :    ");

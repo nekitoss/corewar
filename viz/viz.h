@@ -1,6 +1,7 @@
 #ifndef NCURSES_VIZ_H
 #define NCURSES_VIZ_H
 
+#include "../corewar.h"
 #include <curses.h>
 
 /*

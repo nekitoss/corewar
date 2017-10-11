@@ -16,6 +16,8 @@ int main(int argc, char **argv)
 		ft_exit("Don't have arg!");
 	ptr = vm_valid(argc, argv);
 
+    start_draw(ptr);
+	end_draw();
  	//test();
 	return 0;
 }
