@@ -12,9 +12,11 @@ int ft_exit(char *str)
 
 int main(int argc, char **argv)
 {
+	t_arg *ptr;
+
 	if(argc == 1)
 		ft_exit("Don't have arg!");
-	vm_valid(argc, argv);
+	ptr = vm_valid(argc, argv);
 
  	//test();
 	return 0;
