@@ -44,6 +44,7 @@ typedef	struct 			s_asm
 {
 	t_label				*labels;
 	t_commands			*commands;
+	struct header_s		*head;
 	int 				count_byte;
 }						t_asm;
 

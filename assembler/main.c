@@ -26,7 +26,7 @@ t_commands		*new_commands()
 	ret = (t_commands*)malloc(sizeof(t_commands));
 	ret->command_name = NULL;
 	ret->labels = (char**)malloc(sizeof(char*) * 3);
-	ret->P = (char*)malloc(sizeof(char) * 4);
+	ret->P = (char*)malloc(sizeof(char) * 3);
 	ret->P[3] = '\0';
 	ret->param = (int*)malloc(sizeof(int) * 3);
 	ft_bzero(ret->param, 3 * sizeof(int));
@@ -50,6 +50,7 @@ t_asm	*new_struct()
 	ret = (t_asm*)malloc(sizeof(t_asm));
 	ret->labels = new_labels();
 	ret->commands = new_commands();
+	ret->head = NULL;
 	ret->count_byte = 0;
 	return (ret);
 }
@@ -434,21 +435,21 @@ void	check_separator(char *s, int index)
 		error("Separator error");
 }
 
-int			check_label_list(t_asm *masm, char **s)	////will help late
-{
-	char	*str;
-	t_label *lb;
-
-	lb = masm->labels;
-	str = *s;
-	(*s)++;
-	ft_printf(">>>%.10s\n", *s);
-	while (ft_strchr(LABEL_CHARS, **s))
-		(*s)++;
-	if (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
-		error("ERROR (Direct label)");
-
-}
+//int			check_label_list(t_asm *masm, char **s)	////will help late
+//{
+//	char	*str;
+//	t_label *lb;
+//
+//	lb = masm->labels;
+//	str = *s;
+//	(*s)++;
+//	ft_printf(">>>%.10s\n", *s);
+//	while (ft_strchr(LABEL_CHARS, **s))
+//		(*s)++;
+//	if (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
+//		error("ERROR (Direct label)");
+//
+//}
 
 void	check_lb_char(char **s)
 {
@@ -616,53 +617,66 @@ void	goto_next_param(char **s)
 	}
 }
 
-void	add_reg(t_commands *comm, int i, char **s)
+int		add_reg(t_commands *comm, int i, char **s)
 {
 	(*s)++;
 	comm->param[i] = ft_atoi(*s);
-	comm->size += 1;
+	comm->size = comm->size + 1;
 	comm->P[i] = 'R';
+	return (1);
 }
 
-void	add_indir(t_commands *comm, int i, char **s)
+int		add_indir(t_commands *comm, int i, char **s)
 {
-	(*s)++;
+	if (**s == ':')
+		(*s)++;
 	comm->P[i] = 'I';
-	comm->size += 2;
-	comm->labels[i] = get_lb_name(*s);
+	if (**s == '-' || ft_isdigit(**s))
+		comm->param[i] = ft_atoi(*s);
+	else
+		comm->labels[i] = get_lb_name(*s);
+	comm->size = comm->size + 2;
+	return (2);
 }
 
-void	add_dir(t_commands *comm, int i, char **s)
+int		add_dir(t_commands *comm, int i, char **s)
 {
 	(*s)++;
 	if (**s == ':')
 	{
 		add_indir(comm, i, s);
-		return ;
+		if (g_tab[i].dir_size)
+			return (4);
+		else
+			return (2);
 	}
 	comm->param[i] = ft_atoi(*s);
 	if (g_tab[i].dir_size)
-		comm->size += 4;
+	{
+		comm->P[i] = 'D';
+		comm->size = comm->size + 4;
+		return (4);
+	}
 	else
-		comm->size += 2;
-	comm->P[i] = 'D';
+	{
+		comm->P[i] = 'd';
+		comm->size = comm->size + 2;
+		return (2);
+	}
 }
 
-void			set_param(t_commands *comm, int i, int index, char **s)
+int			set_param(t_commands *comm, int i, int index, char **s)
 {
-	char 		*str;
 	int 		k;
 
-	str = *s;
 	k = check_type(s, i,  index);
 	if (k == 1)
-		add_reg(comm, i, s);
+		return (add_reg(comm, i, s));
 	else if (k == 2)
-		add_dir(comm, i, s);
+		return (add_dir(comm, i, s));
 	else if (k == 4)
-		add_indir(comm, i, s);
-	while (**s != ',' && **s != ' ' && **s != '\t' && **s != '\n')
-		(*s)++;
+		return (add_indir(comm, i, s));
+	return (0);
 }
 
 void			add_to_struct(t_asm *masm, int ind, char **s) {
@@ -672,16 +686,18 @@ void			add_to_struct(t_asm *masm, int ind, char **s) {
 	i = 0;
 	comm = get_empty_struc(masm->commands);
 	comm->command_name = ft_strdup(g_tab[ind].name);
-	ft_printf("command name:  %s\n", comm->command_name);///
 	*s += ft_strlen(comm->command_name);
 	pass_spaces(s);
 	while (i < g_tab[ind].arg_count)
 	{
 		ft_printf("-->%s\n", *s);
-		set_param(comm, i, ind, s);
+		masm->count_byte += set_param(comm, i, ind, s);
+		while (**s != ',' && **s != ' ' && **s != '\t' && **s != '\n')
+			(*s)++;
 		goto_next_param(s);
 		i++;
 	}
+	masm->count_byte += 1 + g_tab[ind].codage;
 	if (**s != '\n')
 		error("ERROR. Incorect symbol after command");
 }
@@ -766,34 +782,207 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 	close(fdwrite);
 }
 
+char		*make_name(char *s)
+{
+	int		i;
+	char	*ret;
+
+	i = 0;
+	while (s[i] != '.')
+		i++;
+	ret = (char*)malloc(sizeof(char) * (i + 5));
+	i = 0;
+	while (s[i] != 's')
+	{
+		ret[i] = s[i];
+		i++;
+	}
+	ret[i++] = 'c';
+	ret[i++] = 'o';
+	ret[i] = 'r';
+	return (ret);
+}
+
+int		get_ind(char *s)
+{
+	int  i;
+
+	i = 0;
+	while (i < 16)
+	{
+		if (ft_strequ(g_tab[i].name, s))
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+int 	get_codege(char *p, int i)
+{
+	int	code;
+
+	if (p[i] == 'I')
+		code = 3;
+	else if (p[i] == 'R')
+		code = 1;
+	else
+		code = 2;
+	return (code);
+}
+
+void	write_codage(int fdwrite, t_commands *comm, t_label *lb)
+{
+	int codage;
+
+	codage = 0;
+	codage += get_codege(comm->P, 0);
+	codage = codage << 2;
+	codage += get_codege(comm->P, 1);
+	codage = codage << 2;
+	codage += get_codege(comm->P, 2);
+	codage = codage << 2;
+	write(fdwrite, &codage, 1);
+}
+
+void	write_reg(int fd, int param)
+{
+	write(fd, &param, 1);
+}
+
+void	write_indir(int fd, t_commands *comm, t_label *lb, int i)
+{
+	int	param;
+
+	if (comm->labels[i] == NULL)
+		param = comm->param[i];
+	else
+	{
+		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+			lb = lb->next;
+		param = lb->byte_num;
+	}
+	param = reverse_bit((unsigned)param);
+	write(fd, &param, 2);
+}
+
+void	write_dir(int fd, t_commands *comm, t_label *lb, int i)
+{
+	int	param;
+
+	if (comm->labels[i] == NULL)
+		param = comm->param[i];
+	else
+	{
+		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+			lb = lb->next;
+		param = lb->byte_num;
+	}
+	param = reverse_bit((unsigned)param);
+	write(fd, &param, 4);
+}
+void	write_param(int fd, t_commands *comm, t_label *lb, int i)
+{
+	if (comm->P[i] == 'R')
+		write_reg(fd, comm->param[i]);
+	else if (comm->P[i] == 'I')
+		write_indir(fd, comm, lb, i);
+	else if (comm->P[i] == 'D')
+		write_dir(fd, comm, lb, i);
+	else
+		write_indir(fd, comm, lb, i);
+}
+
+void	write_to_cor(int fdwrite, t_commands *comm, t_label *lb)
+{
+	int i;
+
+	i = g_tab[get_ind(comm->command_name)].op_code;
+	write(fdwrite, &i, 1);
+	if (g_tab[get_ind(comm->command_name)].codage)
+		write_codage(fdwrite, comm, lb);
+	write_param(fdwrite, comm, lb, 0);
+	write_param(fdwrite, comm, lb, 1);
+	write_param(fdwrite, comm, lb, 2);
+}
+
+void	make_corfile(t_asm *masm, t_commands *comm, t_label	*lb, char *name)
+{
+	int fdwrite;
+	char *n;
+
+	n = "myasm.cor";//make_name(name);
+	ft_printf("++>%s", n);
+	fdwrite = open(n, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+	masm->head->prog_size = reverse_bit((unsigned)masm->count_byte);
+	write(fdwrite, masm->head, sizeof(header_t));
+	while (comm)
+	{
+		write_to_cor(fdwrite, comm, lb);
+		comm = comm->next;
+	}
+	close(fdwrite);
+}
+
+int 	find_lb(char *s, t_label *lb)
+{
+	while (lb)
+	{
+		if (ft_strequ(lb->name, s))
+			return (1);
+		lb = lb->next;
+	}
+	return (0);
+}
+
+void	check_lb(t_commands *comm, t_label	*lb)
+{
+	int i;
+
+	while(comm)
+	{
+		i = 0;
+		while (i < 3)
+		{
+			if (comm->labels[i] != NULL)
+				if (!find_lb(comm->labels[i], lb))
+					error("ERROR. No such label.");
+			i++;
+		}
+		comm = comm->next;
+	}
+}
+
 int main(int argc, char **argv)
 {
 	int			fd;
 	char		*file;
-	header_t	*head;
-	t_asm		*main_struc;
+	t_asm		*mstruc;
 
 	if (argc <= 1)
 		error("No filename. Usage: ./asm filename.");
 	fd = check_file_name(argv[argc - 1]);
 	file = read_file(fd);
-	head = new_head();
-	main_struc = new_struct();
-	main_struc->labels->byte_num = -1;
-	main_struc->commands->command_name = ft_strdup("start");
-	valid_code(main_struc, file, head);
+	mstruc = new_struct();
+	mstruc->head = new_head();
+	mstruc->labels->byte_num = -1;
+	mstruc->commands->command_name = ft_strdup("start");
+	valid_code(mstruc, file, mstruc->head);
 
 	t_commands *c;
-	c = main_struc->commands;
+	c = mstruc->commands;
 	ft_printf("\n\n\n");
 	while (c)
 	{
 		ft_printf("name = %s  lb1- \"%s\" lb2- \"%s\" lb3- \"%s\"  %c%c%c  pr1- %d pr2- %d pr3- %d size = %d\n",
 				  c->command_name, c->labels[0], c->labels[1], c->labels[2], c->P[0], c->P[1], c->P[2],
-					c->param[0], c->param[1], c->param[2]);
+					c->param[0], c->param[1], c->param[2], c->size);
 		ft_printf("NEXT\n");
 		c = c->next;
 	}
+	ft_printf("count= %d\n", mstruc->count_byte);
+	check_lb(mstruc->commands, mstruc->labels);
+	make_corfile(mstruc, mstruc->commands, mstruc->labels, argv[argc - 1]);
+
 
 
 //	valid = new_valid();
