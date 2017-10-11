@@ -325,18 +325,18 @@ void				opcode(t_core *ls, t_proc *proc)
 {
 	unsigned char opcode;
 
-	opcode = read_data_block(ls, proc->pc, 1);
-	printf("opcode = %d\n", opcode);
 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
 	{
-		((op_tab[(proc->opcode_to_execute)]).func)(ls, ls->processes_list, &(op_tab[opcode]));
-		shift_pc(&(proc->pc), (op_tab[opcode]).cycles_to_exec);
+		((op_tab[(proc->opcode_to_execute)]).func)(ls, ls->processes_list, &(op_tab[(proc->opcode_to_execute)]));
+		shift_pc(&(proc->pc), (op_tab[(proc->opcode_to_execute)]).cycles_to_exec);
 	}
 	else
 	{
-		printf("incorrect opcode\n");
+// printf("incorrect opcode\n");
 		// shift_pc(&(proc->pc), 1);
 	}
+	opcode = read_data_block(ls, proc->pc, 1);
+printf("opcode =%d=%#02x\n", opcode, opcode);
 	proc->opcode_to_execute = opcode;
 	if (opcode < 17 && opcode > 0)
 	{
@@ -360,11 +360,21 @@ int					calculate_data_shift(t_my_op *func, unsigned char coding_byte)
 	i = 0;
 	while (i < func->num_of_params)
 	{
-		par = (coding_byte & (0b11 << ((4 - i) * 2))) >> ((4 - i) * 2);
-		printf("calculate_shift = par%d=%02x\n", i,par);
-		// if (par == 3)
-		// 	par = 4;
-		// if (!(par & func->type_of_params[0]))
+		par = (coding_byte & (0b11 << ((3 - i) * 2))) >> ((3 - i) * 2);
+printf("calculate_shift = par%d=%02x\n", i,par);
+		if (par == 3)
+			par = 4;
+		if (par & T_REG)
+			res += 1;
+		else if (par & T_DIR)
+			res += 2;
+		else if (par & T_IND)
+		{
+			if (func->bytes_for_tdir == 2)
+				res += 2;
+			else
+				res += 4;
+		}
 		i++;
 	}
 	return (res);
@@ -374,18 +384,18 @@ int					coding_byte(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	unsigned char coding_byte;
 	
-	coding_byte = read_data_block(ls, proc->pc, 1);
-	printf("coding byte_int=%u, codingbyte_hex=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
+	coding_byte = read_data_block(ls, proc->pc + 1, 1);
+printf("coding_par byte=%u=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
 	calculate_data_shift(func, coding_byte);
 	if ((check_coding_byte(func, coding_byte)))
 	{
-		printf("params are OK\n");
+printf("params are OK\n");
 
 
 
 		return (1);
 	}
-	printf("wrong parameters for this opcode\n");
+printf("wrong parameters for this opcode\n");
 	// shift_pc(&(proc->pc), 1);
 	return (0);
 
@@ -399,7 +409,7 @@ int					check_coding_byte(t_my_op *func, unsigned char coding_byte)
 	if (func->num_of_params >= 1)
 	{
 		par = (coding_byte & 0b11000000) >> (6);
-		printf("par1=%02x\n", par);
+printf("par1=%02x\n", par);
 		if (par == 3)
 			par = 4;
 		if (!(par & func->type_of_params[0]))
@@ -408,7 +418,7 @@ int					check_coding_byte(t_my_op *func, unsigned char coding_byte)
 	if (func->num_of_params >= 2)
 	{
 		par = (coding_byte & 0b110000) >> (4);
-		printf("par2=%02x\n", par);
+printf("par2=%02x\n", par);
 		if (par == 3)
 			par = 4;
 		if (!(par & func->type_of_params[1]))
@@ -417,7 +427,7 @@ int					check_coding_byte(t_my_op *func, unsigned char coding_byte)
 	if (func->num_of_params == 3)
 	{
 		par = (coding_byte & 0b1100) >> (2);
-		printf("par3=%02x\n", par);
+printf("par3=%02x\n", par);
 		if (par == 3)
 			par = 4;
 		if (!(par & func->type_of_params[2]))
@@ -431,7 +441,7 @@ int					main(void)
 	t_core	*ls;
 	t_proc *current_process;
 
-	printf("MEM_SIZE=%d\n", MEM_SIZE);
+printf("MEM_SIZE=%d\n", MEM_SIZE);
 
 	ls = ft_memalloc(sizeof(t_core));
 	init_my_player_and_process(ls);
@@ -444,7 +454,7 @@ int					main(void)
 	size_t code_len = file_size - offset;
 	tmp = (unsigned char *)ft_strnew(code_len);
 	read (fd, tmp, code_len);
-	printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
+printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	close(fd);
 
 	ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), tmp, code_len);
