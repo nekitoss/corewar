@@ -6,7 +6,7 @@ int		valid_val_arg(char *argv)
 	int i;
 
 	i = 0;
-	while (argv[i] != NULL)
+	while (argv[i] != '\0')
 	{
 		if (!ft_isdigit(argv[i]))
 			return (1);
@@ -71,9 +71,10 @@ int		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 	if (hndl_valid_file(argv, ptr))
 		ft_exit("Not correct file with bot");
 	set_num_player(ptr);
+	return (0);
 }
 
-int		vm_valid(int argc, char **argv)
+t_arg	*vm_valid(int argc, char **argv)
 {
 	t_arg	*ptr;
 	char	*line;
@@ -84,5 +85,5 @@ int		vm_valid(int argc, char **argv)
 	vm_init_struct_player(&ptr);
 	vm_valid_data_file(ptr);
 
-	return (0);
+	return (ptr);
 }
