@@ -75,6 +75,7 @@ typedef struct		s_arg
 	int			cnt_arg;
 	int			nm_d;
 	int			nm_f;
+	int			visual;
 	int			dump;
 	int			cnt_player;
 	t_player	**player;

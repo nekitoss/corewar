@@ -18,6 +18,7 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr)->cnt_arg = -1;
 	(*ptr)->nm_d = -1;
 	(*ptr)->nm_f = -1;
+	(*ptr)->visual = 0;
 	(*ptr)->cnt_player = 0;
 	(*ptr)->path_players[0] = NULL;
 	(*ptr)->path_players[1] = NULL;
