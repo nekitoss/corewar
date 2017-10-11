@@ -20,7 +20,7 @@ int		vm_check_magic_byte(int fd)
 	magic_byte = 15369203;
 	if (lseek(fd, 0, 0) < 0)
 		ft_exit("Error lseek");
-	while ()
+
 	if ((read(fd, &num, 4)) < 0)
 		ft_exit("Cannot read file");
 	//if(magic_byte != num)
@@ -247,7 +247,7 @@ int		vm_check_size_file(int fd)
 	//if (offset > 10000)
 		// ft_exit("Too large file, my friend");
 
-	//ft_exit("s");
+	return (0);
 }
 
 int		vm_read_bot(t_arg *ptr, int i)
