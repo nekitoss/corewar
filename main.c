@@ -1,5 +1,3 @@
-
-
 #include "corewar.h"
 
 int ft_exit(char *str)

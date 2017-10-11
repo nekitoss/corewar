@@ -5,6 +5,7 @@
 #include <errno.h>
 #include "libft/libft.h"
 #include "op.h"
+#include "viz/viz.h"
 
 typedef struct         s_op
 {
