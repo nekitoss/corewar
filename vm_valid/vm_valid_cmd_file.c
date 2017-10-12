@@ -26,7 +26,7 @@ int		find_ext_to_end(char *argv)
 	while (argv[i] != '\0')
 	{
 		ptr++;
- 		i++;
+		i++;
 	}
 	ptr -= 4;
 	if (!ft_strcmp(cor, ptr))
@@ -48,43 +48,28 @@ int		ft_isdigit_str(char *argv)
 	return (0);
 }
 
-int		sv_number_player(char *argv, t_arg *ptr)
+void sv_number_player(char *argv, t_arg *ptr, int *fl)
 {
 	int tmp;
-	char *tmp2;
 
 	if (ft_isdigit_str(argv))
-		ft_exit("Not correct value");
+		ft_exit("Not correct value of number player");
 	tmp = ft_atoi(argv);
-    tmp2 = ft_itoa(tmp);
-    if ((ft_strcmp(tmp2, argv)))
-                return (1);
+	if (tmp > MAX_PLAYERS || tmp <= 0)
+		ft_exit("Not correct number player");
 	ptr->num[ptr->cnt_player] = tmp;
-	return (0);
+	(*fl)++;
 }
 
-void 	sv_path_player(char *argv, t_arg *ptr)
+void 	sv_path_player(char *argv, t_arg *ptr, int *fl)
 {
 	if (ptr->cnt_player <= 3)
 		ptr->path_players[ptr->cnt_player] = ft_strdup(argv);
 	if (ptr->cnt_player > 3)
-		ft_exit("to many bots");
+		ft_exit("Too many champions");
 	ptr->cnt_player++;
-	ptr->nm_f = 1;
-
+	if (*fl == 2)
+		(*fl) = 0;
 }
 
-
-int		hndl_valid_file(char **argv, t_arg *ptr)
-{
-	int i;
-	while (argv[i] != NULL)
-	{
-		ft_printf("%s ", argv[i]);
-		i++;
-	}
-	if (valid_filename(argv, ptr))
-		return (1);
-	return (0);
-}
 

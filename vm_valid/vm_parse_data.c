@@ -15,26 +15,19 @@ int		valid_val_arg(char *argv)
 	return (0);
 }
 
-int		hndl_cmd_arg_p(char **argv, t_arg *ptr)
+void	hndl_cmd_arg_p(char **argv, t_arg *ptr)
 {
 	int i;
-	int fl_n;
-	int cnt_n;
 
-	cnt_n = 0;
-	fl_n = 0;
 	i = 0;
-	while (argv[i] != NULL)
+	while (i < ptr->cnt_arg)
 	{
 		if (!ft_strcmp("-n",argv[i]))
 		{
 			if ((i + 1) < ptr->cnt_arg)
 			{
-				if (!valid_val_arg(argv[(i + 1)]))
-				{
-					ptr->n = ft_atoi(argv[(i + 1)]);
-					cnt_n++;
-				}
+				if (valid_val_arg(argv[(i + 1)]))
+					ft_exit("Error: not valid arg");
 			}
 			else
 			{
@@ -43,7 +36,6 @@ int		hndl_cmd_arg_p(char **argv, t_arg *ptr)
 		}
 		i++;
 	}
-	return (cnt_n);
 }
 
 int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
@@ -51,34 +43,37 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 	int i;
 
 	i = 1;
-	if (!ft_strcmp(str, argv[i]))
+	while (i < ptr->cnt_arg)
 	{
-		if (!valid_val_arg(argv[(i + 1)]))
+		printf("%s", argv[i]);
+		if (!ft_strcmp(str, argv[i]))
 		{
-			ptr->dump = ft_atoi(argv[(i + 1)]);
-			return (0);
+			if (!valid_val_arg(argv[(i + 1)]))
+			{
+				ptr->fl_dump = 1;
+				ptr->num_dump = ft_atoi(argv[(i + 1)]);
+				ptr->pos_dump = i;
+				return (0);
+			}
+			ft_exit("Error: incorrect val dump");
 		}
-		ft_exit("Error: incorrect val dump");
+		i++;
 	}
 	return (0);
 }
 
-int		vm_valid_arg(int argc, char **argv, t_arg *ptr)
+void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 {
 	ptr->cnt_arg = argc;
 	hndl_cmd_arg_dump(argv, ptr, "-dump");
 	hndl_cmd_arg_p(argv, ptr);
-	if (hndl_valid_file(argv, ptr))
-		ft_exit("Not correct file with bot");
+	valid_filename(argv, ptr);
 	set_num_player(ptr);
-	return (0);
 }
 
 t_arg	*vm_valid(int argc, char **argv)
 {
 	t_arg	*ptr;
-	char	*line;
-	int		fd;
 
 	vm_init_struct(&ptr);
 	vm_valid_arg(argc, argv, ptr);

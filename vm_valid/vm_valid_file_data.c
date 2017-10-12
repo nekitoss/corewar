@@ -33,8 +33,18 @@ void 	vm_hndl_code(t_player *player, int fd)
 		ft_exit("Don't have code bot or error of read");
 }
 
+void	vm_check_size_file(int fd)
+{
+	long int num;
+
+	num = lseek(fd, 0, SEEK_END);
+	if (num > 2874)
+		ft_exit("Not correct size file");
+}
+
 void	vm_read_bot_data(t_player *player)
 {
+	vm_check_size_file(player->fd);
 	vm_check_magic_byte(player->fd);
 	vm_hndl_name(player, player->fd);
 	vm_hndl_size_code(player, player->fd);
@@ -42,7 +52,7 @@ void	vm_read_bot_data(t_player *player)
 	vm_hndl_code(player, player->fd);
 }
 
-int		vm_read_bot(t_arg *ptr, int i)
+void	vm_read_bot(t_arg *ptr, int i)
 {
 	int		fd;
 

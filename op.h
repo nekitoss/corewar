@@ -73,10 +73,10 @@ typedef struct		s_player
 typedef struct		s_arg
 {
 	int			cnt_arg;
-	int			nm_d;
-	int			nm_f;
+	int			fl_dump;
 	int			visual;
-	int			dump;
+	int			num_dump;
+	int			pos_dump;
 	int			cnt_player;
 	t_player	**player;
 	char		*path_players[5];

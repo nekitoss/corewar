@@ -12,7 +12,7 @@
 
 #include "../corewar.h"
 
-void		srch_num_player(int *num, t_arg *ptr)
+void	srch_num_player(int *num, t_arg *ptr)
 {
 	int i;
 	int num_player;
@@ -33,12 +33,12 @@ void		srch_num_player(int *num, t_arg *ptr)
 	*num = num_player;
 }
 
-void		set_num_player(t_arg *ptr)
+void	set_num_player(t_arg *ptr)
 {
 	int i;
 
 	i = 0;
-	while (i < 5)
+	while (i < ptr->cnt_player)
 	{
 		if (ptr->num[i] == 0)
 			srch_num_player(&(ptr->num[i]), ptr);
@@ -46,36 +46,30 @@ void		set_num_player(t_arg *ptr)
 	}
 }
 
-int		valid_filename(char **argv, t_arg *ptr)
+void	valid_filename(char **argv, t_arg *ptr)
 {
 	int i;
 	int fl;
 
 	fl = 0;
-	i = (ptr->dump == 1) ? 2 : 1;
-	while (argv[i] != 0)
+	i = 1;
+	while (i < ptr->cnt_arg)
 	{
 		if (!ft_strcmp("-n", argv[i]))
 			fl++;
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 0)
-		{
-			sv_path_player(argv[i], ptr);
-			fl = 0;
-		}
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 2)
-		{
-			sv_path_player(argv[i], ptr);
-			fl = 0;
-		}
+		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 0) // sv path without name -n
+			sv_path_player(argv[i], ptr, &fl);
+		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 2) // sv path with name -n
+			sv_path_player(argv[i], ptr, &fl);
 		else if (fl == 1)
+			sv_number_player(argv[i], ptr, &fl);
+		else if (ptr->pos_dump == i)
 		{
-			if (sv_number_player(argv[i], ptr))
-				return (1);
-			fl++;
+			i += 2;
+			continue;
 		}
 		else
-			return (1);
+			ft_exit("Not correct file with bot");
 		i++;
 	}
-	return (0);
 }
