@@ -872,7 +872,7 @@ int 	get_length(int curr_byte, int lb_byte, int fl)
 		else
 		{
 			res = 65535;
-			res = res - (curr_byte - lb_byte + 1);
+			res = res - (curr_byte - lb_byte) + 1;
 		}
 	}
 	return (res);
