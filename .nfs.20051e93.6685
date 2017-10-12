@@ -418,17 +418,16 @@ void				init_my_player_and_process(t_core *ls)
 	(ls->players)[0]->comment = ft_strdup("some_unusefull comment");
 	(ls->players)[0]->num = -1;
 	ls->cycle_to_die = CYCLE_TO_DIE;
-	ls->next_cycle_to_die = ls->cycle_to_die;
+	ls->next_cycle_to_die = 0;
 
 	ls->processes_list = ft_memalloc(sizeof(t_proc));
 	ls->processes_list->reg[1] = 65;
+	ls->processes_list->is_alive = TRUE;
 	ls->processes_list->ls = ls;
 	ls->num_of_processes = ls->num_of_players;
 
-	// ls->processes_list->is_alive = TRUE;
-	// ls->processes_list->next = ft_memalloc(sizeof(t_proc));
-	// ls->processes_list->next->next = ft_memalloc(sizeof(t_proc));
-	// ls->processes_list->next->next->is_alive = TRUE;
+	ls->processes_list->next = ft_memalloc(sizeof(t_proc));
+	ls->processes_list->next->next = ft_memalloc(sizeof(t_proc));
 }
 
 void				opcode(t_core *ls, t_proc *proc)
@@ -544,11 +543,10 @@ int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num)
 
 void				game_end(void)
 {
-	printf("GAME_ENDED\n");
-	exit (-1);
+
 }
 
-int					calculate_processes_and_0lives(t_proc *proc)
+int					calculate_processes(t_proc *proc)
 {
 	int sum;
 
@@ -556,7 +554,6 @@ int					calculate_processes_and_0lives(t_proc *proc)
 	while (proc)
 	{
 		sum++;
-		proc->is_alive = FALSE;
 		proc = proc->next;
 	}
 	return (sum);
@@ -583,10 +580,10 @@ int					kill_processes(t_proc **head)
 			ptr->next = ptr->next->next;
 			ft_strdel((char **)&(tmp));
 		}
-		else
+		if(ptr)
 			ptr = ptr->next;
 	}
-	return (calculate_processes_and_0lives(*head));
+	return (calculate_processes(*head));
 }
 
 void				armageddon(t_core *ls)
@@ -641,10 +638,9 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	ft_strdel((char **)&tmp);
 	print_data(ls->field, 32);
 
-	while (1)//ls->cycle < 25)//ls->cycle_to_die)
+	while (ls->cycle < 25)//ls->cycle_to_die)
 	{
 		//if == ctd then check dead
-		// printf("cycle=%06zu\n", ls->cycle);
 		current_process =  ls->processes_list;
 		armageddon(ls);
 		while (current_process)
