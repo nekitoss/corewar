@@ -1,6 +1,9 @@
 #include "corewar.h"
 
 #define OCTET 8
+#define TRUE 1
+#define FALSE 0
+
 
 typedef struct		s_proc
 {
@@ -31,6 +34,8 @@ typedef struct		s_core
 	size_t			cycle;
 	size_t			gen_lives_in_current_period;
 	size_t			cycle_to_die;
+	size_t			next_cycle_to_die;
+	size_t			nbr_of_checks;
 	t_player		**players; //покачто хард-код
 	int				num_of_players;
 	int				num_of_processes;
@@ -89,8 +94,6 @@ t_my_op				op_tab[17] =
 	{f_aff,		1,	{T_REG, 0, 0},											16,	2,		1,	0}
 };
 
-
-
 size_t				revert_16_bits_size_t(size_t num);
 size_t				revert_32_bits_size_t(size_t num);
 int					check_coding_byte(t_core *ls, t_proc *proc, t_my_op *func);
@@ -103,142 +106,147 @@ int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num);
 //#################### funcions
 void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	printf("end_of_try_execute f_live at cycle=%zu\n", ls->cycle);
+	int	alive_num;
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	alive_num = (int)read_data_block(ls, proc->pc, 4);
+	shift_pc(&(proc->pc), 4);
+	printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", alive_num);
+	proc->is_alive = TRUE;
+	printf("-end_of_try_execute f_live at cycle=%zu\n", ls->cycle);
 }
 
 void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_ld at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_ld at cycle=%zu\n", ls->cycle);
 }
 
 void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_st at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_st at cycle=%zu\n", ls->cycle);
 }
 
 void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_add at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_add at cycle=%zu\n", ls->cycle);
 }
 
 void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_sub at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_sub at cycle=%zu\n", ls->cycle);
 }
 
 void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
 }
 
 void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_or at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_or at cycle=%zu\n", ls->cycle);
 }
 
 void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_xor at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_xor at cycle=%zu\n", ls->cycle);
 }
 
 void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	printf("end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);
 }
 
 void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_ldi at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_ldi at cycle=%zu\n", ls->cycle);
 }
 
 void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
 }
 
 void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	printf("end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);
 }
 
 void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_lld at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_lld at cycle=%zu\n", ls->cycle);
 }
 
 void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
 	{
 
 	}
-	printf("end_of_try_execute f_lldi at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_lldi at cycle=%zu\n", ls->cycle);
 }
 
 void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
 {
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	printf("end_of_try_execute f_lfork at cycle=%zu\n", ls->cycle);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-end_of_try_execute f_lfork at cycle=%zu\n", ls->cycle);
 }
 
 void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int par[1];
-	printf("cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 2);
 	read_parameters_and_shift(func, proc, read_data_block(ls, proc->pc - 1, 1), par);
 	if (!(proc->wrong_params))
@@ -251,7 +259,7 @@ void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
 		proc->execute_at = ls->cycle + 1;
 		printf("AFF parametrs WRONg, CAN't DO aff\n");
 	}
-	printf("end_of_try_execute f_aff at cycle=%zu\n", ls->cycle);
+	printf("-end_of_try_execute f_aff at cycle=%zu\n", ls->cycle);
 }
 
 //#################### funcions
@@ -410,10 +418,17 @@ void				init_my_player_and_process(t_core *ls)
 	(ls->players)[0]->comment = ft_strdup("some_unusefull comment");
 	(ls->players)[0]->num = -1;
 	ls->cycle_to_die = CYCLE_TO_DIE;
+	ls->next_cycle_to_die = ls->cycle_to_die;
 
 	ls->processes_list = ft_memalloc(sizeof(t_proc));
 	ls->processes_list->reg[1] = 65;
 	ls->processes_list->ls = ls;
+	ls->num_of_processes = ls->num_of_players;
+
+	// ls->processes_list->is_alive = TRUE;
+	// ls->processes_list->next = ft_memalloc(sizeof(t_proc));
+	// ls->processes_list->next->next = ft_memalloc(sizeof(t_proc));
+	// ls->processes_list->next->next->is_alive = TRUE;
 }
 
 void				opcode(t_core *ls, t_proc *proc)
@@ -423,7 +438,8 @@ void				opcode(t_core *ls, t_proc *proc)
 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
 	{
 		((op_tab[(proc->opcode_to_execute)]).func)(ls, proc, &(op_tab[(proc->opcode_to_execute)]));
-		shift_pc(&(proc->pc), (op_tab[(proc->opcode_to_execute)]).cycles_to_exec);
+		// shift_pc(&(proc->pc), (op_tab[(proc->opcode_to_execute)]).cycles_to_exec);
+		// shift_pc(&(proc->pc), 1);
 	}
 	else
 	{
@@ -526,10 +542,81 @@ int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num)
 	return (0);
 }
 
+void				game_end(void)
+{
+
+}
+
+int					calculate_processes(t_proc *proc)
+{
+	int sum;
+
+	sum = 0;
+	while (proc)
+	{
+		sum++;
+		proc = proc->next;
+	}
+	return (sum);
+}
+
+int					kill_processes(t_proc **head)
+{
+	t_proc	*ptr;
+	t_proc	*tmp;
+
+	ptr = *head;
+	while (ptr)
+	{
+		if (ptr == *head && !(ptr->is_alive))
+		{
+			tmp = ptr;
+			*head = ptr->next;
+			ptr = *head;
+			ft_strdel((char **)&(tmp));
+		}
+		else if (ptr->next && !(ptr->next->is_alive))
+		{
+			tmp = ptr->next;
+			ptr->next = ptr->next->next;
+			ft_strdel((char **)&(tmp));
+		}
+		else
+			ptr = ptr->next;
+	}
+	return (calculate_processes(*head));
+}
+
+void				armageddon(t_core *ls)
+{
+	if (ls->cycle == ls->next_cycle_to_die)
+	{
+		if (ls->gen_lives_in_current_period >= NBR_LIVE || ls->nbr_of_checks >= MAX_CHECKS)
+		{
+			if (ls->cycle_to_die > CYCLE_DELTA)
+			{
+				ls->cycle_to_die -= CYCLE_DELTA;
+				ls->nbr_of_checks = 0;
+			}
+			else
+				game_end();
+		}
+		else
+			(ls->nbr_of_checks)++;
+		ls->gen_lives_in_current_period = 0;
+		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
+		ls->num_of_processes = kill_processes(&(ls->processes_list));
+		if (!(ls->num_of_processes))
+			game_end();
+	}
+}
+
 int					main(void)
 {
 	t_core	*ls;
 	t_proc	*current_process;
+
+	
 
 printf("MEM_SIZE=%d\n", MEM_SIZE);
 
@@ -552,12 +639,13 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	ft_strdel((char **)&tmp);
 	print_data(ls->field, 32);
 
-	while (ls->cycle < 10)//ls->cycle_to_die)
+	while (ls->cycle < 25)//ls->cycle_to_die)
 	{
 		//if == ctd then check dead
 		current_process =  ls->processes_list;
+		armageddon(ls);
 		while (current_process)
-		{	
+		{
 			if (current_process->execute_at == ls->cycle)
 				opcode(ls, current_process);
 			current_process = current_process->next;
