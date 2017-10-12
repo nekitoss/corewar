@@ -376,7 +376,7 @@ char	*get_lb_name(char *s)
 		str[j] = s[j];
 		j++;
 	}
-	ft_printf("str = %s\n", str);
+	//ft_printf("str = %s\n", str);
 	return (str);
 }
 
@@ -434,22 +434,6 @@ void	check_separator(char *s, int index)
 	if (g_tab[index].arg_count != (count + 1))
 		error("Separator error");
 }
-
-//int			check_label_list(t_asm *masm, char **s)	////will help late
-//{
-//	char	*str;
-//	t_label *lb;
-//
-//	lb = masm->labels;
-//	str = *s;
-//	(*s)++;
-//	ft_printf(">>>%.10s\n", *s);
-//	while (ft_strchr(LABEL_CHARS, **s))
-//		(*s)++;
-//	if (**s != ' ' && **s != '\t' && **s != ',' && **s != '\n')
-//		error("ERROR (Direct label)");
-//
-//}
 
 void	check_lb_char(char **s)
 {
@@ -539,7 +523,7 @@ void	check_num(char **s)
 
 void	check_parameter(char **s)
 {
-	ft_printf("==>%.10s\n", *s);
+	//ft_printf("==>%.10s\n", *s);
 	if (**s == '%')
 		check_dir(s);
 	else if (**s == 'r')
@@ -621,7 +605,6 @@ int		add_reg(t_commands *comm, int i, char **s)
 {
 	(*s)++;
 	comm->param[i] = ft_atoi(*s);
-	comm->size = comm->size + 1;
 	comm->P[i] = 'R';
 	return (1);
 }
@@ -635,32 +618,42 @@ int		add_indir(t_commands *comm, int i, char **s)
 		comm->param[i] = ft_atoi(*s);
 	else
 		comm->labels[i] = get_lb_name(*s);
-	comm->size = comm->size + 2;
 	return (2);
 }
 
-int		add_dir(t_commands *comm, int i, char **s)
+int		add_lbdir(t_commands *comm, int i, int ind, char **s)
 {
 	(*s)++;
-	if (**s == ':')
-	{
-		add_indir(comm, i, s);
-		if (g_tab[i].dir_size)
-			return (4);
-		else
-			return (2);
-	}
-	comm->param[i] = ft_atoi(*s);
-	if (g_tab[i].dir_size)
+	comm->labels[i] = get_lb_name(*s);
+	if (!g_tab[ind].dir_size)
 	{
 		comm->P[i] = 'D';
-		comm->size = comm->size + 4;
 		return (4);
 	}
 	else
 	{
 		comm->P[i] = 'd';
-		comm->size = comm->size + 2;
+		return (2);
+	}
+}
+
+int		add_dir(t_commands *comm, int i, int ind, char **s)
+{
+	(*s)++;
+	if (**s == ':')
+	{
+		return (add_lbdir(comm, i, ind, s));
+
+	}
+	comm->param[i] = ft_atoi(*s);
+	if (!g_tab[ind].dir_size)
+	{
+		comm->P[i] = 'D';
+		return (4);
+	}
+	else
+	{
+		comm->P[i] = 'd';
 		return (2);
 	}
 }
@@ -673,7 +666,7 @@ int			set_param(t_commands *comm, int i, int index, char **s)
 	if (k == 1)
 		return (add_reg(comm, i, s));
 	else if (k == 2)
-		return (add_dir(comm, i, s));
+		return (add_dir(comm, i, index, s));
 	else if (k == 4)
 		return (add_indir(comm, i, s));
 	return (0);
@@ -688,9 +681,10 @@ void			add_to_struct(t_asm *masm, int ind, char **s) {
 	comm->command_name = ft_strdup(g_tab[ind].name);
 	*s += ft_strlen(comm->command_name);
 	pass_spaces(s);
+	comm->size = masm->count_byte;
 	while (i < g_tab[ind].arg_count)
 	{
-		ft_printf("-->%s\n", *s);
+		//ft_printf("-->%s\n", *s);
 		masm->count_byte += set_param(comm, i, ind, s);
 		while (**s != ',' && **s != ' ' && **s != '\t' && **s != '\n')
 			(*s)++;
@@ -698,6 +692,7 @@ void			add_to_struct(t_asm *masm, int ind, char **s) {
 		i++;
 	}
 	masm->count_byte += 1 + g_tab[ind].codage;
+	ft_printf("count_byte %d\n",masm->count_byte);
 	if (**s != '\n')
 		error("ERROR. Incorect symbol after command");
 }
@@ -720,25 +715,18 @@ void	check_command(t_asm *masm, char **str)
 	add_to_struct(masm, index, &s);
 
 	while (**str != '\n')
-	{
-		//if (**str != '\t' && **str != ' ')
-			//error("WTF after parameters??");
 		(*str)++;
-	}
+
 }
 
 int			check_label(t_asm *masm, char **str)
 {
 	char	*s;
-	int		i;
 
 	s = *str;
 	if (check_label_or_comm(s) == 1)
 		return (1);
-	i = add_label(masm, s);
-	if (i == -1)
-		return (0);
-	//(*str) += i + 1;
+	add_label(masm, s); ////
 	while (**str != LABEL_CHAR)
 		(*str)++;
 	(*str)++;
@@ -758,16 +746,22 @@ int		is_empty(char *s)
 	return (0);
 }
 
+int		pass_it(char *s)
+{
+	while (*s == ' ' || *s == '\t')
+		s++;
+	if (*s == '\n')
+		return (1);
+	return (0);
+}
+
 void	valid_code(t_asm *masm, char *str, header_t *head)
 {
-	int fdwrite;
-
-	fdwrite = open("hell.s", O_WRONLY);
 	valid_head(head, &str);
 	del_com(&str);
 	while (*str != '\0' && !is_empty(str))
 	{
-		if (check_label(masm, &str))
+		if (!pass_it(str) && check_label(masm, &str))
 			check_command(masm, &str);
 		while (*str != '\n')
 			str++;
@@ -778,8 +772,6 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 
 
 	ft_printf("\n----->%s\n", str);
-	write(fdwrite, str, ft_strlen(str));
-	close(fdwrite);
 }
 
 char		*make_name(char *s)
@@ -825,8 +817,10 @@ int 	get_codege(char *p, int i)
 		code = 3;
 	else if (p[i] == 'R')
 		code = 1;
-	else
+	else if (p[i] == 'D' || p[i] == 'd')
 		code = 2;
+	else
+		code = 0;
 	return (code);
 }
 
@@ -844,38 +838,82 @@ void	write_codage(int fdwrite, t_commands *comm, t_label *lb)
 	write(fdwrite, &codage, 1);
 }
 
+unsigned int		reverse_two_bit(unsigned int a)
+{
+	unsigned int	b;
+
+	b = 0;
+	b = b | (a & 255);
+	b = b << 8;
+	a = a >> 8;
+	b = b | (a & 255);
+	return (b);
+}
+
 void	write_reg(int fd, int param)
 {
+	ft_printf("write reg\n");
 	write(fd, &param, 1);
+}
+
+int 	get_length(int curr_byte, int lb_byte, int fl)
+{
+	unsigned int	res;
+
+	if (lb_byte >= curr_byte)
+		res = (unsigned)lb_byte - curr_byte;
+	else
+	{
+		if (fl == 4)
+		{
+			res = 4294967295;
+			res = res - (curr_byte - lb_byte) + 1;
+		}
+		else
+		{
+			res = 65535;
+			res = res - (curr_byte - lb_byte + 1);
+		}
+	}
+	return (res);
 }
 
 void	write_indir(int fd, t_commands *comm, t_label *lb, int i)
 {
 	int	param;
-
+	ft_printf("write indir\n");
 	if (comm->labels[i] == NULL)
 		param = comm->param[i];
 	else
 	{
+		ft_printf("else indir\n");
 		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+		{
+			ft_printf("param lb= %d \n", lb->byte_num);
 			lb = lb->next;
-		param = lb->byte_num;
+		}
+		ft_printf("param lb= %d \n", lb->byte_num);
+		param = get_length(comm->size, lb->byte_num, 2);
 	}
-	param = reverse_bit((unsigned)param);
+	param = reverse_two_bit((unsigned)param);
 	write(fd, &param, 2);
 }
 
 void	write_dir(int fd, t_commands *comm, t_label *lb, int i)
 {
 	int	param;
-
+	ft_printf("write dir\n");
 	if (comm->labels[i] == NULL)
 		param = comm->param[i];
 	else
 	{
 		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+		{
+			ft_printf("param lb= %d \n", lb->byte_num);
 			lb = lb->next;
-		param = lb->byte_num;
+		}
+		param = get_length(comm->size, lb->byte_num, 4);
+		ft_printf("param lb= %d \n", lb->byte_num);
 	}
 	param = reverse_bit((unsigned)param);
 	write(fd, &param, 4);
@@ -888,8 +926,11 @@ void	write_param(int fd, t_commands *comm, t_label *lb, int i)
 		write_indir(fd, comm, lb, i);
 	else if (comm->P[i] == 'D')
 		write_dir(fd, comm, lb, i);
-	else
+	else if (comm->P[i] == 'd')
 		write_indir(fd, comm, lb, i);
+	else
+		return ;
+	ft_printf("\n\n");
 }
 
 void	write_to_cor(int fdwrite, t_commands *comm, t_label *lb)
@@ -910,8 +951,7 @@ void	make_corfile(t_asm *masm, t_commands *comm, t_label	*lb, char *name)
 	int fdwrite;
 	char *n;
 
-	n = "myasm.cor";//make_name(name);
-	ft_printf("++>%s", n);
+	n = "myasm.cor";////make_name(name); ///// DONT FORGET
 	fdwrite = open(n, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
 	masm->head->prog_size = reverse_bit((unsigned)masm->count_byte);
 	write(fdwrite, masm->head, sizeof(header_t));
@@ -920,6 +960,7 @@ void	make_corfile(t_asm *masm, t_commands *comm, t_label	*lb, char *name)
 		write_to_cor(fdwrite, comm, lb);
 		comm = comm->next;
 	}
+	ft_printf("Writing output program to %s\n", n);
 	close(fdwrite);
 }
 
@@ -978,6 +1019,13 @@ int main(int argc, char **argv)
 					c->param[0], c->param[1], c->param[2], c->size);
 		ft_printf("NEXT\n");
 		c = c->next;
+	}
+	t_label *l;
+	l = mstruc->labels;
+	while (l)
+	{
+		ft_printf("name = %s, byte_num = %d\n",l->name, l->byte_num);
+		l = l->next;
 	}
 	ft_printf("count= %d\n", mstruc->count_byte);
 	check_lb(mstruc->commands, mstruc->labels);
