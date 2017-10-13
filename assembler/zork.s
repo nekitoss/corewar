@@ -1,10 +1,16 @@
-.name "zork"
-.comment "I'M ALIIIIVE"
+.name "
+zork"
+.comment "I'M ALIII
 
-l2:		and %:l2, r1, r1
+
+live:
+IVE"
+
+l2:		
 		and %:l2, r1, r1
+		and %:l2, r1, r1
+l2:		and %:l2, r2, r1
 		and %:l2, r2, r1
-		and %:l2, r2, r1
-		and %:l2, r2, r1
+l2:		and %:l2, r2, r1
 		and %:l2, r2, r1
 

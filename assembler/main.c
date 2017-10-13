@@ -73,7 +73,6 @@ int		check_file_name(char *s)
 	if (len <= 2 || s[len - 1] != 's' || s[len - 2] != '.')
 		error("Wrong file. File format must be .s");
 	fd = open(s, O_RDONLY);
-	ft_printf("fd = %d\n", fd);
 	if (fd < 0)
 		error("No file.");
 	return (fd);
@@ -234,22 +233,19 @@ char	*check_comment(char *str)
 void valid_head(header_t *head, char **str)
 {
 	char *t;
-	int fdwrite;
 	int i;
 
-	fdwrite = open("example.cor", O_WRONLY);
 	t = head->prog_name;
+
 	cpy(&t, check_name(*str));
-	ft_printf("\nname - %s\n", head->prog_name);
+	ft_printf("\nname - %s\n", head->prog_name);////
 	if (ft_strlen(t) > 128)
 		error("Too large name");
 	t = head->comment;
 	cpy(&t, check_comment(*str));
-	ft_printf("\ncomment - %s\n", head->comment);
+	ft_printf("\ncomment - %s\n", head->comment);////
 	if (ft_strlen(t) > 2048)
 		error("Too large comment");
-	write(fdwrite, head, sizeof(header_t));
-	close(fdwrite);
 	i = 0;
 	while (i < 2)
 	{
@@ -951,7 +947,7 @@ void	make_corfile(t_asm *masm, t_commands *comm, t_label	*lb, char *name)
 	int fdwrite;
 	char *n;
 
-	n = "myasm.cor";////make_name(name); ///// DONT FORGET
+	n = make_name(name); ///// DONT FORGET
 	fdwrite = open(n, O_CREAT | O_TRUNC | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
 	masm->head->prog_size = reverse_bit((unsigned)masm->count_byte);
 	write(fdwrite, masm->head, sizeof(header_t));
