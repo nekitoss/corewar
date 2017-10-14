@@ -14,6 +14,7 @@ typedef struct		s_proc
 	size_t			execute_at;
 	int				opcode_to_execute;
 	int				wrong_params;
+	int				belong_to_player;
 	struct s_core	*ls;
 	struct s_proc	*next;
 }					t_proc;
@@ -102,6 +103,8 @@ void				shift_pc(size_t *pc, int value);
 void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[]);
 size_t				read_data_block(t_core *ls, size_t start, int len);
 int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num);
+void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
+void				clone_proc(t_proc *father, t_proc *son);
 
 //#################### funcions
 void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
@@ -214,6 +217,7 @@ void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
 void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+
 	printf("-end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);
 }
 
@@ -246,6 +250,8 @@ void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
 void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int par[1];
+
+	par[0] = 0;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 2);
 	read_parameters_and_shift(func, proc, read_data_block(ls, proc->pc - 1, 1), par);
@@ -320,29 +326,6 @@ void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char cod
 		i++;
 	}
 }
-
-// int					read_parameter(t_my_op *func, t_proc *proc, unsigned char coding_byte, int par_num)
-// {
-// 	int			res;
-
-// 	res = 0;
-// 	coding_byte = ident_param(coding_byte, par_num);
-// 	if (coding_byte & T_REG)
-// 	{
-// 		res = read_data_block(proc->ls, proc->pc, 2);
-// 		if (res > 0 && res < 17)
-// 			res = (short int)((proc->reg)[]);
-// 	}
-// 	else if (coding_byte & T_IND)
-// 		res = (int)(read_data_block(proc->ls, proc->pc, 4));
-// 	else if (coding_byte & T_DIR)
-// 	{
-// 		if (func->bytes_for_tdir == 2)
-// 			res += 2;
-// 		else
-// 			res += 4;
-// 	}
-// }
 
 size_t				read_data_block(t_core *ls, size_t start, int len)
 {
@@ -420,15 +403,27 @@ void				init_my_player_and_process(t_core *ls)
 	ls->cycle_to_die = CYCLE_TO_DIE;
 	ls->next_cycle_to_die = ls->cycle_to_die;
 
-	ls->processes_list = ft_memalloc(sizeof(t_proc));
-	ls->processes_list->reg[1] = 65;
-	ls->processes_list->ls = ls;
+	(ls->players)[1] = (t_player *)ft_memalloc(sizeof(t_player));
+	((ls->players)[1])->name = ft_strdup("second_player");
+	(ls->players)[1]->comment = ft_strdup("very_unusefull comment");
+	(ls->players)[1]->num = -2;
+	ls->cycle_to_die = CYCLE_TO_DIE;
+	ls->next_cycle_to_die = ls->cycle_to_die;
+
+	int i = 0;
+
+	while (i < ls->num_of_players)
+	{
+		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
+		i++;
+	}
+	// ls->processes_list = ft_memalloc(sizeof(t_proc));
+	// ls->processes_list->reg[1] = 65;
+	// ls->processes_list->ls = ls;
 	ls->num_of_processes = ls->num_of_players;
 
-	// ls->processes_list->is_alive = TRUE;
-	// ls->processes_list->next = ft_memalloc(sizeof(t_proc));
-	// ls->processes_list->next->next = ft_memalloc(sizeof(t_proc));
-	// ls->processes_list->next->next->is_alive = TRUE;
+	// add_proc_on_top(ls, MEM_SIZE/2, 255);
+	// clone_proc(ls->processes_list->next, ls->processes_list);
 }
 
 void				opcode(t_core *ls, t_proc *proc)
@@ -460,35 +455,6 @@ void				opcode(t_core *ls, t_proc *proc)
 	}
 }
 
-// int					calculate_data_shift(t_my_op *func, unsigned char coding_byte)
-// {
-// 	int				i;
-// 	int				res;
-// 	unsigned char	par;
-
-// 	par = 0;
-// 	res = 0;
-// 	i = 0;
-// 	while (i < func->num_of_params)
-// 	{
-// 		par = ident_param(coding_byte, i);
-// // printf("calculate_shift = par%d=%02x\n", i,par);
-// 		if (par & T_REG)
-// 			res += 1;
-// 		else if (par & T_IND)
-// 			res += 2;
-// 		else if (par & T_DIR)
-// 		{
-// 			if (func->bytes_for_tdir == 2)
-// 				res += 2;
-// 			else
-// 				res += 4;
-// 		}
-// 		i++;
-// 	}
-// 	return (res);
-// }
-
 int					check_coding_byte(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	unsigned char coding_byte;
@@ -510,7 +476,7 @@ int					cmp_coding_byte(t_my_op *func, unsigned char coding_byte)
 {
 	unsigned char par;
 
-	par = 0;
+	//par = 0;
 	if (func->num_of_params >= 1)
 	{
 		par = ident_param(coding_byte, 0);
@@ -540,6 +506,33 @@ int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num)
 	if (ident_param(coding_byte, param_num) & func->type_of_params[param_num])
 			return (1);
 	return (0);
+}
+
+void				add_proc_on_top(t_core *ls, int pc, int belong_to_player)
+{
+	t_proc	*new;
+
+	new = ft_memalloc(sizeof(t_proc));
+	new->reg[1] = belong_to_player;
+	new->next = ls->processes_list;
+	new->pc = pc;
+	new->belong_to_player = belong_to_player;
+	new->ls = ls;
+	new->execute_at = ls->cycle;
+	ls->processes_list = new;
+}
+
+void				clone_proc(t_proc *father, t_proc *son)
+{
+	if (father && son)
+	{
+		ft_memcpy(son->reg, father->reg, (REG_NUMBER + 1) * sizeof(*(father->reg)));
+		son->is_alive = father->is_alive;
+		son->carry = father->carry;
+		son->execute_at = father->ls->cycle + 1;
+		// son->opcode = read_data_block(father->ls, son->pc, 1);
+		son->belong_to_player = father->belong_to_player;
+	}
 }
 
 void				game_end(void)
