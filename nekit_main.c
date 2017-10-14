@@ -41,7 +41,9 @@ typedef struct		s_core
 	int				num_of_players;
 	int				num_of_processes;
 	unsigned char	field[MEM_SIZE];
+	unsigned char	colors[MEM_SIZE];
 	t_proc			*processes_list;
+	// t_arg			*args;
 }					t_core;
 
 
@@ -363,16 +365,16 @@ size_t				revert_32_bits_size_t(size_t num)
 	return (num);
 }
 
-void				print_data(unsigned char *str, size_t len)
+void				print_data(unsigned char *str, size_t len, size_t width)
 {
 	size_t i;
 
 	i = 0;
 	while (i < len)
 	{
-		if (i % 32 == 0 && i != 0)
+		if (i % width == 0 && i != 0)
 			printf("\n");
-		printf(" %02x", str[(i % MEM_SIZE)]);
+		printf(" %02x", str[i]);
 		
 		i++;
 	}
@@ -535,9 +537,27 @@ void				clone_proc(t_proc *father, t_proc *son)
 	}
 }
 
-void				game_end(void)
+void				game_end(t_core *ls)
 {
+	int		i;
+	size_t	last_live_of_winner;
+	int		winner_num;
+
+	winner_num = -1;
+	last_live_of_winner = 0;
+	i = 0;
+	while(i < ls->num_of_players)
+	{
+		if (((ls->players)[i])->last_live >= last_live_of_winner) //не факт что больше равно
+		{
+			last_live_of_winner = ((ls->players)[i])->last_live;
+			winner_num = i + 1;
+		}
+		i++;
+	}//вывести номера игрокок умноженные на -1 //можно сделать указание что игрок выиграл не сказав лайв
 	printf("GAME_ENDED\n");
+	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);
+	//free structure
 	exit (-1);
 }
 
@@ -584,6 +604,8 @@ int					kill_processes(t_proc **head)
 
 void				armageddon(t_core *ls)
 {
+	// if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
+	// 	print_data(ls->field, MEM_SIZE, ls->args->width_dump);
 	if (ls->cycle == ls->next_cycle_to_die)
 	{
 		if (ls->gen_lives_in_current_period >= NBR_LIVE || ls->nbr_of_checks >= MAX_CHECKS)
@@ -594,7 +616,7 @@ void				armageddon(t_core *ls)
 				ls->nbr_of_checks = 0;
 			}
 			else
-				game_end();
+				game_end(ls);
 		}
 		else
 			(ls->nbr_of_checks)++;
@@ -602,7 +624,7 @@ void				armageddon(t_core *ls)
 		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
 		ls->num_of_processes = kill_processes(&(ls->processes_list));
 		if (!(ls->num_of_processes))
-			game_end();
+			game_end(ls);
 	}
 }
 
@@ -630,9 +652,9 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	close(fd);
 
 	ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), tmp, code_len);
-	print_data(tmp, code_len);
+	print_data(tmp, code_len, 0);
 	ft_strdel((char **)&tmp);
-	print_data(ls->field, 32);
+	print_data(ls->field, 64, 64);
 
 	while (1)//ls->cycle < 25)//ls->cycle_to_die)
 	{
