@@ -415,7 +415,7 @@ void				set_next_ex(size_t *next_execution_at, int value)
 
 void				init_my_player_and_process(t_core *ls)
 {
-	ls->num_of_players = 2;
+	ls->num_of_players = 1;
 	ls->players = (t_player **)ft_memalloc(sizeof(t_player *) * ls->num_of_players);
 	(ls->players)[0] = (t_player *)ft_memalloc(sizeof(t_player));
 	((ls->players)[0])->name = ft_strdup("my_name");
@@ -424,19 +424,42 @@ void				init_my_player_and_process(t_core *ls)
 	ls->cycle_to_die = CYCLE_TO_DIE;
 	ls->next_cycle_to_die = ls->cycle_to_die;
 
-	(ls->players)[1] = (t_player *)ft_memalloc(sizeof(t_player));
-	((ls->players)[1])->name = ft_strdup("second_player");
-	(ls->players)[1]->comment = ft_strdup("very_unusefull comment");
-	(ls->players)[1]->num = -2;
-	ls->cycle_to_die = CYCLE_TO_DIE;
-	ls->next_cycle_to_die = ls->cycle_to_die;
+
+
+	int fd = open("/nfs/2016/m/mpochuka/pool/corewar/src/test.cor", O_RDONLY);
+	size_t file_size = lseek(fd, 0, SEEK_END);
+	size_t offset = lseek(fd, 4 + PROG_NAME_LENGTH + 1 + 3 + sizeof(int) + COMMENT_LENGTH + 1 + 3, 0);
+	
+	unsigned char *tmp;
+	size_t code_len = file_size - offset;
+	tmp = (unsigned char *)ft_strnew(code_len);
+	read (fd, tmp, code_len);
+printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
+	close(fd);
+
+	((ls->players)[0])->program_code = (unsigned char *)ft_strnew(code_len);
+	((ls->players)[0])->code_size = code_len;
+	ft_memcpy((void **)&(((ls->players)[0])->program_code), tmp, code_len);
+	print_data(tmp, code_len, 32);
+	ft_strdel((char **)&tmp);
+	print_data(ls->field, 64, 64);
+
+
+	// (ls->players)[1] = (t_player *)ft_memalloc(sizeof(t_player));
+	// ((ls->players)[1])->name = ft_strdup("second_player");
+	// (ls->players)[1]->comment = ft_strdup("very_unusefull comment");
+	// (ls->players)[1]->num = -2;
+	// ls->cycle_to_die = CYCLE_TO_DIE;
+	// ls->next_cycle_to_die = ls->cycle_to_die;
 
 	int i = 0;
 
 	while (i < ls->num_of_players)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
-		ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
+		printf("try copy on field %p, from  %p, with len %d\n", &((ls->field)[(ls->processes_list->pc)]), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
+		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
+		printf("copied\n");
 		i++;
 	}
 	// ls->processes_list = ft_memalloc(sizeof(t_proc));
@@ -446,6 +469,7 @@ void				init_my_player_and_process(t_core *ls)
 
 	// add_proc_on_top(ls, MEM_SIZE/2, 255);
 	// clone_proc(ls->processes_list->next, ls->processes_list);
+	printf("end of init\n");
 }
 
 void				opcode(t_core *ls, t_proc *proc)
@@ -560,15 +584,15 @@ void				clone_proc(t_proc *father, t_proc *son)
 void				game_end(t_core *ls)
 {
 	int		i;
-	size_t	last_live_of_winner;
+	ssize_t	last_live_of_winner;
 	int		winner_num;
 
 	winner_num = -1;
-	last_live_of_winner = 0;
+	last_live_of_winner = -1;
 	i = 0;
 	while(i < ls->num_of_players)
 	{
-		if (((ls->players)[i])->last_live > last_live_of_winner) //не факт что больше равно
+		if ((ssize_t)(((ls->players)[i])->last_live) > last_live_of_winner) //не факт что больше равно
 		{
 			last_live_of_winner = ((ls->players)[i])->last_live;
 			winner_num = i + 1;
@@ -659,22 +683,7 @@ printf("MEM_SIZE=%d\n", MEM_SIZE);
 
 	ls = ft_memalloc(sizeof(t_core));
 	init_my_player_and_process(ls);
-	
-	int fd = open("/nfs/2016/m/mpochuka/pool/corewar/src/test.cor", O_RDONLY);
-	size_t file_size = lseek(fd, 0, SEEK_END);
-	size_t offset = lseek(fd, 4 + PROG_NAME_LENGTH + 1 + 3 + sizeof(int) + COMMENT_LENGTH + 1 + 3, 0);
-	
-	unsigned char *tmp;
-	size_t code_len = file_size - offset;
-	tmp = (unsigned char *)ft_strnew(code_len);
-	read (fd, tmp, code_len);
-printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
-	close(fd);
 
-	ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), tmp, code_len);
-	print_data(tmp, code_len, 32);
-	ft_strdel((char **)&tmp);
-	print_data(ls->field, 64, 64);
 
 	while (1)//ls->cycle < 25)//ls->cycle_to_die)
 	{
