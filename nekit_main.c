@@ -41,7 +41,7 @@ typedef struct		s_core
 	int				num_of_players;
 	int				num_of_processes;
 	unsigned char	field[MEM_SIZE];
-	unsigned char	colors[MEM_SIZE];
+	char			colors[MEM_SIZE];
 	t_proc			*processes_list;
 	// t_arg			*args;
 }					t_core;
@@ -115,6 +115,7 @@ void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	alive_num = (int)read_data_block(ls, proc->pc, 4);
 	shift_pc(&(proc->pc), 4);
+	// if alive_
 	printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", alive_num);
 	proc->is_alive = TRUE;
 	printf("-end_of_try_execute f_live at cycle=%zu\n", ls->cycle);
@@ -329,7 +330,7 @@ void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char cod
 	}
 }
 
-void				write_data_block(t_core *ls, size_t data, size_t start, int len)
+void				write_data_block(t_proc *proc, size_t data, size_t start, int len)
 {
 	int i;
 
@@ -340,7 +341,8 @@ void				write_data_block(t_core *ls, size_t data, size_t start, int len)
 		data = revert_16_bits_size_t(data);
 	while (i < len && i < 5)
 	{
-		ls->field[((start + i) % MEM_SIZE)] = (data & 0xff);
+		proc->ls->field[((start + i) % MEM_SIZE)] = (data & 0xff);
+		proc->ls->colors[((start + i) % MEM_SIZE)] = proc->belong_to_player;
 		data = data >> OCTET;
 		i++;
 	}
@@ -413,7 +415,7 @@ void				set_next_ex(size_t *next_execution_at, int value)
 
 void				init_my_player_and_process(t_core *ls)
 {
-	ls->num_of_players = 1;
+	ls->num_of_players = 2;
 	ls->players = (t_player **)ft_memalloc(sizeof(t_player *) * ls->num_of_players);
 	(ls->players)[0] = (t_player *)ft_memalloc(sizeof(t_player));
 	((ls->players)[0])->name = ft_strdup("my_name");
@@ -565,13 +567,13 @@ void				game_end(t_core *ls)
 	i = 0;
 	while(i < ls->num_of_players)
 	{
-		if (((ls->players)[i])->last_live >= last_live_of_winner) //не факт что больше равно
+		if (((ls->players)[i])->last_live > last_live_of_winner) //не факт что больше равно
 		{
 			last_live_of_winner = ((ls->players)[i])->last_live;
 			winner_num = i + 1;
 		}
 		i++;
-	}//можно сделать указание что игрок выиграл не сказав лайв
+	}//можно сделать указание что игрок выиграл не сказав лайв сплясать от макс чекс
 	printf("GAME_ENDED\n");
 	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);
 	//free structure
