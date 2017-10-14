@@ -26,14 +26,21 @@ int		vm_check_magic_byte(int fd)
 		ft_exit("Error in magic byte, my friend!");
 }
 
-int 	vm_check_null(int fd)
+int 	vm_check_null(int fd, int fl)
 {
 	int zero;
 
 	zero = 0;
 	read(fd, &zero, 4);
 	if (zero != 0)
-		ft_exit("Error not valid data, don't have null terminate");
+	{
+		if (fl == 1)
+			write(1,"Warning: "
+					"don't have null terminate afte name. Autocorrect", 54);
+		if (fl == 2)
+			write(1,"Warning:"
+					" don't have null terminate afte comment. Autocorrect", 54);
+	}
 }
 
 void	vm_hndl_name(t_player *player, int fd)
@@ -41,9 +48,10 @@ void	vm_hndl_name(t_player *player, int fd)
 	char buffer[129];
 
 	buffer[128] = '\0';
-	lseek(fd, 4, 0);
+	if (lseek(fd, 4, 0) < 0)
+		ft_exit("Error lseek");
 	read(fd, buffer, PROG_NAME_LENGTH);
-	vm_check_null(fd);
+	vm_check_null(fd, 1);
 	player->name = ft_strdup(buffer);
 }
 
@@ -52,9 +60,10 @@ void	vm_hndl_comment(t_player *player, int fd)
 	char buffer[COMMENT_LENGTH + 1];
 
 	buffer[COMMENT_LENGTH] = '\0';
-	lseek(fd, 140, 0);
+	if (lseek(fd, 140, 0) < 0)
+		ft_exit("Error lseek");
 	read(fd, buffer, COMMENT_LENGTH);
-	vm_check_null(fd);
+	vm_check_null(fd, 2);
 	player->comment = ft_strdup(buffer);
 }
 

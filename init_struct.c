@@ -19,7 +19,10 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr)->fl_dump = -1;
 	(*ptr)->num_dump = -1;
 	(*ptr)->pos_dump = -1;
-	(*ptr)->visual = 0;
+	(*ptr)->width_dump = 8;
+	(*ptr)->fl_visual = 0;
+	(*ptr)->fl_warning_name = 0;
+	(*ptr)->fl_warning_comment = 0;
 	(*ptr)->cnt_player = 0;
 	(*ptr)->path_players[0] = NULL;
 	(*ptr)->path_players[1] = NULL;
@@ -53,9 +56,10 @@ int 	vm_init_struct_player(t_arg **ptr)
 		(*ptr)->player[i]->name = NULL;
 		(*ptr)->player[i]->comment = NULL;
 		(*ptr)->player[i]->program_code = NULL;
+		(*ptr)->player[i]->path_player = NULL;
 		(*ptr)->player[i]->last_live = 0;
 		(*ptr)->player[i]->sum_lives = 0;
-		(*ptr)->player[i]->num = 0;
+		(*ptr)->player[i]->num = (*ptr)->num[i];
 		(*ptr)->player[i]->fd = 0;
 		(*ptr)->player[i]->size_code = 0;
 		i++;

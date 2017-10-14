@@ -63,6 +63,7 @@ typedef struct		s_player
 	char			*name;
 	char			*comment;
 	char			*program_code;
+	char			*path_player;
 	size_t			last_live;
 	unsigned int	sum_lives;
 	int				num;
@@ -74,9 +75,12 @@ typedef struct		s_arg
 {
 	int			cnt_arg;
 	int			fl_dump;
-	int			visual;
+	int			fl_visual;
 	int			num_dump;
 	int			pos_dump;
+	int			width_dump;
+	int			fl_warning_name;
+	int			fl_warning_comment;
 	int			cnt_player;
 	t_player	**player;
 	char		*path_players[5];

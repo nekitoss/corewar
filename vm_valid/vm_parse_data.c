@@ -4,14 +4,28 @@
 int		valid_val_arg(char *argv)
 {
 	int i;
+	int fl;
 
+	fl = 0;
 	i = 0;
 	while (argv[i] != '\0')
 	{
 		if (!ft_isdigit(argv[i]))
+		{
+			if (argv[i] == '0' && fl == 0)
+			{
+				i++;
+				continue;
+			}
+			fl = 1;
+		}
+		else
 			return (1);
 		i++;
 	}
+	if (fl == 0)
+		ft_exit("Error: number must be content at "
+		"least one digit, but not zero");
 	return (0);
 }
 
@@ -51,6 +65,8 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 			if (!valid_val_arg(argv[(i + 1)]))
 			{
 				ptr->fl_dump = 1;
+				if (ft_strlen(argv[(i + 1)]) > 10)
+					ft_exit("Error too big number");
 				ptr->num_dump = ft_atoi(argv[(i + 1)]);
 				ptr->pos_dump = i;
 				return (0);

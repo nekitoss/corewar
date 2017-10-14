@@ -12,39 +12,57 @@
 
 #include "../corewar.h"
 
+void 	ft_exit_name_file(t_player *player, char *str1, char *str2)
+{
+	write(1, str1, ft_strlen(str1));
+	write(1, player->path_player, ft_strlen(player->path_player));
+	write(1, str2, ft_strlen(str2));
+	exit(0);
+}
 
+void	vm_check_file_structure(t_player *player)
+{
+	int offset;
+
+	if (offset = lseek(player->fd,0,SEEK_END) < 0)
+		ft_exit("Error lseek");
+	if (offset == 0)
+	{
+		// insert free func!!!
+		ft_exit_name_file(player, "Error file too small: ", " it's "
+				"empty");
+	}
+	else if (offset < 4 )
+		ft_exit_name_file(player, "Error file too small: ", "have'not magic number");
+	else if (offset < 132 && offset > 4)
+		ft_exit_name_file(player, "Error file too small: ", "have'not correct name");
+	else if (offset < 140 && offset > 136)
+		ft_exit_name_file(player, "Error file too small: ", "have'not size code");
+	else if (offset > 140 && offset < 2192)
+		ft_exit_name_file(player, "Error file too small: ", "have'not comment");
+}
 
 void 	vm_hndl_code(t_player *player, int fd)
 {
 	char buffer[CHAMP_MAX_SIZE + 1];
 	int byte;
+	long int offset;
 
 	buffer[CHAMP_MAX_SIZE] = '\0';
-	lseek(fd, 2192, 0);
-	if ((byte = read(fd, buffer, player->size_code)) > 0)
+	offset = lseek(fd,0,SEEK_END);
+	if ((offset - 2192) != player->size_code)
 	{
-		if (read(fd, buffer, 1) != 0)
-			ft_exit("Not correct size code champ bot");
-		player->program_code = (char*)malloc(sizeof(char) * byte + 1);
-		player->program_code[byte] = '\0';
-		ft_memcpy((void*)player->program_code, (void*)buffer, byte);
+		ft_exit_name_file(player, "Error file: ",
+		  " has a code size that differ from what its header says\n");
 	}
-	else
-		ft_exit("Don't have code bot or error of read");
-}
-
-void	vm_check_size_file(int fd)
-{
-	long int num;
-
-	num = lseek(fd, 0, SEEK_END);
-	if (num > 2874)
-		ft_exit("Not correct size file");
+	player->program_code = (char*)malloc(sizeof(char) * byte + 1);
+	player->program_code[byte] = '\0';
+	ft_memcpy((void*)player->program_code, (void*)buffer, byte);
 }
 
 void	vm_read_bot_data(t_player *player)
 {
-	vm_check_size_file(player->fd);
+	vm_check_file_structure(player);
 	vm_check_magic_byte(player->fd);
 	vm_hndl_name(player, player->fd);
 	vm_hndl_size_code(player, player->fd);
@@ -55,11 +73,15 @@ void	vm_read_bot_data(t_player *player)
 void	vm_read_bot(t_arg *ptr, int i)
 {
 	int		fd;
-
+	char	chr;
+	long long int offset;
 	fd = open(ptr->path_players[i], O_RDONLY, 0666);
+	offset = lseek(fd,0,SEEK_END);//test
+	read(fd,&chr,1);// test
 	if (fd < 0)
 		ft_exit("Not exist file *.cor");
 	ptr->player[i]->fd = fd;
+	ptr->player[i]->path_player = ptr->path_players[i];
 	vm_read_bot_data(ptr->player[i]);
 }
 
