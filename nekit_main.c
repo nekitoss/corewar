@@ -329,6 +329,23 @@ void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char cod
 	}
 }
 
+void				write_data_block(t_core *ls, size_t data, size_t start, int len)
+{
+	int i;
+
+	i = 0;
+	if (len == 4)
+		data = revert_32_bits_size_t(data);
+	else if (len == 2)
+		data = revert_16_bits_size_t(data);
+	while (i < len && i < 5)
+	{
+		ls->field[((start + i) % MEM_SIZE)] = (data & 0xff);
+		data = data >> OCTET;
+		i++;
+	}
+}
+
 size_t				read_data_block(t_core *ls, size_t start, int len)
 {
 	int i;
@@ -336,7 +353,7 @@ size_t				read_data_block(t_core *ls, size_t start, int len)
 
 	mem_block = 0;
 	i = 0;
-	while (i < len)
+	while (i < len && i < 9)
 	{
 		mem_block = mem_block << OCTET;
 		mem_block |= ls->field[((start + i) % MEM_SIZE)];
@@ -372,7 +389,7 @@ void				print_data(unsigned char *str, size_t len, size_t width)
 	i = 0;
 	while (i < len)
 	{
-		if (i % width == 0 && i != 0)
+		if (i != 0 && i % width == 0)
 			printf("\n");
 		printf(" %02x", str[i]);
 		
@@ -554,7 +571,7 @@ void				game_end(t_core *ls)
 			winner_num = i + 1;
 		}
 		i++;
-	}//вывести номера игрокок умноженные на -1 //можно сделать указание что игрок выиграл не сказав лайв
+	}//можно сделать указание что игрок выиграл не сказав лайв
 	printf("GAME_ENDED\n");
 	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);
 	//free structure
@@ -652,7 +669,7 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	close(fd);
 
 	ft_memcpy((void **)&((ls->field)[(ls->processes_list->pc)]), tmp, code_len);
-	print_data(tmp, code_len, 0);
+	print_data(tmp, code_len, 32);
 	ft_strdel((char **)&tmp);
 	print_data(ls->field, 64, 64);
 
