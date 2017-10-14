@@ -55,6 +55,8 @@ void 	vm_hndl_code(t_player *player, int fd)
 		ft_exit_name_file(player, "Error file: ",
 		  " has a code size that differ from what its header says\n");
 	}
+	else if (offset > 2874)
+		ft_exit("Too big code size bot");
 	player->program_code = (char*)malloc(sizeof(char) * byte + 1);
 	player->program_code[byte] = '\0';
 	ft_memcpy((void*)player->program_code, (void*)buffer, byte);
@@ -74,7 +76,7 @@ void	vm_read_bot(t_arg *ptr, int i)
 {
 	int		fd;
 	char	chr;
-	long long int offset;
+	long long int offset; // test
 	fd = open(ptr->path_players[i], O_RDONLY, 0666);
 	offset = lseek(fd,0,SEEK_END);//test
 	read(fd,&chr,1);// test
