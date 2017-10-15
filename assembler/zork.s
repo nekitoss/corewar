@@ -1,10 +1,5 @@
-.name "
-zork"
-.comment "I'M ALIII
-
-
-live:
-IVE"
+.name ""
+.comment """
 
 l2:		
 		and %:l2, r1, r1

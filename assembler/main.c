@@ -2,7 +2,9 @@
 
 void error(char *str)
 {
-	ft_printf("%s\n", str);
+	ft_putstr(str);
+	ft_putchar('\n');
+	//ft_printf("%s\n", str);
 	exit(1);
 }
 
@@ -156,18 +158,23 @@ char		*get_name(char *str)
 	return (ret);
 }
 
-int 	count_quotes(char *ptr)
+void 	check_quotes(char *str, int i)
 {
-	int i;
+	int count;
 
-	i = 0;
-	while (*ptr != '\n')
+	count = 0;
+	if (i == 1)
+		str = ft_strstr(str, ".name");
+	else
+		str = ft_strstr(str, ".comment");
+	while (*str != '\0')
 	{
-		if (*ptr == '"')
-			i++;
-		ptr++;
+		if (*str == '\"')
+			count++;
+		str++;
 	}
-	return (i);
+	if (count != 2 && count != 4)
+		error("Syntax error. -> \" <- ");
 }
 
 char	*check_name(char *str)
@@ -186,10 +193,9 @@ char	*check_name(char *str)
 		prev += 5;
 		prev = ft_strstr(prev, ".name");
 	}
-	if (v->count_name > 1 || v->count_name == 0)
+	if (v->count_name != 1)
 		error("Syntax error. \".name\"");
-	if (count_quotes(ptr) != 2)
-		error("Syntax error. -> \" <- ");
+	check_quotes(str, 1);
 	return (get_name(ptr));
 }
 
@@ -223,10 +229,9 @@ char	*check_comment(char *str)
 		prev += 8;
 		prev = ft_strstr(prev, ".comment");
 	}
-	if (v->count_comment > 1 || v->count_comment == 0)
+	if (v->count_comment !=1)
 		error("Syntax error. \".comment\"");
-	if (count_quotes(ptr) != 2)
-		error("Syntax error. -> \" <-");
+	check_quotes(str, 0);
 	return (get_name(ptr));
 }
 
@@ -247,13 +252,11 @@ void valid_head(header_t *head, char **str)
 	if (ft_strlen(t) > 2048)
 		error("Too large comment");
 	i = 0;
-	while (i < 2)
+	while (i < 4)
 	{
-		while (**str != '.')
-			(*str)++;
-		while (**str != '\n')
-			(*str)++;
-		i++;
+		if (**str == '\"')
+			i++;
+		(*str)++;
 	}
 	(*str)++;
 	while (**str == ' ' || **str == '\n' || **str == '\t')
@@ -372,7 +375,6 @@ char	*get_lb_name(char *s)
 		str[j] = s[j];
 		j++;
 	}
-	//ft_printf("str = %s\n", str);
 	return (str);
 }
 
@@ -519,7 +521,6 @@ void	check_num(char **s)
 
 void	check_parameter(char **s)
 {
-	//ft_printf("==>%.10s\n", *s);
 	if (**s == '%')
 		check_dir(s);
 	else if (**s == 'r')
@@ -668,7 +669,8 @@ int			set_param(t_commands *comm, int i, int index, char **s)
 	return (0);
 }
 
-void			add_to_struct(t_asm *masm, int ind, char **s) {
+void			add_to_struct(t_asm *masm, int ind, char **s)
+{
 	t_commands *comm;
 	int i;
 
@@ -757,6 +759,7 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 	del_com(&str);
 	while (*str != '\0' && !is_empty(str))
 	{
+		ft_printf("--->>%s\n", str);
 		if (!pass_it(str) && check_label(masm, &str))
 			check_command(masm, &str);
 		while (*str != '\n')
@@ -820,7 +823,7 @@ int 	get_codege(char *p, int i)
 	return (code);
 }
 
-void	write_codage(int fdwrite, t_commands *comm, t_label *lb)
+void	write_codage(int fdwrite, t_commands *comm)
 {
 	int codage;
 
@@ -936,7 +939,7 @@ void	write_to_cor(int fdwrite, t_commands *comm, t_label *lb)
 	i = g_tab[get_ind(comm->command_name)].op_code;
 	write(fdwrite, &i, 1);
 	if (g_tab[get_ind(comm->command_name)].codage)
-		write_codage(fdwrite, comm, lb);
+		write_codage(fdwrite, comm);
 	write_param(fdwrite, comm, lb, 0);
 	write_param(fdwrite, comm, lb, 1);
 	write_param(fdwrite, comm, lb, 2);
