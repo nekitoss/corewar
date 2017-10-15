@@ -37,11 +37,12 @@ typedef struct		s_core
 	size_t			cycle_to_die;
 	size_t			next_cycle_to_die;
 	size_t			nbr_of_checks;
-	t_player		**players; //покачто хард-код
+	t_player		**players;
 	int				num_of_players;
 	int				num_of_processes;
 	unsigned char	field[MEM_SIZE];
 	char			colors[MEM_SIZE];
+	// char			changes[MEM_SIZE];
 	t_proc			*processes_list;
 	// t_arg			*args;
 }					t_core;
@@ -57,26 +58,26 @@ typedef struct		s_my_op
 	int				cycles_to_exec;
 	char			is_codage;
 	char			bytes_for_tdir;
-}					t_my_op;
+}					g_my_op;
 
-void				f_live(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_ld(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_st(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_add(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_sub(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_and(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_or(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_xor(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_sti(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_fork(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_lld(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func);
-void				f_aff(t_core *ls, t_proc *proc, t_my_op *func);
+void				f_live(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_ld(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_st(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_add(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_sub(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_and(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_or(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_xor(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_sti(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_fork(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_lld(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func);
+void				f_aff(t_core *ls, t_proc *proc, g_my_op *func);
 
-t_my_op				op_tab[17] =
+g_my_op				op_tab[17] =
 {
 	{0,			0,	{0, 0, 0},												0,	0,		0,	0},
 	{f_live,	1,	{T_DIR, 0, 0},											1,	10,		0,	4},
@@ -99,29 +100,35 @@ t_my_op				op_tab[17] =
 
 size_t				revert_16_bits_size_t(size_t num);
 size_t				revert_32_bits_size_t(size_t num);
-int					check_coding_byte(t_core *ls, t_proc *proc, t_my_op *func);
-int					cmp_coding_byte(t_my_op *func, unsigned char coding_byte);
+int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func);
+int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte);
 void				shift_pc(size_t *pc, int value);
-void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[]);
+void				read_parameters_and_shift(g_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[]);
 size_t				read_data_block(t_core *ls, size_t start, int len);
-int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num);
+int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
 void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
 
 //#################### funcions
-void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int	alive_num;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	alive_num = (int)read_data_block(ls, proc->pc, 4);
 	shift_pc(&(proc->pc), 4);
-	// if alive_
-	printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", alive_num);
+	if (alive_num < 0 && alive_num >= (ls->num_of_players * -1))
+	{
+		(((ls->players)[(alive_num * -1)])->sum_lives)++; 
+		((ls->players)[(alive_num * -1)])->last_live = ls->cycle;
+		printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", alive_num);
+	}
+
+	(ls->gen_lives_in_current_period)++;
 	proc->is_alive = TRUE;
 	printf("-end_of_try_execute f_live at cycle=%zu\n", ls->cycle);
 }
 
-void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -131,7 +138,7 @@ void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_ld at cycle=%zu\n", ls->cycle);
 }
 
-void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -141,7 +148,7 @@ void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_st at cycle=%zu\n", ls->cycle);
 }
 
-void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -151,7 +158,7 @@ void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_add at cycle=%zu\n", ls->cycle);
 }
 
-void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -161,7 +168,7 @@ void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_sub at cycle=%zu\n", ls->cycle);
 }
 
-void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -171,7 +178,7 @@ void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
 }
 
-void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -181,7 +188,7 @@ void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_or at cycle=%zu\n", ls->cycle);
 }
 
-void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -191,13 +198,13 @@ void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_xor at cycle=%zu\n", ls->cycle);
 }
 
-void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	printf("-end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);
 }
 
-void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -207,7 +214,7 @@ void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_ldi at cycle=%zu\n", ls->cycle);
 }
 
-void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -217,14 +224,14 @@ void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
 }
 
-void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 
 	printf("-end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);
 }
 
-void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -234,7 +241,7 @@ void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_lld at cycle=%zu\n", ls->cycle);
 }
 
-void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (check_coding_byte(ls, proc, func))
@@ -244,13 +251,13 @@ void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
 	printf("-end_of_try_execute f_lldi at cycle=%zu\n", ls->cycle);
 }
 
-void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	printf("-end_of_try_execute f_lfork at cycle=%zu\n", ls->cycle);
 }
 
-void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
+void				f_aff(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int par[1];
 
@@ -281,7 +288,7 @@ unsigned char		ident_param(unsigned char coding_byte, int param_num)
 	return (coding_byte);
 }
 
-int					calculate_pc_shift(t_my_op *func, unsigned char coding_byte, int par_num)
+int					calculate_pc_shift(g_my_op *func, unsigned char coding_byte, int par_num)
 {
 	coding_byte = ident_param(coding_byte, par_num);
 // printf("calculate_pc_shift = par%d=%02x\n", i, coding_byte);
@@ -300,7 +307,7 @@ int					calculate_pc_shift(t_my_op *func, unsigned char coding_byte, int par_num
 		return (0);
 }
 
-void				read_parameters_and_shift(t_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[])
+void				read_parameters_and_shift(g_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[])
 {
 	int			i;
 
@@ -462,9 +469,7 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 		i++;
 	}
 	print_data(ls->field, 64, 64);
-	// ls->processes_list = ft_memalloc(sizeof(t_proc));
 	// ls->processes_list->reg[1] = 65;
-	// ls->processes_list->ls = ls;
 	ls->num_of_processes = ls->num_of_players;
 
 	// add_proc_on_top(ls, MEM_SIZE/2, 255);
@@ -501,12 +506,12 @@ void				opcode(t_core *ls, t_proc *proc)
 	}
 }
 
-int					check_coding_byte(t_core *ls, t_proc *proc, t_my_op *func)
+int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	unsigned char coding_byte;
 	
 	coding_byte = read_data_block(ls, proc->pc + 1, 1);
-printf("coding_par byte=%u=%#x\n", coding_byte, (coding_byte));// & 0b11000000));
+printf("coding_par byte=%u=%#x\n", coding_byte, (coding_byte));
 	if ((cmp_coding_byte(func, coding_byte)))
 	{
 printf("params are OK\n");
@@ -518,36 +523,32 @@ printf("wrong parameters for %03d opcode\n", proc->opcode_to_execute);
 
 }
 
-int					cmp_coding_byte(t_my_op *func, unsigned char coding_byte)
+int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte)
 {
 	unsigned char par;
 
-	//par = 0;
 	if (func->num_of_params >= 1)
 	{
 		par = ident_param(coding_byte, 0);
-// printf("par1=%02x\n", par);
 		if (!(par & func->type_of_params[0]))
 			return (0);
 	}
 	if (func->num_of_params >= 2)
 	{
 		par = ident_param(coding_byte, 1);
-// printf("par2=%02x\n", par);
 		if (!(par & func->type_of_params[1]))
 			return (0);
 	}
 	if (func->num_of_params == 3)
 	{
 		par = ident_param(coding_byte, 2);
-// printf("par3=%02x\n", par);
 		if (!(par & func->type_of_params[2]))
 			return (0);
 	}
 	return (1);
 }
 
-int					cmp_one_param(t_my_op *func, unsigned char coding_byte, int param_num)
+int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num)
 {
 	if (ident_param(coding_byte, param_num) & func->type_of_params[param_num])
 			return (1);
@@ -685,9 +686,9 @@ printf("MEM_SIZE=%d\n", MEM_SIZE);
 	init_my_player_and_process(ls);
 
 
-	while (1)//ls->cycle < 25)//ls->cycle_to_die)
+	//call visio
+	while (1)
 	{
-		//if == ctd then check dead
 		// printf("cycle=%06zu\n", ls->cycle);
 		current_process =  ls->processes_list;
 		armageddon(ls);
@@ -697,6 +698,7 @@ printf("MEM_SIZE=%d\n", MEM_SIZE);
 				opcode(ls, current_process);
 			current_process = current_process->next;
 		}
+		//call visio
 		(ls->cycle)++;
 	}
 
