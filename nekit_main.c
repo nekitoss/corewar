@@ -4,17 +4,22 @@
 #define TRUE 1
 #define FALSE 0
 
-
+#define P_PAR (proc->par)
+#define P_REG (proc->reg)
+#define P_COD_B (proc->coding_byte)
 typedef struct		s_proc
 {
 	size_t			pc;
 	int				reg[REG_NUMBER + 1];
-	int				is_alive;
+	unsigned char	is_alive;
 	char			carry;
 	size_t			execute_at;
-	int				opcode_to_execute;
-	int				wrong_params;
-	int				belong_to_player;
+	unsigned char	opcode_to_execute;
+	// int				wrong_params;
+	char			belong_to_player;
+	unsigned char	coding_byte;
+	size_t			old_pc;
+	int				par[3];
 	struct s_core	*ls;
 	struct s_proc	*next;
 }					t_proc;
@@ -104,11 +109,14 @@ size_t				revert_32_bits_size_t(size_t num);
 int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func);
 int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte);
 void				shift_pc(size_t *pc, int value);
-void				read_parameters_and_shift(g_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[]);
+int					read_parameters_and_shift(g_my_op *func, t_proc *proc);
+int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc);
 size_t				read_data_block(t_core *ls, size_t start, int len);
 int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
 void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
+void				convert_param(g_my_op *func, t_proc *proc, int par_num);
+unsigned char		ident_param(unsigned char coding_byte, int param_num);
 
 //#################### funcions
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
@@ -219,12 +227,19 @@ void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
 {
-	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
+printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 2);
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
+		int what = P_REG[P_PAR[0]];
+		convert_param(func, proc, 1);
+		convert_param(func, proc, 2);
+		int where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + proc->old_pc) % MEM_SIZE;
+		printf("what=%d where=%d\n", what, where);		
 
 	}
-	printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
+printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
 }
 
 void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
@@ -267,21 +282,37 @@ void				f_aff(t_core *ls, t_proc *proc, g_my_op *func)
 	par[0] = 0;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 2);
-	read_parameters_and_shift(func, proc, read_data_block(ls, proc->pc - 1, 1), par);
-	if (!(proc->wrong_params))
-	{
-		printf("### ICANDO AFF ####\n");
-		printf("%c\n", par[0] % 256);
-	}
-	else
-	{
-		proc->execute_at = ls->cycle + 1;
-		printf("AFF parametrs WRONg, CAN't DO aff\n");
-	}
+	read_parameters_and_shift(func, proc);
+	// if (!(proc->wrong_params))
+	// {
+	// 	printf("### ICANDO AFF ####\n");
+	// 	printf("%c\n", par[0] % 256);
+	// }
+	// else
+	// {
+	// 	proc->execute_at = ls->cycle + 1;
+	// 	printf("AFF parametrs WRONg, CAN't DO aff\n");
+	// }
 	printf("-end_of_try_execute f_aff at cycle=%zu\n", ls->cycle);
 }
 
 //#################### funcions
+
+void					convert_param(g_my_op *func, t_proc *proc, int par_num)
+{
+	int coding_byte;
+
+	coding_byte = ident_param(P_COD_B, par_num);
+	if (coding_byte & T_REG)
+		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]);
+	else if (coding_byte & T_IND)
+	{
+		P_PAR[par_num] = (int)(((short)P_PAR[par_num]) % IDX_MOD);
+		P_PAR[par_num] = (int)read_data_block(proc->ls, proc->old_pc, P_PAR[par_num]);
+	}
+	else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
+		P_PAR[par_num] = (int)((short)P_PAR[par_num]);
+}
 
 unsigned char		ident_param(unsigned char coding_byte, int param_num)
 {
@@ -310,34 +341,64 @@ int					calculate_pc_shift(g_my_op *func, unsigned char coding_byte, int par_num
 		return (0);
 }
 
-void				read_parameters_and_shift(g_my_op *func, t_proc *proc, unsigned char coding_byte, int ret[])
+
+
+int					read_parameters_and_shift(g_my_op *func, t_proc *proc)
 {
 	int			i;
+	int			correct_params;
 
+	correct_params = 1;
 	i = 0;
 	while (i < func->num_of_params)
 	{
-		ret[i] = (int)read_data_block(proc->ls, proc->pc, calculate_pc_shift(func, coding_byte, i));
-		if (cmp_one_param(func, coding_byte, i))
+		P_PAR[i] = (int)read_data_block(proc->ls, proc->pc, calculate_pc_shift(func, P_COD_B, i));
+		if (cmp_one_param(func, P_COD_B, i))
 		{
-			if ((ident_param(coding_byte, i) & T_REG) && ret[i] > 0 && ret[i] < 17)
-				ret[i] = (int)((short)(proc->reg)[(ret[i])]);
-			else if (ident_param(coding_byte, i) & T_IND)
+			if ((ident_param(P_COD_B, i) & T_REG) && P_PAR[i] > 0 && P_PAR[i] < 17)
+				P_PAR[i] = (int)((short)P_REG[(P_PAR[i])]);
+			else if (ident_param(P_COD_B, i) & T_IND)
 			{
-				ret[i] = (int)(((short)ret[i]) % IDX_MOD);
-				ret[i] = (int)read_data_block(proc->ls, proc->pc, ret[i]);
+				P_PAR[i] = (int)(((short)P_PAR[i]) % IDX_MOD);
+				P_PAR[i] = (int)read_data_block(proc->ls, proc->pc, P_PAR[i]);
 			}
-			else if ((ident_param(coding_byte, i) & T_DIR) && func->bytes_for_tdir == 2)
-				ret[i] = (int)((short)ret[i]);
-			else if ((ident_param(coding_byte, i) & T_DIR) && func->bytes_for_tdir == 4)
+			else if ((ident_param(P_COD_B, i) & T_DIR) && func->bytes_for_tdir == 2)
+				P_PAR[i] = (int)((short)P_PAR[i]);
+			else if ((ident_param(P_COD_B, i) & T_DIR) && func->bytes_for_tdir == 4)
 				continue ;
 			else
-				proc->wrong_params = 1;
+				correct_params = 0;
 		}
 		else
-			proc->wrong_params = 1;
+			correct_params = 0;
 		i++;
 	}
+	return (correct_params);
+}
+
+int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc)
+{
+	int			i;
+	int			correct_params;
+
+	correct_params = 1;
+	i = 0;
+	while (i < func->num_of_params)
+	{
+		P_PAR[i] = (int)read_data_block(proc->ls, proc->pc, calculate_pc_shift(func, P_COD_B, i));
+		if (cmp_one_param(func, P_COD_B, i))
+		{
+			if ((ident_param(P_COD_B, i) & T_REG) && P_PAR[i] < 1 && P_PAR[i] > 16)
+				correct_params = 0;
+			if ((ident_param(P_COD_B, i) & T_DIR) && func->bytes_for_tdir == 2)
+				P_PAR[i] = (int)((short)P_PAR[i]);
+		}
+		else
+			correct_params = 0;
+		shift_pc(&(proc->pc), calculate_pc_shift(func, P_COD_B, i));
+		i++;
+	}
+	return (correct_params);
 }
 
 void				write_data_block(t_proc *proc, size_t data, size_t start, int len)
@@ -486,6 +547,7 @@ void				opcode(t_core *ls, t_proc *proc)
 
 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
 	{
+		proc->old_pc = proc->pc;
 		((op_tab[(proc->opcode_to_execute)]).func)(ls, proc, &(op_tab[(proc->opcode_to_execute)]));
 		// shift_pc(&(proc->pc), (op_tab[(proc->opcode_to_execute)]).cycles_to_exec);
 		// shift_pc(&(proc->pc), 1);
