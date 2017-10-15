@@ -437,13 +437,14 @@ void				init_my_player_and_process(t_core *ls)
 printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	close(fd);
 
-	((ls->players)[0])->program_code = (unsigned char *)ft_strnew(code_len);
-	((ls->players)[0])->code_size = code_len;
-	ft_memcpy((void **)&(((ls->players)[0])->program_code), tmp, code_len);
 	print_data(tmp, code_len, 32);
-	ft_strdel((char **)&tmp);
-	print_data(ls->field, 64, 64);
 
+	((ls->players)[0])->program_code = (unsigned char *)ft_strnew(code_len);
+	ft_memcpy((void *)(((ls->players)[0])->program_code), tmp, code_len);
+	print_data(	((ls->players)[0])->program_code	, code_len, 32);
+	((ls->players)[0])->code_size = code_len;
+
+	ft_strdel((char **)&tmp);
 
 	// (ls->players)[1] = (t_player *)ft_memalloc(sizeof(t_player));
 	// ((ls->players)[1])->name = ft_strdup("second_player");
@@ -457,11 +458,10 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	while (i < ls->num_of_players)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
-		printf("try copy on field %p, from  %p, with len %d\n", &((ls->field)[(ls->processes_list->pc)]), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
 		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
-		printf("copied\n");
 		i++;
 	}
+	print_data(ls->field, 64, 64);
 	// ls->processes_list = ft_memalloc(sizeof(t_proc));
 	// ls->processes_list->reg[1] = 65;
 	// ls->processes_list->ls = ls;
