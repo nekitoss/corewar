@@ -25,7 +25,7 @@ typedef struct		s_player
 	char			*comment;
 	unsigned char	*program_code;
 	size_t			last_live;
-	unsigned int	sum_lives;
+	unsigned int	sum_lives_in_current_period;
 	int				num;
 	int				code_size;
 }					t_player;
@@ -34,6 +34,7 @@ typedef struct		s_core
 {
 	size_t			cycle;
 	size_t			gen_lives_in_current_period;
+	size_t			gen_lives_in_previous_period;
 	size_t			cycle_to_die;
 	size_t			next_cycle_to_die;
 	size_t			nbr_of_checks;
@@ -114,13 +115,15 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int	alive_num;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 1);
 	alive_num = (int)read_data_block(ls, proc->pc, 4);
 	shift_pc(&(proc->pc), 4);
 	if (alive_num < 0 && alive_num >= (ls->num_of_players * -1))
 	{
-		(((ls->players)[(alive_num * -1)])->sum_lives)++; 
-		((ls->players)[(alive_num * -1)])->last_live = ls->cycle;
-		printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", alive_num);
+		alive_num = (alive_num * (-1)) - 1;
+		(((ls->players)[alive_num])->sum_lives_in_current_period)++; 
+		((ls->players)[alive_num])->last_live = ls->cycle;
+		printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", (alive_num + 1) * -1);
 	}
 
 	(ls->gen_lives_in_current_period)++;
@@ -600,7 +603,7 @@ void				game_end(t_core *ls)
 		}
 		i++;
 	}//можно сделать указание что игрок выиграл не сказав лайв сплясать от макс чекс
-	printf("GAME_ENDED\n");
+	printf("GAME_ENDED on cycle %zu\n", ls->cycle);
 	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);
 	//free structure
 	exit (-1);
@@ -647,6 +650,18 @@ int					kill_processes(t_proc **head)
 	return (calculate_processes_and_0lives(*head));
 }
 
+void				empty_player_lives(t_core *ls)
+{
+	int i;
+
+	i = 0;
+	while (i < ls->num_of_players)
+	{
+		((ls->players)[i])->sum_lives_in_current_period = 0;
+		i++;
+	}
+}
+
 void				armageddon(t_core *ls)
 {
 	// if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
@@ -665,6 +680,8 @@ void				armageddon(t_core *ls)
 		}
 		else
 			(ls->nbr_of_checks)++;
+		empty_player_lives(ls);
+		ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
 		ls->gen_lives_in_current_period = 0;
 		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
 		ls->num_of_processes = kill_processes(&(ls->processes_list));
