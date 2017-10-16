@@ -65,7 +65,7 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 			{
 				ptr->fl_dump = 1;
 				if (ft_strlen(argv[(i + 1)]) > 10)
-					ft_exit("Error: too big number\n");
+					ft_exit("Error: too big number, my friend\n");
 				ptr->num_dump = ft_atoi(argv[(i + 1)]);
 				ptr->pos_dump = i;
 			}

@@ -57,9 +57,9 @@ void	valid_filename(char **argv, t_arg *ptr)
 	{
 		if (!ft_strcmp("-n", argv[i]))
 			fl++;
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 0) // sv path without name -n
+		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 0)
 			sv_path_player(argv[i], ptr, &fl);
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 2) // sv path with name -n
+		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 2)
 			sv_path_player(argv[i], ptr, &fl);
 		else if (fl == 1)
 			sv_number_player(argv[i], ptr, &fl);
@@ -69,7 +69,11 @@ void	valid_filename(char **argv, t_arg *ptr)
 			continue;
 		}
 		else
-			ft_exit("Error: in argument to line\n");
+			ft_exit("Error: in argument to line, think about this,"
+							" my friend\n");
 		i++;
 	}
+	if (fl != 0)
+		ft_exit("Error: in argument to line, think about this,"
+						" my friend)\n");
 }
