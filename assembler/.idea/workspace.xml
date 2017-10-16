@@ -27,8 +27,8 @@
           <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.c">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="714">
-                  <caret line="795" column="21" lean-forward="true" selection-start-line="792" selection-start-column="4" selection-end-line="795" selection-end-column="21" />
+                <state relative-caret-position="479">
+                  <caret line="279" column="55" lean-forward="false" selection-start-line="279" selection-start-column="55" selection-end-line="279" selection-end-column="55" />
                   <folding />
                 </state>
               </provider>
@@ -63,8 +63,8 @@
           <file leaf-file-name="asm.h" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/asm.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="386">
-                  <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+                <state relative-caret-position="236">
+                  <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
                   <folding>
                     <element signature="e#913#932#0" expanded="true" />
                   </folding>
@@ -377,12 +377,12 @@
       <workItem from="1507807765149" duration="11697000" />
       <workItem from="1507905227574" duration="5422000" />
       <workItem from="1508071538373" duration="6219000" />
-      <workItem from="1508150689202" duration="7166000" />
+      <workItem from="1508150689202" duration="7710000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="137881000" />
+    <option name="totallyTimeSpent" value="138425000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1309" height="1375" extended-state="0" />
@@ -790,8 +790,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="795" column="21" lean-forward="true" selection-start-line="792" selection-start-column="4" selection-end-line="795" selection-end-column="21" />
+        <state relative-caret-position="479">
+          <caret line="279" column="55" lean-forward="false" selection-start-line="279" selection-start-column="55" selection-end-line="279" selection-end-column="55" />
           <folding />
         </state>
       </provider>

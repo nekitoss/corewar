@@ -277,7 +277,7 @@ void	del_com(char **s)
 	i = 0;
 	while ((*s)[i] != '\0')
 	{
-		while ((*s)[i] != COMMENT_CHAR && (*s)[i] != '\0')
+		while ((*s)[i] != COMMENT_CHAR && (*s)[i] != ';' && (*s)[i] != '\0')
 			i++;
 		while ((*s)[i] != '\n' && (*s)[i] != '\0')
 			(*s)[i++] = ' ';
