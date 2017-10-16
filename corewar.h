@@ -30,10 +30,13 @@ void sv_number_player(char *argv, t_arg *ptr, int *fl);
 void		set_num_player(t_arg *ptr);
 int			vm_valid_data_file(t_arg *ptr);
 int			vm_init_struct_player(t_arg **ptr);
-int			vm_check_magic_byte(int fd);
-int			vm_check_null(int fd, int num);
+void		vm_check_magic_byte(int fd);
+void		vm_check_null(int fd, int num);
 void		vm_hndl_name(t_player *player, int fd);
 void		vm_hndl_comment(t_player *player, int fd);
 void		vm_hndl_size_code(t_player *player, int fd);
+void		vm_hndl_code(t_player *player, int fd);
+void		ft_exit_name_file(t_player *player, char *str1, char *str2);
+void		ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3);
 
 #endif

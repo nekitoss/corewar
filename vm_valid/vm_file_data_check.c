@@ -12,7 +12,7 @@
 
 #include "../corewar.h"
 
-int		vm_check_magic_byte(int fd)
+void	vm_check_magic_byte(int fd)
 {
 	unsigned int magic_byte;
 	unsigned int num;
@@ -21,12 +21,12 @@ int		vm_check_magic_byte(int fd)
 	if (lseek(fd, 0, 0) < 0)
 		ft_exit("Error lseek");
 	if ((read(fd, &num, 4)) < 0)
-		ft_exit("Cannot read file");
+		ft_exit("Error: cannot read file");
 	if (magic_byte != num)
 		ft_exit("Error in magic byte, my friend!");
 }
 
-int 	vm_check_null(int fd, int fl)
+void 	vm_check_null(int fd, int fl)
 {
 	int zero;
 
@@ -36,10 +36,10 @@ int 	vm_check_null(int fd, int fl)
 	{
 		if (fl == 1)
 			write(1,"Warning: "
-					"don't have null terminate afte name. Autocorrect", 54);
+					"don't have null terminate afte name. Autocorrect\n", 59);
 		if (fl == 2)
-			write(1,"Warning:"
-					" don't have null terminate afte comment. Autocorrect", 54);
+			write(1,"Warning: "
+					"don't have null terminate afte comment. Autocorrect\n", 59);
 	}
 }
 
@@ -49,7 +49,7 @@ void	vm_hndl_name(t_player *player, int fd)
 
 	buffer[128] = '\0';
 	if (lseek(fd, 4, 0) < 0)
-		ft_exit("Error lseek");
+		ft_exit("Error lseek\n");
 	read(fd, buffer, PROG_NAME_LENGTH);
 	vm_check_null(fd, 1);
 	player->name = ft_strdup(buffer);
@@ -61,7 +61,7 @@ void	vm_hndl_comment(t_player *player, int fd)
 
 	buffer[COMMENT_LENGTH] = '\0';
 	if (lseek(fd, 140, 0) < 0)
-		ft_exit("Error lseek");
+		ft_exit("Error lseek\n");
 	read(fd, buffer, COMMENT_LENGTH);
 	vm_check_null(fd, 2);
 	player->comment = ft_strdup(buffer);

@@ -19,7 +19,7 @@ void	srch_num_player(int *num, t_arg *ptr)
 
 	i = 0;
 	num_player = 1;
-	while (i < 5)
+	while (i < ptr->cnt_player)
 	{
 		if (ptr->num[i] == num_player)
 		{
@@ -30,7 +30,7 @@ void	srch_num_player(int *num, t_arg *ptr)
 		i++;
 	}
 
-	*num = num_player;
+	*num = (num_player * -1);
 }
 
 void	set_num_player(t_arg *ptr)
@@ -63,13 +63,13 @@ void	valid_filename(char **argv, t_arg *ptr)
 			sv_path_player(argv[i], ptr, &fl);
 		else if (fl == 1)
 			sv_number_player(argv[i], ptr, &fl);
-		else if (ptr->pos_dump == i)
+		else if (!ft_strcmp("-dump", argv[i]))
 		{
 			i += 2;
 			continue;
 		}
 		else
-			ft_exit("Not correct file with bot");
+			ft_exit("Error: in argument to line\n");
 		i++;
 	}
 }

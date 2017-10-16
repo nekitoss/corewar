@@ -53,10 +53,12 @@ void sv_number_player(char *argv, t_arg *ptr, int *fl)
 	int tmp;
 
 	if (ft_isdigit_str(argv))
-		ft_exit("Not correct value of number player");
+		ft_exit("Not correct value of number player, my friend\n");
+	if (ft_strlen(argv) > 10)
+		ft_exit("Error: too big number, my friend, are you joke?)\n");
 	tmp = ft_atoi(argv);
 	if (tmp > MAX_PLAYERS || tmp <= 0)
-		ft_exit("Not correct number player");
+		ft_exit("Not correct number player\n");
 	ptr->num[ptr->cnt_player] = tmp;
 	(*fl)++;
 }
@@ -66,7 +68,7 @@ void 	sv_path_player(char *argv, t_arg *ptr, int *fl)
 	if (ptr->cnt_player <= 3)
 		ptr->path_players[ptr->cnt_player] = ft_strdup(argv);
 	if (ptr->cnt_player > 3)
-		ft_exit("Too many champions");
+		ft_exit("Too many champions, it's not football) my friend\n");
 	ptr->cnt_player++;
 	if (*fl == 2)
 		(*fl) = 0;

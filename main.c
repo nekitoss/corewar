@@ -6,6 +6,14 @@ int ft_exit(char *str)
 	exit(0);
 }
 
+void 	ft_exit_name_file(t_player *player, char *str1, char *str2)
+{
+	write(1, str1, ft_strlen(str1));
+	write(1, player->path_player, ft_strlen(player->path_player));
+	write(1, str2, ft_strlen(str2));
+	exit(0);
+}
+
 void for_test(t_arg *ptr)
 {
 	int i;
@@ -35,12 +43,12 @@ void	vm_sort_player(t_arg *ptr)
 	i = 0;
 	while (i < ptr->cnt_player)
 	{
-		j = i + 1;
+		j = i;
 		while (j < ptr->cnt_player)
 		{
 			if (ptr->player[i]->num > ptr->player[j]->num)
 			{
-				tmp_player = *ptr->player;
+				tmp_player = ptr->player[i];
 				ptr->player[i] = ptr->player[j];
 				ptr->player[j] = tmp_player;
 			}
@@ -52,15 +60,12 @@ void	vm_sort_player(t_arg *ptr)
 
 void	vm_show_usage(void)
 {
-
 	write(1, "Usage: ./corewar [-dump nbr_cycles] [-v] [[-n number] champion1.cor] ...\n", 74);
 	write(1, "#### TEXT OUTPUT MODE ##########################################################\n", 81);
 	write(1, "-dump N      : Dumps memory after N cycles then exits\n", 54);
 	write(1, "#### NCURSES OUTPUT MODE #######################################################\n", 81);
 	write(1, "-v           : Ncurses output mode\n", 35);
 	write(1, "################################################################################\n", 81);
-
-
 }
 
 int main(int argc, char **argv)
@@ -71,7 +76,7 @@ int main(int argc, char **argv)
 		vm_show_usage();
 	ptr = vm_valid(argc, argv);
 	vm_sort_player(ptr);
-	for_test(ptr);
+	//for_test(ptr);
 	if (ptr->fl_visual == 1)// turn on fl_visual
 	{
 		start_draw(ptr);
