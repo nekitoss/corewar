@@ -70,7 +70,12 @@ int		check_file_name(char *s)
 	int fd;
 	int len;
 
-	len = (int)ft_strlen(s);
+//	while (ft_strchr(s, '/'))
+//	{
+//		s = ft_strchr(s, '/');
+//		s++;
+//	}
+	len = (int)ft_strlen(s); //// ../zork.s /champ/zork.s
 	ft_putstr(s);
 	if (len <= 2 || s[len - 1] != 's' || s[len - 2] != '.')
 		error("Wrong file. File format must be .s");
@@ -775,18 +780,21 @@ char		*make_name(char *s)
 	char	*ret;
 
 	i = 0;
-	while (s[i] != '.')
-		i++;
-	ret = (char*)malloc(sizeof(char) * (i + 5));
-	i = 0;
-	while (s[i] != 's')
-	{
-		ret[i] = s[i];
-		i++;
-	}
-	ret[i++] = 'c';
-	ret[i++] = 'o';
-	ret[i] = 'r';
+	i = (int)ft_strlen(s);
+//	while (s[i] != '.')
+//		i++;
+	ft_printf("%s\n", s);
+	ret = (char*)malloc(sizeof(char) * (i + 3));
+//	while (s[i] != 's')
+//	{
+//		ret[i] = s[i];
+//		i++;
+//	}
+	ft_strcpy(ret, s);
+	ret[i - 1] = 'c';
+	ret[i] = 'o';
+	ret[i + 1] = 'r';
+	ft_printf("%s\n", ret);
 	return (ret);
 }
 

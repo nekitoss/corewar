@@ -32,19 +32,12 @@ char		*make_name(char *s)
 	int		i;
 	char	*ret;
 
-	i = 0;
-	while (s[i] != '.')
-		i++;
-	ret = (char*)malloc(sizeof(char) * (i + 5));
-	i = 0;
-	while (s[i] != 's')
-	{
-		ret[i] = s[i];
-		i++;
-	}
-	ret[i++] = 'c';
-	ret[i++] = 'o';
-	ret[i] = 'r';
+	i = (int)ft_strlen(s);
+	ret = (char*)malloc(sizeof(char) * (i + 3));
+    ft_strcpy(ret, s);
+    ret[i - 1] = 'c';
+    ret[i] = 'o';
+    ret[i + 1] = 'r';
 	return (ret);
 }
 

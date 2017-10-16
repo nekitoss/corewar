@@ -16,7 +16,8 @@ int main(int argc, char **argv)
 {
 	int			fd;
 	char		*file;
-	t_asm		*mstruc;
+    t_asm		*mstruc;
+    char        *start;
 
 	if (argc <= 1)
 		error("No filename. Usage: ./asm filename.");
@@ -25,7 +26,8 @@ int main(int argc, char **argv)
 	mstruc = new_struct();
 	mstruc->head = new_head();
 	mstruc->labels->byte_num = -1;
-	mstruc->commands->command_name = ft_strdup("start");
+    start = ft_strdup("start");
+    mstruc->commands->command_name = start;
 	valid_code(mstruc, file, mstruc->head);
 
 	t_commands *c;
@@ -33,5 +35,6 @@ int main(int argc, char **argv)
 	check_lb(mstruc->commands, mstruc->labels);
 	make_corfile(mstruc, mstruc->commands, mstruc->labels, argv[argc - 1]);
 	close(fd);
+    free(start);
 	return 0;
 }

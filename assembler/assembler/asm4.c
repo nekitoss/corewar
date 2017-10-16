@@ -49,9 +49,11 @@ int			check_repeat(t_label *lb, char *s)
 int		add_label(t_asm *masm, char *s)
 {
 	t_label	*lb;
+    char    *lb_name;
 
 	lb = masm->labels;
-	if (check_repeat(lb, get_lb_name(s)))
+    lb_name = get_lb_name(s);
+	if (check_repeat(lb, lb_name))
 		return (-1);
 	if (lb->byte_num != -1)
 	{
@@ -60,7 +62,7 @@ int		add_label(t_asm *masm, char *s)
 		lb->next = new_labels();
 		lb = lb->next;
 	}
-	lb->name = get_lb_name(s);
+    lb->name = lb_name;
 	lb->byte_num = masm->count_byte;
 	return ((int)ft_strlen(lb->name));
 }
