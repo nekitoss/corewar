@@ -4,7 +4,6 @@ void error(char *str)
 {
 	ft_putstr(str);
 	ft_putchar('\n');
-	//ft_printf("%s\n", str);
 	exit(1);
 }
 
@@ -72,6 +71,7 @@ int		check_file_name(char *s)
 	int len;
 
 	len = (int)ft_strlen(s);
+	ft_putstr(s);
 	if (len <= 2 || s[len - 1] != 's' || s[len - 2] != '.')
 		error("Wrong file. File format must be .s");
 	fd = open(s, O_RDONLY);
@@ -767,10 +767,6 @@ void	valid_code(t_asm *masm, char *str, header_t *head)
 		if (*str == '\n')
 			str++;
 	}
-
-
-
-	ft_printf("\n----->%s\n", str);
 }
 
 char		*make_name(char *s)
@@ -917,6 +913,7 @@ void	write_dir(int fd, t_commands *comm, t_label *lb, int i)
 	param = reverse_bit((unsigned)param);
 	write(fd, &param, 4);
 }
+
 void	write_param(int fd, t_commands *comm, t_label *lb, int i)
 {
 	if (comm->P[i] == 'R')
@@ -974,7 +971,7 @@ int 	find_lb(char *s, t_label *lb)
 	return (0);
 }
 
-void	check_lb(t_commands *comm, t_label	*lb)
+void	check_lb(t_commands *comm, t_label *lb)
 {
 	int i;
 

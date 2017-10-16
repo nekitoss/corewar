@@ -6,25 +6,29 @@
 #    By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/08 19:01:12 by yrobotko          #+#    #+#              #
-#    Updated: 2017/09/20 15:30:04 by yrobotko         ###   ########.fr        #
+#    Updated: 2017/10/16 14:23:04 by yrobotko         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = lem-in
+NAME = asm
 
 G = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
-SRC =   lemin.c \
-		file0.c \
-		file1.c \
-		file2.c \
-		file3.c \
-		file4.c \
-		file5.c \
-		file6.c \
-		file7.c \
+SRC =   asm.c \
+		asm0.c \
+		asm1.c \
+		asm2.c \
+		asm3.c \
+		asm4.c \
+		asm5.c \
+		asm6.c \
+		asm7.c \
+		asm8.c \
+		asm9.c \
+		asm10.c \
+		asm11.c \
 
 OBJ = $(SRC:.c=.o)
 
