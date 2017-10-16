@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   asm.h                                      :+:      :+:    :+:   */
+/*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 16:54:40 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/09/22 16:54:57 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 19:14:07 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,30 @@ typedef struct			s_validation
 	int					count_comment;
 }						t_validation;
 
-typedef	struct 			s_label
+typedef	struct			s_label
 {
 	char				*name;
-	int 				byte_num;
+	int					byte_num;
 	struct s_label		*next;
 }						t_label;
 
-typedef struct 			s_commands
+typedef struct			s_commands
 {
-	char	 			*command_name;
-	char	 			**labels;
-	char 				*P;
-	int	 				*param;
+	char				*command_name;
+	char				**labels;
+	char				*p;
+	int					*param;
 	int					codage;
-	int 				size;
+	int					size;
 	struct s_commands	*next;
 }						t_commands;
 
-typedef	struct 			s_asm
+typedef	struct			s_asm
 {
 	t_label				*labels;
 	t_commands			*commands;
-	struct header_s		*head;
-	int 				count_byte;
+	struct s_header		*head;
+	int					count_byte;
 }						t_asm;
 
 int						check_label_or_comm(char *s);
@@ -57,13 +57,13 @@ t_validation			*new_valid();
 int						check_file_name(char *s);
 char					*read_file(int fd);
 unsigned int			reverse_bit(unsigned int a);
-header_t				*new_head();
+t_header				*new_head();
 char					*get_name(char *str);
-void 					check_quotes(char *str, int i);
+void					check_quotes(char *str, int i);
 char					*check_name(char *str);
 void					cpy(char **dest, char *str);
 char					*check_comment(char *str);
-void					valid_head(header_t *head, char **str);
+void					valid_head(t_header *head, char **str);
 void					del_com(char **s);
 int						ft_stcmp(char *s1, char *s2);
 int						is_command(char *s);
@@ -93,20 +93,24 @@ void					check_command(t_asm *masm, char **str);
 int						check_label(t_asm *masm, char **str);
 int						is_empty(char *s);
 int						pass_it(char *s);
-void					valid_code(t_asm *masm, char *str, header_t *head);
+void					valid_code(t_asm *masm, char *str, t_header *head);
 char					*make_name(char *s);
 int						get_ind(char *s);
-int 					get_codege(char *p, int i);
+int						get_codege(char *p, int i);
 void					write_codage(int fdwrite, t_commands *comm);
 unsigned int			reverse_two_bit(unsigned int a);
 void					write_reg(int fd, int param);
-int 					get_length(int curr_byte, int lb_byte, int fl);
-void					write_indir(int fd, t_commands *comm, t_label *lb, int i);
+int						get_length(int curr_byte, int lb_byte, int fl);
+void					write_indir(int fd, t_commands *comm, t_label *lb,
+		int i);
 void					write_dir(int fd, t_commands *comm, t_label *lb, int i);
-void					write_param(int fd, t_commands *comm, t_label *lb, int i);
-void					write_to_cor(int fdwrite, t_commands *comm, t_label *lb);
-void					make_corfile(t_asm *masm, t_commands *comm, t_label	*lb, char *name);
-int 					find_lb(char *s, t_label *lb);
+void					write_param(int fd, t_commands *comm, t_label *lb,
+		int i);
+void					write_to_cor(int fdwrite, t_commands *comm,
+		t_label *lb);
+void					make_corfile(t_asm *masm, t_commands *comm,
+		t_label	*lb, char *name);
+int						find_lb(char *s, t_label *lb);
 void					check_lb(t_commands *comm, t_label	*lb);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:14:49 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:48:30 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void			add_to_struct(t_asm *masm, int ind, char **s)
 {
-	t_commands *comm;
-	int i;
+	t_commands	*comm;
+	int			i;
 
 	i = 0;
 	comm = get_empty_struc(masm->commands);
@@ -36,10 +36,10 @@ void			add_to_struct(t_asm *masm, int ind, char **s)
 		error("ERROR. Incorect symbol after command");
 }
 
-void	check_command(t_asm *masm, char **str)
+void			check_command(t_asm *masm, char **str)
 {
-	char	*s;
-	int 	index;
+	char		*s;
+	int			index;
 
 	s = *str;
 	if (!check_label_or_comm(s))
@@ -56,9 +56,9 @@ void	check_command(t_asm *masm, char **str)
 		(*str)++;
 }
 
-int			check_label(t_asm *masm, char **str)
+int				check_label(t_asm *masm, char **str)
 {
-	char	*s;
+	char		*s;
 
 	s = *str;
 	if (check_label_or_comm(s) == 1)
@@ -67,14 +67,14 @@ int			check_label(t_asm *masm, char **str)
 	while (**str != LABEL_CHAR)
 		(*str)++;
 	(*str)++;
-	while (**str ==  ' ' || **str == '\t')
+	while (**str == ' ' || **str == '\t')
 		(*str)++;
 	if (**str == '\n')
 		return (0);
 	return (1);
 }
 
-int		is_empty(char *s)
+int				is_empty(char *s)
 {
 	while ((*s == ' ' || *s == '\t') && *s != '\n')
 		s++;
@@ -83,7 +83,7 @@ int		is_empty(char *s)
 	return (0);
 }
 
-int		pass_it(char *s)
+int				pass_it(char *s)
 {
 	while (*s == ' ' || *s == '\t')
 		s++;

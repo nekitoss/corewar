@@ -6,16 +6,16 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:12:17 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 19:15:15 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		check_file_name(char *s)
+int					check_file_name(char *s)
 {
-	int fd;
-	int len;
+	int				fd;
+	int				len;
 
 	len = (int)ft_strlen(s);
 	if (len <= 2 || s[len - 1] != 's' || s[len - 2] != '.')
@@ -26,7 +26,7 @@ int		check_file_name(char *s)
 	return (fd);
 }
 
-char		*read_file(int fd)
+char				*read_file(int fd)
 {
 	char			*str;
 	long long		len;
@@ -42,7 +42,7 @@ char		*read_file(int fd)
 			len--;
 			continue;
 		}
-		break;
+		break ;
 	}
 	if (str[len - 1] != '\n')
 		error("No newline at the end of file.");
@@ -69,11 +69,11 @@ unsigned int		reverse_bit(unsigned int a)
 	return (b);
 }
 
-header_t	*new_head()
+t_header			*new_head(void)
 {
-	header_t *ret;
+	t_header		*ret;
 
-	ret = (header_t*)malloc(sizeof(header_t));
+	ret = (t_header*)malloc(sizeof(t_header));
 	ft_bzero(ret->prog_name, sizeof(char) * (PROG_NAME_LENGTH + 1));
 	ft_bzero(ret->comment, sizeof(char) * (COMMENT_LENGTH + 1));
 	ret->prog_size = 0;
@@ -81,11 +81,11 @@ header_t	*new_head()
 	return (ret);
 }
 
-char		*get_name(char *str)
+char				*get_name(char *str)
 {
-	char	*ret;
-	int		i;
-	int j;
+	char			*ret;
+	int				i;
+	int				j;
 
 	j = 0;
 	i = 0;

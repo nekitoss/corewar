@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:15:26 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:15:57 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:52:07 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ unsigned int		reverse_two_bit(unsigned int a)
 	return (b);
 }
 
-void	write_reg(int fd, int param)
+void				write_reg(int fd, int param)
 {
 	write(fd, &param, 1);
 }
 
-int 	get_length(int curr_byte, int lb_byte, int fl)
+int					get_length(int curr_byte, int lb_byte, int fl)
 {
 	unsigned int	res;
 
@@ -51,14 +51,15 @@ int 	get_length(int curr_byte, int lb_byte, int fl)
 	return (res);
 }
 
-void	write_indir(int fd, t_commands *comm, t_label *lb, int i)
+void				write_indir(int fd, t_commands *comm, t_label *lb, int i)
 {
-	int	param;
+	int				param;
+
 	if (comm->labels[i] == NULL)
 		param = comm->param[i];
 	else
 	{
-		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+		while (!ft_strequ(comm->labels[i], lb->name) && lb)
 		{
 			lb = lb->next;
 		}
@@ -68,14 +69,15 @@ void	write_indir(int fd, t_commands *comm, t_label *lb, int i)
 	write(fd, &param, 2);
 }
 
-void	write_dir(int fd, t_commands *comm, t_label *lb, int i)
+void				write_dir(int fd, t_commands *comm, t_label *lb, int i)
 {
-	int	param;
+	int				param;
+
 	if (comm->labels[i] == NULL)
 		param = comm->param[i];
 	else
 	{
-		while(!ft_strequ(comm->labels[i], lb->name) && lb)
+		while (!ft_strequ(comm->labels[i], lb->name) && lb)
 		{
 			lb = lb->next;
 		}

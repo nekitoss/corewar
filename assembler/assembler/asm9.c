@@ -6,13 +6,13 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:15:18 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 19:16:02 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	valid_code(t_asm *masm, char *str, header_t *head)
+void		valid_code(t_asm *masm, char *str, t_header *head)
 {
 	valid_head(head, &str);
 	del_com(&str);
@@ -34,16 +34,16 @@ char		*make_name(char *s)
 
 	i = (int)ft_strlen(s);
 	ret = (char*)malloc(sizeof(char) * (i + 3));
-    ft_strcpy(ret, s);
-    ret[i - 1] = 'c';
-    ret[i] = 'o';
-    ret[i + 1] = 'r';
+	ft_strcpy(ret, s);
+	ret[i - 1] = 'c';
+	ret[i] = 'o';
+	ret[i + 1] = 'r';
 	return (ret);
 }
 
-int		get_ind(char *s)
+int			get_ind(char *s)
 {
-	int  i;
+	int		i;
 
 	i = 0;
 	while (i < 16)
@@ -55,9 +55,9 @@ int		get_ind(char *s)
 	return (i);
 }
 
-int 	get_codege(char *p, int i)
+int			get_codege(char *p, int i)
 {
-	int	code;
+	int		code;
 
 	if (p[i] == 'I')
 		code = 3;
@@ -70,16 +70,16 @@ int 	get_codege(char *p, int i)
 	return (code);
 }
 
-void	write_codage(int fdwrite, t_commands *comm)
+void		write_codage(int fdwrite, t_commands *comm)
 {
-	int codage;
+	int		codage;
 
 	codage = 0;
-	codage += get_codege(comm->P, 0);
+	codage += get_codege(comm->p, 0);
 	codage = codage << 2;
-	codage += get_codege(comm->P, 1);
+	codage += get_codege(comm->p, 1);
 	codage = codage << 2;
-	codage += get_codege(comm->P, 2);
+	codage += get_codege(comm->p, 2);
 	codage = codage << 2;
 	write(fdwrite, &codage, 1);
 }

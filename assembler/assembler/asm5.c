@@ -6,13 +6,13 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:13:51 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:42:55 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	check_lb_char(char **s)
+void		check_lb_char(char **s)
 {
 	if (!ft_strchr(LABEL_CHARS, **s))
 		error("Parameter error");
@@ -24,7 +24,7 @@ void	check_lb_char(char **s)
 	}
 }
 
-void	check_dir(char **s)
+void		check_dir(char **s)
 {
 	(*s)++;
 	if (ft_isdigit(**s) || **s == '-')
@@ -70,18 +70,18 @@ void		check_reg(char **s)
 		error("Incorect register number");
 }
 
-void	check_indir(char **s)
+void		check_indir(char **s)
 {
 	(*s)++;
 	if (**s == '-')
 		error("Parameter error");
-	if (ft_strchr(LABEL_CHARS,**s))
+	if (ft_strchr(LABEL_CHARS, **s))
 		check_lb_char(s);
 	else
 		error("Parameter error");
 }
 
-void	check_num(char **s)
+void		check_num(char **s)
 {
 	if (**s == '-' && !ft_isdigit(*(*s + 1)))
 		error("Parameter error");

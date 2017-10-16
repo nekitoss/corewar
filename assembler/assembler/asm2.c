@@ -6,15 +6,15 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:12:38 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 19:15:36 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void 	check_quotes(char *str, int i)
+void				check_quotes(char *str, int i)
 {
-	int count;
+	int				count;
 
 	count = 0;
 	if (i == 1)
@@ -31,11 +31,11 @@ void 	check_quotes(char *str, int i)
 		error("Syntax error. -> \" <- ");
 }
 
-char	*check_name(char *str)
+char				*check_name(char *str)
 {
-	t_validation *v;
-	char *ptr;
-	char *prev;
+	t_validation	*v;
+	char			*ptr;
+	char			*prev;
 
 	v = new_valid();
 	prev = ft_strstr(str, ".name");
@@ -53,10 +53,10 @@ char	*check_name(char *str)
 	return (get_name(ptr));
 }
 
-void cpy(char **dest, char *str)
+void				cpy(char **dest, char *str)
 {
-	int i;
-	int len;
+	int				i;
+	int				len;
 
 	i = 0;
 	len = (int)ft_strlen(str);
@@ -67,11 +67,11 @@ void cpy(char **dest, char *str)
 	}
 }
 
-char	*check_comment(char *str)
+char				*check_comment(char *str)
 {
-	t_validation *v;
-	char *ptr;
-	char *prev;
+	t_validation	*v;
+	char			*ptr;
+	char			*prev;
 
 	v = new_valid();
 	prev = ft_strstr(str, ".comment");
@@ -83,19 +83,18 @@ char	*check_comment(char *str)
 		prev += 8;
 		prev = ft_strstr(prev, ".comment");
 	}
-	if (v->count_comment !=1)
+	if (v->count_comment != 1)
 		error("Syntax error. \".comment\"");
 	check_quotes(str, 0);
 	return (get_name(ptr));
 }
 
-void valid_head(header_t *head, char **str)
+void				valid_head(t_header *head, char **str)
 {
-	char *t;
-	int i;
+	char			*t;
+	int				i;
 
 	t = head->prog_name;
-
 	cpy(&t, check_name(*str));
 	if (ft_strlen(t) > 128)
 		error("Too large name");

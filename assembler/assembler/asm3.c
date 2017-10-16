@@ -6,30 +6,30 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:13:00 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:39:27 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	del_com(char **s)
+void		del_com(char **s)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while ((*s)[i] != '\0')
 	{
-        while ((*s)[i] != COMMENT_CHAR && (*s)[i] != ';' && (*s)[i] != '\0')
+		while ((*s)[i] != COMMENT_CHAR && (*s)[i] != ';' && (*s)[i] != '\0')
 			i++;
 		while ((*s)[i] != '\n' && (*s)[i] != '\0')
 			(*s)[i++] = ' ';
 	}
 }
 
-int		ft_stcmp(char *s1, char *s2)
+int			ft_stcmp(char *s1, char *s2)
 {
-	int i;
-	char *s;
+	int		i;
+	char	*s;
 
 	s = s1;
 	i = 0;
@@ -44,14 +44,13 @@ int		ft_stcmp(char *s1, char *s2)
 	if (*s2 != ' ' && *s2 != '\t' && *s2 != '%')
 		error("Invalid instruction");
 	if (*s2 == '%')
-		if (ft_strequ(s, "st") || ft_strequ(s, "add")
-			|| ft_strequ(s, "sub") || ft_strequ(s, "sti")
-			|| ft_strequ(s, "aff"))
+		if (ft_strequ(s, "st") || ft_strequ(s, "add") || ft_strequ(s, "sub")
+				|| ft_strequ(s, "sti") || ft_strequ(s, "aff"))
 			error("Invalid instruction");
 	return (i);
 }
 
-int		is_command(char *s)
+int			is_command(char *s)
 {
 	int		i;
 	int		a;
@@ -63,20 +62,20 @@ int		is_command(char *s)
 	while (i >= 0)
 	{
 		st = (g_tab[i]).name;
-		a = ft_stcmp(st , s);
-		if (a  > 0 && a == (int)ft_strlen(st))
+		a = ft_stcmp(st, s);
+		if (a > 0 && a == (int)ft_strlen(st))
 			return (i);
 		i--;
 	}
 	return (-1);
 }
 
-int		is_label(char *s)
+int			is_label(char *s)
 {
 	while (*s != '\n')
 	{
 		if (!ft_strchr(LABEL_CHARS, *s))
-			break;
+			break ;
 		s++;
 	}
 	if (*s == LABEL_CHAR)
@@ -84,9 +83,9 @@ int		is_label(char *s)
 	return (0);
 }
 
-int 	check_label_or_comm(char *s)			/// label - 0, command - 1
+int			check_label_or_comm(char *s)
 {
-	while (*s ==  ' ' || *s == '\t' || *s == '\n')
+	while (*s == ' ' || *s == '\t' || *s == '\n')
 		s++;
 	if (!ft_strchr(LABEL_CHARS, *s))
 		error("Lexical error in row");

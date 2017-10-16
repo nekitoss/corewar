@@ -6,13 +6,13 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:14:11 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:44:14 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void	check_parameter(char **s)
+void		check_parameter(char **s)
 {
 	if (**s == '%')
 		check_dir(s);
@@ -26,9 +26,9 @@ void	check_parameter(char **s)
 		error("Parameter error");
 }
 
-void	check_args(char *s, int index)
+void		check_args(char *s, int index)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	pass_spaces(&s);
@@ -47,12 +47,12 @@ void	check_args(char *s, int index)
 	}
 }
 
-t_commands		*get_empty_struc(t_commands *c)
+t_commands	*get_empty_struc(t_commands *c)
 {
 	while (c->next)
 		c = c->next;
 	if (ft_strequ(c->command_name, "start"))
-		return c;
+		return (c);
 	else
 	{
 		c->next = new_commands();
@@ -61,9 +61,9 @@ t_commands		*get_empty_struc(t_commands *c)
 	}
 }
 
-int		check_type(char **s, int ind, int index)
+int			check_type(char **s, int ind, int index)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	if (**s == 'r')
@@ -73,7 +73,8 @@ int		check_type(char **s, int ind, int index)
 	if (**s == ':' || ft_isdigit(**s) || **s == '-')
 	{
 		i = 4;
-		if ((ind == 1 && (index == 9 || index == 13)) || (ind == 2 && index == 10))
+		if ((ind == 1 && (index == 9 || index == 13)) ||
+				(ind == 2 && index == 10))
 			error("Incorect parameter type");
 	}
 	if ((i & g_tab[index].arg[ind]) == 0)
@@ -81,7 +82,7 @@ int		check_type(char **s, int ind, int index)
 	return (i);
 }
 
-void	goto_next_param(char **s)
+void		goto_next_param(char **s)
 {
 	pass_spaces(s);
 	if (**s == ',')

@@ -6,21 +6,21 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 14:13:20 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/16 18:41:49 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-char	*get_lb_name(char *s)
+char			*get_lb_name(char *s)
 {
-	char	*str;
-	int		i;
-	int		j;
+	char		*str;
+	int			i;
+	int			j;
 
 	i = 0;
 	j = 0;
-	while (*s ==  ' ' || *s == '\t' || *s == '\n')
+	while (*s == ' ' || *s == '\t' || *s == '\n')
 		s++;
 	while (ft_strchr(LABEL_CHARS, s[i]))
 		i++;
@@ -33,7 +33,7 @@ char	*get_lb_name(char *s)
 	return (str);
 }
 
-int			check_repeat(t_label *lb, char *s)
+int				check_repeat(t_label *lb, char *s)
 {
 	if (!(lb->name))
 		return (0);
@@ -46,13 +46,13 @@ int			check_repeat(t_label *lb, char *s)
 	return (0);
 }
 
-int		add_label(t_asm *masm, char *s)
+int				add_label(t_asm *masm, char *s)
 {
-	t_label	*lb;
-    char    *lb_name;
+	t_label		*lb;
+	char		*lb_name;
 
 	lb = masm->labels;
-    lb_name = get_lb_name(s);
+	lb_name = get_lb_name(s);
 	if (check_repeat(lb, lb_name))
 		return (-1);
 	if (lb->byte_num != -1)
@@ -62,20 +62,20 @@ int		add_label(t_asm *masm, char *s)
 		lb->next = new_labels();
 		lb = lb->next;
 	}
-    lb->name = lb_name;
+	lb->name = lb_name;
 	lb->byte_num = masm->count_byte;
 	return ((int)ft_strlen(lb->name));
 }
 
-void	pass_spaces(char **s)
+void			pass_spaces(char **s)
 {
 	while (**s == '\t' || **s == ' ')
 		(*s)++;
 }
 
-void	check_separator(char *s, int index)
+void			check_separator(char *s, int index)
 {
-	int count;
+	int			count;
 
 	count = 0;
 	while (*s != '\n')
