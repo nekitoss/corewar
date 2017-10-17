@@ -112,12 +112,14 @@ int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte);
 void				shift_pc(size_t *pc, int value);
 int					read_parameters_and_shift(g_my_op *func, t_proc *proc);
 int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc);
-int					read_data_block(t_core *ls, size_t start, int len);
+int					read_data_block(t_core *ls, unsigned int start, int len);
 int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
 void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
-void				convert_param(g_my_op *func, t_proc *proc, int par_num);
+// void				convert_param(g_my_op *func, t_proc *proc, int par_num);
 unsigned char		ident_param(unsigned char coding_byte, int param_num);
+void				write_data_block(t_proc *proc, int data, unsigned int start, int len);
+void				print_data(unsigned char *str, size_t len, size_t width);
 
 //#################### funcions
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
@@ -125,7 +127,7 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 	int	alive_num;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 1);
-	alive_num = (int)read_data_block(ls, proc->pc, 4);
+	alive_num = read_data_block(ls, proc->pc, 4);
 	shift_pc(&(proc->pc), 4);
 	if (alive_num < 0 && alive_num >= (ls->num_of_players * -1))
 	{
@@ -143,7 +145,7 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -153,7 +155,7 @@ void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -163,7 +165,7 @@ void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -173,7 +175,7 @@ void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -183,7 +185,7 @@ void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -193,7 +195,7 @@ void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -203,7 +205,7 @@ void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -219,7 +221,7 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -228,19 +230,21 @@ void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
 {
+	int what;
+	int where;
+
 	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-		int what = P_REG[P_PAR[0]];
-		convert_param(func, proc, 1);
-		convert_param(func, proc, 2);
-		int where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + proc->old_pc) % MEM_SIZE;
-		printf("what=%d where=%d\n", what, where);		
-
+		what = P_REG[P_PAR[0]];
+		where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+		print_data(ls->field, MEM_SIZE, 64);
+		write_data_block(proc, what, where, 4);
 	}
 printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
+print_data(ls->field, MEM_SIZE, 64);
 }
 
 void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
@@ -253,7 +257,7 @@ void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -263,7 +267,7 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	if (check_coding_byte(ls, proc, func))
+	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 
 	}
@@ -305,21 +309,21 @@ void					my_deb(char *str)
 	exit(-1);
 }
 
-void					convert_param(g_my_op *func, t_proc *proc, int par_num)
-{
-	int coding_byte;
+// void					convert_param(g_my_op *func, t_proc *proc, int par_num)
+// {
+// 	int coding_byte;
 
-	coding_byte = ident_param(P_COD_B, par_num);
-	if (coding_byte & T_REG)
-		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]);
-	else if (coding_byte & T_IND)
-	{
-		P_PAR[par_num] = (int)(((short)P_PAR[par_num]) % IDX_MOD);
-		P_PAR[par_num] = (int)read_data_block(proc->ls, proc->old_pc, P_PAR[par_num]);
-	}
-	else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
-		P_PAR[par_num] = (int)((short)P_PAR[par_num]);
-}
+// 	coding_byte = ident_param(P_COD_B, par_num);
+// 	if (coding_byte & T_REG)
+// 		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]);
+// 	else if (coding_byte & T_IND)
+// 	{
+// 		P_PAR[par_num] = (int)(((short)P_PAR[par_num]) % IDX_MOD);
+// 		P_PAR[par_num] = (int)read_data_block(proc->ls, proc->old_pc, P_PAR[par_num]);
+// 	}
+// 	else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
+// 		P_PAR[par_num] = (int)((short)P_PAR[par_num]);
+// }
 
 unsigned char		ident_param(unsigned char coding_byte, int param_num)
 {
@@ -408,7 +412,7 @@ int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc)
 	return (correct_params);
 }
 
-void				write_data_block(t_proc *proc, size_t data, size_t start, int len)
+void				write_data_block(t_proc *proc, int data, unsigned int start, int len)
 {
 	int i;
 
@@ -419,6 +423,7 @@ void				write_data_block(t_proc *proc, size_t data, size_t start, int len)
 		data = revert_16_bits_size_t(data);
 	while (i < len && i < 5)
 	{
+		int where = ((start + i + MEM_SIZE) % MEM_SIZE);
 		proc->ls->field[((start + i) % MEM_SIZE)] = (data & 0xff);
 		proc->ls->colors[((start + i) % MEM_SIZE)] = proc->belong_to_player;
 		data = data >> OCTET;
@@ -441,14 +446,14 @@ short				read_2_byte(t_core *ls, size_t start)
 	res = ls->field[(start % MEM_SIZE)];
 	res = res << OCTET;
 	res |= ls->field[((start + 1) % MEM_SIZE)];
-	res = revert_16_bits_size_t(res);
+	// res = revert_16_bits_size_t(res);
 	
 	return (res);
 }
 
-short				read_4_byte(t_core *ls, size_t start)
+int					read_4_byte(t_core *ls, size_t start)
 {
-	short res;
+	int 	res;
 
 	res = ls->field[(start % MEM_SIZE)];
 	res = res << OCTET;
@@ -457,7 +462,7 @@ short				read_4_byte(t_core *ls, size_t start)
 	res |= ls->field[((start + 2) % MEM_SIZE)];
 	res = res << OCTET;
 	res |= ls->field[((start + 3) % MEM_SIZE)];
-	res = revert_32_bits_size_t(res);
+	// res = revert_32_bits_size_t(res);
 	return (res);
 }
 
@@ -481,7 +486,7 @@ short				read_4_byte(t_core *ls, size_t start)
 // 	return (mem_block);
 // }
 
-int					read_data_block(t_core *ls, size_t start, int len)
+int					read_data_block(t_core *ls, unsigned int start, int len)
 {
 	int res;
 
@@ -491,7 +496,7 @@ int					read_data_block(t_core *ls, size_t start, int len)
 	else if (len == 2)
 		res = (int)read_2_byte(ls, start);
 	else if (len == 4)
-		res = (int)read_4_byte(ls, start);
+		res = read_4_byte(ls, start);
 	else
 		my_deb("wrong len in read data block");
 	return (res);
