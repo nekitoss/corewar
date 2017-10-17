@@ -185,10 +185,18 @@ void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 {
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-		// int what = 
+		convert_param_to_data(proc, 0);
+		convert_param_to_data(proc, 1);
+		int what = P_PAR[0] & P_PAR[1];
+		int where = P_PAR[2];
+		P_REG[where] = what;
+		if (!what)
+			proc->carry = 1;
 	}
 	printf("-end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
 }
@@ -240,8 +248,8 @@ printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func-
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 		what = P_REG[P_PAR[0]];
-		convert_param_to_data(func, proc, 1);
-		convert_param_to_data(func, proc, 2);
+		convert_param_to_data(proc, 1);
+		convert_param_to_data(proc, 2);
 		where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
 		print_data(ls->field, MEM_SIZE, 64);
 		write_data_block(proc, what, where, 4);
