@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:17:46 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/17 19:15:19 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/17 21:11:56 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,38 @@ int				main(int argc, char **argv)
 	make_corfile(mstruc, mstruc->commands, mstruc->labels, argv[argc - 1]);
 	close(fd);
 	free(start);
+	free_lb(mstruc->labels);
+	free_comm(mstruc->commands);
+	free(mstruc);
+	free(file);
+	free(mstruc->head);
+	while (1)
+		;
 	return (0);
+}
+
+void			free_lb(t_label *lb)
+{
+	if (lb->next)
+		free_lb(lb->next);
+	free(lb->name);
+	if (lb->next)
+		free(lb->next);
+}
+
+void			free_comm(t_commands *comm)
+{
+	if (comm->next)
+		free_comm(comm->next);
+	if (comm->next)
+		free(comm->next);
+	free(comm->param);
+	free(comm->p);
+	free(comm->labels[0]);
+	free(comm->labels[1]);
+	free(comm->labels[2]);
+	free(comm->labels);
+	free(comm->command_name);
 }
 
 long long		fft_atoi(const char *str)

@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 16:54:40 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/17 19:15:02 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/17 19:44:46 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,7 @@ void					make_corfile(t_asm *masm, t_commands *comm,
 int						find_lb(char *s, t_label *lb);
 void					check_lb(t_commands *comm, t_label	*lb);
 long long				fft_atoi(const char *str);
+void					free_lb(t_label *lb);
+void					free_comm(t_commands *comm);
 
 #endif
