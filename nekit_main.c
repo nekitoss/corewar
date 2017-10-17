@@ -31,6 +31,7 @@ typedef struct		s_player
 	unsigned char	*program_code;
 	size_t			last_live;
 	unsigned int	sum_lives_in_current_period;
+	unsigned int	sum_lives_in_previous_period;
 	int				num;
 	int				code_size;
 }					t_player;
@@ -445,7 +446,6 @@ size_t				revert_16_bits_size_t(size_t num)
 	return (num);
 }
 
-
 size_t				revert_32_bits_size_t(size_t num)
 {
 	num = ((num >> 24) & 0xff) | // move byte 3 to byte 0
@@ -720,6 +720,7 @@ void				empty_player_lives(t_core *ls)
 	while (i < ls->num_of_players)
 	{
 		((ls->players)[i])->sum_lives_in_current_period = 0;
+		((ls->players)[i])->sum_lives_in_previous_period = ((ls->players)[i])->sum_lives_in_current_period;
 		i++;
 	}
 }
