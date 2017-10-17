@@ -116,7 +116,8 @@ int					read_data_block(t_core *ls, unsigned int start, int len);
 int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
 void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
-// void				convert_param(g_my_op *func, t_proc *proc, int par_num);
+// void				convert_param_to_data(g_my_op *func, t_proc *proc, int par_num);
+void				convert_param_to_data(t_proc *proc, int par_num);
 unsigned char		ident_param(unsigned char coding_byte, int param_num);
 void				write_data_block(t_proc *proc, int data, unsigned int start, int len);
 void				print_data(unsigned char *str, size_t len, size_t width);
@@ -187,7 +188,7 @@ void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-
+		// int what = 
 	}
 	printf("-end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
 }
@@ -239,6 +240,8 @@ printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func-
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 		what = P_REG[P_PAR[0]];
+		convert_param_to_data(func, proc, 1);
+		convert_param_to_data(func, proc, 2);
 		where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
 		print_data(ls->field, MEM_SIZE, 64);
 		write_data_block(proc, what, where, 4);
@@ -309,21 +312,22 @@ void					my_deb(char *str)
 	exit(-1);
 }
 
-// void					convert_param(g_my_op *func, t_proc *proc, int par_num)
-// {
-// 	int coding_byte;
+// void					convert_param_to_data(g_my_op *func, t_proc *proc, int par_num)
+void					convert_param_to_data(t_proc *proc, int par_num)
+{
+	int coding_byte;
 
-// 	coding_byte = ident_param(P_COD_B, par_num);
-// 	if (coding_byte & T_REG)
-// 		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]);
-// 	else if (coding_byte & T_IND)
-// 	{
-// 		P_PAR[par_num] = (int)(((short)P_PAR[par_num]) % IDX_MOD);
-// 		P_PAR[par_num] = (int)read_data_block(proc->ls, proc->old_pc, P_PAR[par_num]);
-// 	}
-// 	else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
-// 		P_PAR[par_num] = (int)((short)P_PAR[par_num]);
-// }
+	coding_byte = ident_param(P_COD_B, par_num);
+	if (coding_byte & T_REG)
+		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]); //тут может быть ошибка неправильного регистра
+	else if (coding_byte & T_IND)
+	{
+		P_PAR[par_num] = ((P_PAR[par_num] % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+		P_PAR[par_num] = (int)read_data_block(proc->ls, P_PAR[par_num], 4);
+	}
+	// else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
+	// 	P_PAR[par_num] = (int)((short)P_PAR[par_num]);
+}
 
 unsigned char		ident_param(unsigned char coding_byte, int param_num)
 {
@@ -423,7 +427,7 @@ void				write_data_block(t_proc *proc, int data, unsigned int start, int len)
 		data = revert_16_bits_size_t(data);
 	while (i < len && i < 5)
 	{
-		int where = ((start + i + MEM_SIZE) % MEM_SIZE);
+		// int where = ((start + i + MEM_SIZE) % MEM_SIZE);
 		proc->ls->field[((start + i) % MEM_SIZE)] = (data & 0xff);
 		proc->ls->colors[((start + i) % MEM_SIZE)] = proc->belong_to_player;
 		data = data >> OCTET;
@@ -431,7 +435,7 @@ void				write_data_block(t_proc *proc, int data, unsigned int start, int len)
 	}
 }
 
-char				read_1_byte(t_core *ls, size_t start)
+char				read_1_byte(t_core *ls, unsigned int start)
 {
 	char res;
 
@@ -439,7 +443,7 @@ char				read_1_byte(t_core *ls, size_t start)
 	return (res);
 }
 
-short				read_2_byte(t_core *ls, size_t start)
+short				read_2_byte(t_core *ls, unsigned int start)
 {
 	short res;
 
@@ -451,7 +455,7 @@ short				read_2_byte(t_core *ls, size_t start)
 	return (res);
 }
 
-int					read_4_byte(t_core *ls, size_t start)
+int					read_4_byte(t_core *ls, unsigned int start)
 {
 	int 	res;
 
