@@ -105,14 +105,14 @@ g_my_op				op_tab[17] =
 	{f_aff,		1,	{T_REG, 0, 0},											16,	2,		1,	0}
 };
 
-size_t				revert_16_bits_size_t(size_t num);
-size_t				revert_32_bits_size_t(size_t num);
+short				revert_16_bits_size_t(short num);
+int					revert_32_bits_size_t(int num);
 int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func);
 int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte);
 void				shift_pc(size_t *pc, int value);
 int					read_parameters_and_shift(g_my_op *func, t_proc *proc);
 int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc);
-size_t				read_data_block(t_core *ls, size_t start, int len);
+int					read_data_block(t_core *ls, size_t start, int len);
 int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
 void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
@@ -299,6 +299,12 @@ void				f_aff(t_core *ls, t_proc *proc, g_my_op *func)
 
 //#################### funcions
 
+void					my_deb(char *str)
+{
+	ft_putstr_fd(str, 2);
+	exit(-1);
+}
+
 void					convert_param(g_my_op *func, t_proc *proc, int par_num)
 {
 	int coding_byte;
@@ -420,33 +426,84 @@ void				write_data_block(t_proc *proc, size_t data, size_t start, int len)
 	}
 }
 
-size_t				read_data_block(t_core *ls, size_t start, int len)
+char				read_1_byte(t_core *ls, size_t start)
 {
-	int i;
-	size_t mem_block;
+	char res;
 
-	mem_block = 0;
-	i = 0;
-	while (i < len && i < 9)
-	{
-		mem_block = mem_block << OCTET;
-		mem_block |= ls->field[((start + i) % MEM_SIZE)];
-		i++;
-	}
-	if (len == 4)
-		mem_block = revert_32_bits_size_t(mem_block);
-	else if (len == 2)
-		mem_block = revert_16_bits_size_t(mem_block);
-	return (mem_block);
+	res = ls->field[(start % MEM_SIZE)];
+	return (res);
 }
 
-size_t				revert_16_bits_size_t(size_t num)
+short				read_2_byte(t_core *ls, size_t start)
+{
+	short res;
+
+	res = ls->field[(start % MEM_SIZE)];
+	res = res << OCTET;
+	res |= ls->field[((start + 1) % MEM_SIZE)];
+	res = revert_16_bits_size_t(res);
+	
+	return (res);
+}
+
+short				read_4_byte(t_core *ls, size_t start)
+{
+	short res;
+
+	res = ls->field[(start % MEM_SIZE)];
+	res = res << OCTET;
+	res |= ls->field[((start + 1) % MEM_SIZE)];
+	res = res << OCTET;
+	res |= ls->field[((start + 2) % MEM_SIZE)];
+	res = res << OCTET;
+	res |= ls->field[((start + 3) % MEM_SIZE)];
+	res = revert_32_bits_size_t(res);
+	return (res);
+}
+
+// size_t				read_data_block(t_core *ls, size_t start, int len)
+// {
+// 	int i;
+// 	size_t mem_block;
+
+// 	mem_block = 0;
+// 	i = 0;
+// 	while (i < len && i < 9)
+// 	{
+// 		mem_block = mem_block << OCTET;
+// 		mem_block |= ls->field[((start + i) % MEM_SIZE)];
+// 		i++;
+// 	}
+// 	if (len == 4)
+// 		mem_block = revert_32_bits_size_t(mem_block);
+// 	else if (len == 2)
+// 		mem_block = revert_16_bits_size_t(mem_block);
+// 	return (mem_block);
+// }
+
+int					read_data_block(t_core *ls, size_t start, int len)
+{
+	int res;
+
+	res = 0;
+	if (len == 1)
+		res = (int)read_1_byte(ls, start);
+	else if (len == 2)
+		res = (int)read_2_byte(ls, start);
+	else if (len == 4)
+		res = (int)read_4_byte(ls, start);
+	else
+		my_deb("wrong len in read data block");
+	return (res);
+}
+
+short				revert_16_bits_size_t(short num)
 {
 	num = (num >> 8) | (num << 8);
 	return (num);
 }
 
-size_t				revert_32_bits_size_t(size_t num)
+int					revert_32_bits_size_t(int num)
 {
 	num = ((num >> 24) & 0xff) | // move byte 3 to byte 0
 			((num << 8) & 0xff0000) | // move byte 1 to byte 2
