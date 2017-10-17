@@ -38,5 +38,8 @@ void		vm_hndl_size_code(t_player *player, int fd);
 void		vm_hndl_code(t_player *player, int fd);
 void		ft_exit_name_file(t_player *player, char *str1, char *str2);
 void		ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3);
+void		hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str);
+void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str);
+int			valid_val_arg(char *argv);
 
 #endif

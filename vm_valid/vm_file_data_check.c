@@ -35,8 +35,11 @@ void 	vm_check_null(int fd, int fl)
 	if (zero != 0)
 	{
 		if (fl == 1)
+		{
 			write(1,"Warning: "
 					"don't have null terminate afte name. Autocorrect\n", 59);
+
+		}
 		if (fl == 2)
 			write(1,"Warning: "
 					"don't have null terminate afte comment. Autocorrect\n", 59);

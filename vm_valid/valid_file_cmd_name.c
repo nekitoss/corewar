@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <zconf.h>
 #include "../corewar.h"
 
 void	srch_num_player(int *num, t_arg *ptr)
@@ -76,4 +77,31 @@ void	valid_filename(char **argv, t_arg *ptr)
 	if (fl != 0)
 		ft_exit("Error: in argument to line, think about this,"
 						" my friend)\n");
+}
+
+void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+	long int num;
+
+	i = 1;
+	while (i < ptr->cnt_arg)
+	{
+		if (!ft_strcmp(str, argv[i]))
+		{
+			if (!valid_val_arg(argv[(i + 1)]))
+			{
+				ptr->fl_width = 1;
+				if (ft_strlen(argv[(i + 1)]) > 10)
+					ft_exit("Error: too big number, my friend\n");
+				num = ft_atoi(argv[(i + 1)]);
+				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
+					ft_exit("Error: to big number, my friend\n");
+				ptr->width_dump = ft_atoi(argv[(i + 1)]);
+			}
+			else
+				ft_exit("Error: incorrect val dump width, my friend\n");
+		}
+		i++;
+	}
 }

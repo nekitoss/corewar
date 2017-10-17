@@ -76,11 +76,9 @@ typedef struct		s_arg
 	int			cnt_arg;
 	int			fl_dump;
 	int			fl_visual;
+	int			fl_width;
 	int			num_dump;
-	int			pos_dump;
 	int			width_dump;
-	int			fl_warning_name;
-	int			fl_warning_comment;
 	int			cnt_player;
 	t_player	**player;
 	char		*path_players[5];

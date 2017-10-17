@@ -25,7 +25,7 @@ int		valid_val_arg(char *argv)
 	}
 	if (fl == 0)
 		ft_exit("Error: number must be content at "
-		"least one digit, but not zero, my friend, it's not Go)\n");
+		"least one digit, but not zero, my friend, it's not 'Go')\n");
 	return (0);
 }
 
@@ -55,6 +55,7 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 {
 	int i;
+	long int num;
 
 	i = 1;
 	while (i < ptr->cnt_arg)
@@ -66,8 +67,10 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 				ptr->fl_dump = 1;
 				if (ft_strlen(argv[(i + 1)]) > 10)
 					ft_exit("Error: too big number, my friend\n");
+				num = ft_atoi(argv[(i + 1)]);
+				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
+					ft_exit("Error: to big number, my friend\n");
 				ptr->num_dump = ft_atoi(argv[(i + 1)]);
-				ptr->pos_dump = i;
 			}
 			else
 				ft_exit("Error: incorrect val dump\n");
@@ -81,6 +84,8 @@ void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 {
 	ptr->cnt_arg = argc;
 	hndl_cmd_arg_dump(argv, ptr, "-dump");
+	hndl_cmd_arg_visual(argv, ptr, "-v");
+	hndl_cmd_arg_wide(argv, ptr, "-w");
 	hndl_cmd_arg_n(argv, ptr);
 	valid_filename(argv, ptr);
 	set_num_player(ptr);
