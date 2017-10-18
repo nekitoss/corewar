@@ -63,7 +63,7 @@ void	vm_sort_player(t_arg *ptr)
 
 void	vm_show_usage(void)
 {
-	write(1, "Usage: ./corewar [-dump nbr_cycles] [-w number] [-v] [[-n number]"
+	write(1, "Usage: ./corewar [-dump nbr_cycles [-w width]] [-v] [[-n number]"
 			" champion1.cor] ...\n", 86);
 	write(1, "#### TEXT OUTPUT MODE ###########################################"
 			"###############\n", 82);
