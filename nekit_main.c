@@ -287,20 +287,39 @@ void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 {//no idxmod
+	int what;
+	int where;
+
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-
+		convert_param_to_data_no_idx(proc, 0);
+		what = P_PAR[0];
+		where = P_PAR[1];
+		P_REG[where] = what;
+		if (!what)
+			proc->carry = 1;
 	}
 	printf("-end_of_try_execute f_lld at cycle=%zu\n", ls->cycle);
 }
 
 void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 {//no idxmod
+	int what;
+	int where;
+
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-
+		convert_param_to_data_no_idx(proc, 0);
+		convert_param_to_data_no_idx(proc, 1);
+		what = read_data_block(ls ,(P_PAR[0] + P_PAR[1]), 4);
+		where = P_PAR[2];
+		P_REG[where] = what;
 	}
 	printf("-end_of_try_execute f_lldi at cycle=%zu\n", ls->cycle);
 }
@@ -351,6 +370,22 @@ void					convert_param_to_data(t_proc *proc, int par_num)
 	else if (coding_byte & T_IND)
 	{
 		P_PAR[par_num] = ((P_PAR[par_num] % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+		P_PAR[par_num] = (int)read_data_block(proc->ls, P_PAR[par_num], 4);
+	}
+	// else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
+	// 	P_PAR[par_num] = (int)((short)P_PAR[par_num]);
+}
+
+void					convert_param_to_data_no_idx(t_proc *proc, int par_num)
+{
+	int coding_byte;
+
+	coding_byte = ident_param(P_COD_B, par_num);
+	if (coding_byte & T_REG)
+		P_PAR[par_num] = (int)(P_REG[(P_PAR[par_num])]); //тут может быть ошибка неправильного регистра
+	else if (coding_byte & T_IND)
+	{
+		P_PAR[par_num] = (P_PAR[par_num] + (int)proc->old_pc) % MEM_SIZE;
 		P_PAR[par_num] = (int)read_data_block(proc->ls, P_PAR[par_num], 4);
 	}
 	// else if ((coding_byte & T_DIR) && func->bytes_for_tdir == 2)
