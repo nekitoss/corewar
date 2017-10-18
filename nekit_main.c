@@ -299,8 +299,13 @@ printf("-end_of_try_execute f_sti at cycle=%zu\n", ls->cycle);
 
 void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 {
-	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	int where;
 
+	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	where = read_data_block(ls, proc->pc + 1, 2);
+	where = ((int)proc->pc + where) % IDX_MOD;
+	add_proc_on_top(ls, where, proc->belong_to_player);
+	clone_proc(proc, ls->processes_list);
 	printf("-end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);
 }
 
@@ -347,7 +352,13 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
 {//no idxmod
+	int where;
+
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	where = read_data_block(ls, proc->pc + 1, 2);
+	where = (int)proc->pc + where;
+	add_proc_on_top(ls, where, proc->belong_to_player);
+	clone_proc(proc, ls->processes_list);
 	printf("-end_of_try_execute f_lfork at cycle=%zu\n", ls->cycle);
 }
 
@@ -756,7 +767,7 @@ int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num)
 	return (0);
 }
 
-void				add_proc_on_top(t_core *ls, int pc, int belong_to_player)
+void				add_proc_on_top(t_core *ls, unsigned int pc, int belong_to_player)
 {
 	t_proc	*new;
 
