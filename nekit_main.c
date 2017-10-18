@@ -816,7 +816,7 @@ int					main(int argc, char **argv)
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
 	ls->players = ls->args->player;
 	
-	init_my_player_and_process(ls);
+	//init_my_player_and_process(ls);
 	return(10);
 
 	//call visio
