@@ -70,7 +70,7 @@ void	valid_filename(char **argv, t_arg *ptr)
 			sv_path_player(argv[i], ptr, &fl);
 		else if (fl == 1)
 			sv_number_player(argv[i], ptr, &fl);
-		else if (!ft_strcmp("-dump", argv[i]))
+		else if (!ft_strcmp("-dump", argv[i]) || !ft_strcmp("-w", argv[i]))
 		{
 			i += 2;
 			continue;
