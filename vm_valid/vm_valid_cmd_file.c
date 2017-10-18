@@ -19,6 +19,8 @@ int		find_ext_to_end(char *argv)
 
 	cor = ".cor";
 	ptr = ft_strrchr(argv,'.');
+	if (ptr == NULL)
+		return (1);
 	if (!ft_strcmp(ptr, cor))
 		return (0);
 	return (1);

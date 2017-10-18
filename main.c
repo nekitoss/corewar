@@ -64,8 +64,8 @@ void	vm_sort_player(t_arg *ptr)
 
 void	vm_show_usage(void)
 {
-	write(1, "Usage: ./corewar [-dump nbr_cycles [-w width]] [-v] [[-n number]"
-			" champion1.cor] ...\n", 86);
+	ft_putstr("Usage: ./corewar [-dump nbr_cycles [-w width]] [-v] [[-n number]"
+			" champion1.cor] ...\n\n");
 	write(1, "#### TEXT OUTPUT MODE ###########################################"
 			"###############\n", 82);
 	write(1, "-dump N      : Dumps memory after N cycles then exits\n", 55);
