@@ -234,7 +234,14 @@ void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 {
+	int where;
+
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	if (proc->carry)
+	{
+		where = read_data_block(ls, proc->pc + 1, 2);
+		shift_pc(&(proc->pc), where);
+	}
 	printf("-end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);
 }
 
@@ -600,7 +607,7 @@ void				print_data(unsigned char *str, size_t len, size_t width)
 	printf("\n");
 }
 
-void				shift_pc(size_t *pc, int value)
+void				shift_pc(size_t *pc, unsigned int value)
 {
 	(*pc) = (*pc) + value;
 	(*pc) = (*pc) % MEM_SIZE;
