@@ -2,7 +2,10 @@
 
 int ft_exit(char *str)
 {
-	perror(str);
+	if (errno == 1)
+		perror(str);
+	else
+		write(1, str, ft_strlen(str));
 	exit(0);
 }
 
