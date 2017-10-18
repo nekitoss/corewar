@@ -22,6 +22,7 @@ void for_test(t_arg *ptr)
 	int i;
 
 	i = 0;
+	printf("switch off this function in main file, funciton - 'for test(void)'");
 	printf("number of players%i\n", ptr->cnt_player);
 	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
 	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
@@ -74,6 +75,7 @@ void	vm_show_usage(void)
 	write(1, "-v           : Ncurses output mode\n", 36);
 	write(1, "#################################################################"
 			"###############\n", 82);
+	exit(0);
 }
 
 // int main(int argc, char **argv)

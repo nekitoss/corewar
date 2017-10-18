@@ -89,6 +89,8 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 	{
 		if (!ft_strcmp(str, argv[i]))
 		{
+			if (i + 1 >= ptr->cnt_player)
+				ft_exit("Error: incorrect value of width dump\n");
 			if (!valid_val_arg(argv[(i + 1)]))
 			{
 				ptr->fl_width = 1;
@@ -96,7 +98,7 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 					ft_exit("Error: too big number, my friend\n");
 				num = ft_atoi(argv[(i + 1)]);
 				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
-					ft_exit("Error: to big number, my friend\n");
+					ft_exit("Error: too big number, my friend\n");
 				ptr->width_dump = ft_atoi(argv[(i + 1)]);
 			}
 			else

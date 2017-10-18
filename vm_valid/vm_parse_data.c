@@ -46,7 +46,7 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 					ft_exit("Error: too big number, my friend\n");
 			}
 			else
-				ft_exit("Error: not valid arg, my friend\n");
+				ft_exit("Error: incorrect value of number player\n");
 		}
 		i++;
 	}

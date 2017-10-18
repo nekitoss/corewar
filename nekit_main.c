@@ -805,7 +805,7 @@ int					main(int argc, char **argv)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
 	vm_sort_player(ls->args);
-	
+	for_test(ls->args);
 	// if (ls->args->fl_visual == 1)// turn on fl_visual
 	// {
 	// 	start_draw(ls->args);
