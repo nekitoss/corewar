@@ -202,7 +202,7 @@ void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data(proc, 0);
 		convert_param_to_data(proc, 1);
-		what = P_PAR[0] ^ P_PAR[1];
+		what = P_PAR[0] | P_PAR[1];
 		where = P_PAR[2];
 		P_REG[where] = what;
 		if (!what)
@@ -223,7 +223,7 @@ void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data(proc, 0);
 		convert_param_to_data(proc, 1);
-		what = P_PAR[0] & P_PAR[1];
+		what = P_PAR[0] ^ P_PAR[1];
 		where = P_PAR[2];
 		P_REG[where] = what;
 		if (!what)
