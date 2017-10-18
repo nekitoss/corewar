@@ -102,6 +102,8 @@ void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_ld at cycle=%zu\n", ls->cycle);
 }
@@ -144,6 +146,8 @@ void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_add at cycle=%zu\n", ls->cycle);
 }
@@ -165,6 +169,8 @@ void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_sub at cycle=%zu\n", ls->cycle);
 }
@@ -186,6 +192,8 @@ void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_and at cycle=%zu\n", ls->cycle);
 }
@@ -207,6 +215,8 @@ void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_or at cycle=%zu\n", ls->cycle);
 }
@@ -228,6 +238,8 @@ void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_xor at cycle=%zu\n", ls->cycle);
 }
@@ -308,6 +320,8 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 		P_REG[where] = what;
 		if (!what)
 			proc->carry = 1;
+		else
+			proc->carry = 0;
 	}
 	printf("-end_of_try_execute f_lld at cycle=%zu\n", ls->cycle);
 }
