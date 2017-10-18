@@ -1,37 +1,35 @@
 
 #include "../corewar.h"
 
-int		valid_val_arg(char *argv)
+int		valid_val_arg(char *argv, char **cur)
 {
-	int i;
-	int fl;
-
-	fl = 0;
-	i = 0;
-	while (argv[i] != '\0')
+	*cur = argv;
+	while (**cur != '\0')
 	{
-		if (ft_isdigit(argv[i]))
+		if (ft_isdigit(**cur))
 		{
-			if (argv[i] == '0' && fl == 0)
+			if (**cur == '0')
 			{
-				i++;
+				(*cur)++;
 				continue;
 			}
-			fl = 1;
+			break;
 		}
 		else
 			return (1);
-		i++;
 	}
-	if (fl == 0)
-		ft_exit("Error: number must be content at "
-		"least one digit, but not zero, my friend, it's not 'Go')\n");
+	if (**cur == '\0')
+	{
+		(*cur)--;
+		return(0);
+	}
 	return (0);
 }
 
 void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 {
 	int i;
+	char *cur;
 
 	i = 0;
 	while (i < ptr->cnt_arg)
@@ -40,7 +38,7 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 		{
 			if ((i + 1) < ptr->cnt_arg)
 			{
-				if (valid_val_arg(argv[(i + 1)]))
+				if (valid_val_arg(argv[(i + 1)], &cur))
 					ft_exit("Error: not valid arg, my friend\n");
 				if (ft_strlen(argv[(i + 1)]) > 10)
 					ft_exit("Error: too big number, my friend\n");
@@ -52,11 +50,29 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 	}
 }
 
+void	ft_save_val(t_arg *ptr, char **argv, int i, char **cur)
+{
+	size_t num;
+
+	ptr->fl_width = 1;
+	if (ft_strlen(argv[(i + 1)]) > 10)
+		ft_exit("Error: too big number, my friend\n");
+	if (**cur != '0')
+	{
+		num = (size_t)ft_atoi(*cur);
+		if (ft_strcmp(*cur, ft_itoa(num)))
+			ft_exit("Error: to big number, my friend\n");
+		ptr->width_dump = num;
+	}
+	else
+		ptr->width_dump = (size_t)ft_atoi(*cur);
+}
+
 int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 {
 	int i;
-	long int num;
 
+	char *cur;
 	i = 1;
 	while (i < ptr->cnt_arg)
 	{
@@ -64,15 +80,9 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 		{
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of dump\n");
-			if (!valid_val_arg(argv[(i + 1)]))
+			if (!valid_val_arg(argv[(i + 1)], &cur))
 			{
-				ptr->fl_dump = 1;
-				if (ft_strlen(argv[(i + 1)]) > 10)
-					ft_exit("Error: too big number, my friend\n");
-				num = ft_atoi(argv[(i + 1)]);
-				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
-					ft_exit("Error: to big number, my friend\n");
-				ptr->num_dump = num;
+				ft_save_val(ptr, argv, i, &cur);
 			}
 			else
 				ft_exit("Error: incorrect value of dump\n");

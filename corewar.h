@@ -125,13 +125,14 @@ void		ft_exit_name_file(t_player *player, char *str1, char *str2);
 void		ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3);
 void		hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str);
-int			valid_val_arg(char *argv);
+int			valid_val_arg(char *argv, char **cur);
 // int ft_exit(char *str)
 // void 	ft_exit_name_file(t_player *player, char *str1, char *str2)
 void		for_test(t_arg *ptr);
 void		vm_sort_player(t_arg *ptr);
 void		vm_show_usage(void);
 void		valid_flags(t_arg *ptr);
+void		ft_save_val(t_arg *ptr, char **argv, int i, char **cur);
 
 
 
