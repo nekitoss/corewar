@@ -364,22 +364,17 @@ void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_aff(t_core *ls, t_proc *proc, g_my_op *func)
 {
-	int par[1];
+	int what;
 
-	par[0] = 0;
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	shift_pc(&(proc->pc), 2);
-	read_parameters_and_shift(func, proc);
-	// if (!(proc->wrong_params))
-	// {
-	// 	printf("### ICANDO AFF ####\n");
-	// 	printf("%c\n", par[0] % 256);
-	// }
-	// else
-	// {
-	// 	proc->execute_at = ls->cycle + 1;
-	// 	printf("AFF parametrs WRONg, CAN't DO aff\n");
-	// }
+	if (read_non_conv_parameters_and_shift(func, proc))
+	{
+		what = P_REG[P_PAR[0]] % 256;
+		printf("### ICANDO AFF ####\n");
+		printf("%c\n", what);
+	}
 	printf("-end_of_try_execute f_aff at cycle=%zu\n", ls->cycle);
 }
 
