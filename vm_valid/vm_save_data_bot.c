@@ -27,6 +27,7 @@ void 	vm_hndl_code(t_player *player, int fd)
 	else if (offset > 2874)
 		ft_exit_size_code(player, "File ", " has too large a code (",
 						  " bytes > 682 bytes)\n");
+	lseek(fd, 2192, SEEK_SET);
 	read (fd, buffer, player->size_code);
 	player->program_code = (unsigned char *)malloc(sizeof(char) *
 		(player->size_code) + 1);
