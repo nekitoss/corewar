@@ -63,13 +63,17 @@ void	vm_sort_player(t_arg *ptr)
 
 void	vm_show_usage(void)
 {
-	write(1, "Usage: ./corewar [-dump nbr_cycles] [-w number] [-v] [[-n number] champion1.cor] ...\n", 74);
-	write(1, "#### TEXT OUTPUT MODE ##########################################################\n", 81);
-	write(1, "-dump N      : Dumps memory after N cycles then exits\n", 54);
+	write(1, "Usage: ./corewar [-dump nbr_cycles] [-w number] [-v] [[-n number]"
+			" champion1.cor] ...\n", 86);
+	write(1, "#### TEXT OUTPUT MODE ###########################################"
+			"###############\n", 82);
+	write(1, "-dump N      : Dumps memory after N cycles then exits\n", 55);
 	write(1, "-w N         : wide of dumps memory, in octets\n", 48);
-	write(1, "#### NCURSES OUTPUT MODE #######################################################\n", 81);
-	write(1, "-v           : Ncurses output mode\n", 35);
-	write(1, "################################################################################\n", 81);
+	write(1, "#### NCURSES OUTPUT MODE ########################################"
+			"###############\n", 82);
+	write(1, "-v           : Ncurses output mode\n", 36);
+	write(1, "#################################################################"
+			"###############\n", 82);
 }
 
 // int main(int argc, char **argv)
