@@ -15,7 +15,6 @@
 void 	vm_hndl_code(t_player *player, int fd)
 {
 	char buffer[CHAMP_MAX_SIZE + 1];
-	// int byte;
 	long int offset;
 
 	buffer[CHAMP_MAX_SIZE] = '\0';
@@ -28,11 +27,11 @@ void 	vm_hndl_code(t_player *player, int fd)
 	else if (offset > 2874)
 		ft_exit_size_code(player, "File ", " has too large a code (",
 						  " bytes > 682 bytes)\n");
-	read (fd, buffer, (offset - 2192));
+	read (fd, buffer, player->size_code);
 	player->program_code = (unsigned char *)malloc(sizeof(char) *
 		(player->size_code) + 1);
 	player->program_code[(player->size_code)] = '\0';
-	ft_memcpy((void*)player->program_code, buffer, (offset - 2192));
+	ft_memcpy((void*)player->program_code, buffer, player->size_code);
 }
 
 
