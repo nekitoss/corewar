@@ -69,19 +69,19 @@ void	vm_show_usage(void)
 	write(1, "################################################################################\n", 81);
 }
 
-int main(int argc, char **argv)
-{
-	t_arg *ptr;
+// int main(int argc, char **argv)
+// {
+// 	t_arg *ptr;
 
-	if(argc == 1)
-		vm_show_usage();
-	ptr = vm_valid(argc, argv);
-	vm_sort_player(ptr);
+// 	if(argc == 1)
+// 		vm_show_usage();
+// 	ptr = vm_valid(argc, argv);
+// 	vm_sort_player(ptr);
 
-	if (ptr->fl_visual == 1)// turn on fl_visual
-	{
-		start_draw(ptr);
-		end_draw();
-	}
-	return 0;
-}
+// 	if (ptr->fl_visual == 1)// turn on fl_visual
+// 	{
+// 		start_draw(ptr);
+// 		end_draw();
+// 	}
+// 	return 0;
+// }

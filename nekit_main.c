@@ -7,6 +7,72 @@
 #define P_PAR (proc->par)
 #define P_REG (proc->reg)
 #define P_COD_B (proc->coding_byte)
+
+//####mkurchin
+
+typedef struct		header_s
+{
+	unsigned int		magic;
+	char				prog_name[PROG_NAME_LENGTH + 1];
+	unsigned int		prog_size;
+	char				comment[COMMENT_LENGTH + 1];
+}					header_t;
+
+
+
+
+// typedef struct		s_player
+// {
+// 	char			*name;
+// 	char			*comment;
+// 	char			*program_code;
+// 	char			*path_player;
+// 	size_t			last_live;
+// 	unsigned int	sum_lives;
+// 	int				num;
+// 	int				fd;
+// 	int				size_code;
+// }					t_player;
+
+
+
+typedef struct		s_arg
+{
+	int			cnt_arg;
+	int			fl_dump;
+	int			fl_visual;
+	int			fl_width;
+	int			num_dump;
+	int			width_dump;
+	int			cnt_player;
+	t_player	**player;
+	char		*path_players[5];
+	int			num[4];
+	int			n;
+
+}					t_arg;
+
+
+
+
+//######
+
+
+typedef struct		s_player
+{
+	char			*name;
+	char			*comment;
+	unsigned char	*program_code;
+	size_t			last_live;
+	unsigned int	sum_lives_in_current_period;
+	unsigned int	sum_lives_in_previous_period;
+	int				num;
+	int				fd;
+	int				size_code;
+}					t_player;
+
+
+
 typedef struct		s_proc
 {
 	size_t			pc;
@@ -24,17 +90,7 @@ typedef struct		s_proc
 	struct s_proc	*next;
 }					t_proc;
 
-typedef struct		s_player
-{
-	char			*name;
-	char			*comment;
-	unsigned char	*program_code;
-	size_t			last_live;
-	unsigned int	sum_lives_in_current_period;
-	unsigned int	sum_lives_in_previous_period;
-	int				num;
-	int				code_size;
-}					t_player;
+
 
 typedef struct		s_core
 {
@@ -51,7 +107,7 @@ typedef struct		s_core
 	char			colors[MEM_SIZE];
 	// char			changes[MEM_SIZE];
 	t_proc			*processes_list;
-	// t_arg			*args;
+	t_arg			*args;
 }					t_core;
 
 
@@ -558,7 +614,7 @@ void				set_next_ex(size_t *next_execution_at, int value)
 	// printf("set_next execution at = %4zu\n", *pc);
 }
 
-void				init_my_player_and_process(t_core *ls)
+/*void				init_my_player_and_process(t_core *ls)
 {
 	ls->num_of_players = 1;
 	ls->players = (t_player **)ft_memalloc(sizeof(t_player *) * ls->num_of_players);
@@ -587,7 +643,7 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	((ls->players)[0])->program_code = (unsigned char *)ft_strnew(code_len);
 	ft_memcpy((void *)(((ls->players)[0])->program_code), tmp, code_len);
 	print_data(	((ls->players)[0])->program_code	, code_len, 32);
-	((ls->players)[0])->code_size = code_len;
+	((ls->players)[0])->size_code = code_len;
 
 	ft_strdel((char **)&tmp);
 
@@ -603,7 +659,7 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	while (i < ls->num_of_players)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
-		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->code_size);
+		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
 		i++;
 	}
 	print_data(ls->field, 64, 64);
@@ -613,7 +669,29 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 	// add_proc_on_top(ls, MEM_SIZE/2, 255);
 	// clone_proc(ls->processes_list->next, ls->processes_list);
 	printf("end of init\n");
+}*/
+
+void				init_my_player_and_process(t_core *ls)
+{
+	int i = 0;
+	
+	ls->num_of_players = ls->args->cnt_player;
+	ls->cycle_to_die = CYCLE_TO_DIE;
+	ls->next_cycle_to_die = ls->cycle_to_die;
+	
+	while (i < ls->num_of_players)
+	{
+		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
+		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
+		i++;
+	}
+	print_data(ls->field, 64, 64);
+	// ls->processes_list->reg[1] = 65;
+	ls->num_of_processes = ls->num_of_players;
+	printf("end of init\n");
 }
+
+
 
 void				opcode(t_core *ls, t_proc *proc)
 {
@@ -801,8 +879,8 @@ void				empty_player_lives(t_core *ls)
 
 void				armageddon(t_core *ls)
 {
-	// if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
-	// 	print_data(ls->field, MEM_SIZE, ls->args->width_dump);
+	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
+		print_data(ls->field, MEM_SIZE, ls->args->width_dump);
 	if (ls->cycle == ls->next_cycle_to_die)
 	{
 		if (ls->gen_lives_in_current_period >= NBR_LIVE || ls->nbr_of_checks >= MAX_CHECKS)
@@ -827,18 +905,30 @@ void				armageddon(t_core *ls)
 	}
 }
 
-int					main(void)
+int					main(int argc, char **argv)
 {
 	t_core	*ls;
 	t_proc	*current_process;
 
 	
 
-printf("MEM_SIZE=%d\n", MEM_SIZE);
+	if(argc == 1)
+		vm_show_usage();
+	ls->args = vm_valid(argc, argv);
+	vm_sort_player(ls->args);
+	
+	// if (ls->args->fl_visual == 1)// turn on fl_visual
+	// {
+	// 	start_draw(ls->args);
+	// 	end_draw();
+	// }
 
+
+// printf("MEM_SIZE=%d\n", MEM_SIZE);
+	ls->players = ls->arg->players;
 	ls = ft_memalloc(sizeof(t_core));
 	init_my_player_and_process(ls);
-
+	return(10);
 
 	//call visio
 	while (1)
