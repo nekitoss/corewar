@@ -88,7 +88,7 @@ void	valid_filename(char **argv, t_arg *ptr)
 void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 {
 	int i;
-	long int num;
+	char *cur;
 
 	i = 1;
 	while (i < ptr->cnt_arg)
@@ -97,16 +97,8 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 		{
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of width dump\n");
-			if (!valid_val_arg(argv[(i + 1)], 1))
-			{
-				ptr->fl_width = 1;
-				if (ft_strlen(argv[(i + 1)]) > 10)
-					ft_exit("Error: too big number, my friend\n");
-				num = ft_atoi(argv[(i + 1)]);
-				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
-					ft_exit("Error: it's not correct number, my friend\n");
-				ptr->width_dump = ft_atoi(argv[(i + 1)]);
-			}
+			if (!valid_val_arg(argv[(i + 1)], &cur))
+				ft_save_val(ptr, argv, i, &cur);
 			else
 				ft_exit("Error: incorrect value of dump width, my friend\n");
 		}
