@@ -90,6 +90,7 @@ void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 	hndl_cmd_arg_wide(argv, ptr, "-w");
 	hndl_cmd_arg_n(argv, ptr);
 	valid_filename(argv, ptr);
+	valid_flags(ptr);
 	set_num_player(ptr);
 }
 

@@ -13,6 +13,12 @@
 #include <zconf.h>
 #include "../corewar.h"
 
+void		valid_flags(t_arg *ptr)
+{
+	if (ptr->fl_dump == 0 && ptr->fl_width == 1)
+		ft_exit("Error: flag width use with flag dump");
+}
+
 void	srch_num_player(int *num, t_arg *ptr)
 {
 	int i;
