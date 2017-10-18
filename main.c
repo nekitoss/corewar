@@ -20,7 +20,7 @@ void for_test(t_arg *ptr)
 
 	i = 0;
 	printf("number of players%i\n", ptr->cnt_player);
-	printf("dump flag->%i num->%i\n", ptr->fl_dump, ptr->num_dump);
+	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
 	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
 	while (i < ptr->cnt_player)
 	{

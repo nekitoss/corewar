@@ -70,7 +70,7 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 				num = ft_atoi(argv[(i + 1)]);
 				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
 					ft_exit("Error: to big number, my friend\n");
-				ptr->num_dump = ft_atoi(argv[(i + 1)]);
+				ptr->num_dump = num;
 			}
 			else
 				ft_exit("Error: incorrect val dump\n");

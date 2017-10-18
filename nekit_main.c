@@ -8,120 +8,7 @@
 #define P_REG (proc->reg)
 #define P_COD_B (proc->coding_byte)
 
-//####mkurchin
 
-typedef struct		header_s
-{
-	unsigned int		magic;
-	char				prog_name[PROG_NAME_LENGTH + 1];
-	unsigned int		prog_size;
-	char				comment[COMMENT_LENGTH + 1];
-}					header_t;
-
-
-
-
-// typedef struct		s_player
-// {
-// 	char			*name;
-// 	char			*comment;
-// 	char			*program_code;
-// 	char			*path_player;
-// 	size_t			last_live;
-// 	unsigned int	sum_lives;
-// 	int				num;
-// 	int				fd;
-// 	int				size_code;
-// }					t_player;
-
-
-
-typedef struct		s_arg
-{
-	int			cnt_arg;
-	int			fl_dump;
-	int			fl_visual;
-	int			fl_width;
-	int			num_dump;
-	int			width_dump;
-	int			cnt_player;
-	t_player	**player;
-	char		*path_players[5];
-	int			num[4];
-	int			n;
-
-}					t_arg;
-
-
-
-
-//######
-
-
-typedef struct		s_player
-{
-	char			*name;
-	char			*comment;
-	unsigned char	*program_code;
-	size_t			last_live;
-	unsigned int	sum_lives_in_current_period;
-	unsigned int	sum_lives_in_previous_period;
-	int				num;
-	int				fd;
-	int				size_code;
-}					t_player;
-
-
-
-typedef struct		s_proc
-{
-	size_t			pc;
-	int				reg[REG_NUMBER + 1];
-	unsigned char	is_alive;
-	char			carry;
-	size_t			execute_at;
-	unsigned char	opcode_to_execute;
-	// int				wrong_params;
-	char			belong_to_player;
-	unsigned char	coding_byte;
-	size_t			old_pc;
-	int				par[3];
-	struct s_core	*ls;
-	struct s_proc	*next;
-}					t_proc;
-
-
-
-typedef struct		s_core
-{
-	size_t			cycle;
-	size_t			gen_lives_in_current_period;
-	size_t			gen_lives_in_previous_period;
-	size_t			cycle_to_die;
-	size_t			next_cycle_to_die;
-	size_t			nbr_of_checks;
-	t_player		**players;
-	int				num_of_players;
-	int				num_of_processes;
-	unsigned char	field[MEM_SIZE];
-	char			colors[MEM_SIZE];
-	// char			changes[MEM_SIZE];
-	t_proc			*processes_list;
-	t_arg			*args;
-}					t_core;
-
-
-
-typedef struct		s_my_op
-{
-	void			(*func)(t_core *ls, t_proc *proc, struct s_my_op *func);
-	char			num_of_params;
-	char			type_of_params[3];
-	char			function_num;
-	int				cycles_to_exec;
-	char			is_codage;
-	char			bytes_for_tdir;
-}					g_my_op;
 
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_ld(t_core *ls, t_proc *proc, g_my_op *func);
@@ -685,10 +572,12 @@ void				init_my_player_and_process(t_core *ls)
 		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
 		i++;
 	}
-	print_data(ls->field, 64, 64);
+	
 	// ls->processes_list->reg[1] = 65;
 	ls->num_of_processes = ls->num_of_players;
-	printf("end of init\n");
+	printf("end of init\n\n");
+
+	// print_data(ls->field, MEM_SIZE, 64);
 }
 
 
@@ -910,7 +799,7 @@ int					main(int argc, char **argv)
 	t_core	*ls;
 	t_proc	*current_process;
 
-	
+	ls = ft_memalloc(sizeof(t_core));
 
 	if(argc == 1)
 		vm_show_usage();
@@ -925,8 +814,8 @@ int					main(int argc, char **argv)
 
 
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
-	ls->players = ls->arg->players;
-	ls = ft_memalloc(sizeof(t_core));
+	ls->players = ls->args->player;
+	
 	init_my_player_and_process(ls);
 	return(10);
 

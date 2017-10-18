@@ -80,6 +80,7 @@ void		hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str)
 	int cnt;
 
 	i = 1;
+	cnt = 0;
 	while (i < ptr->cnt_arg)
 	{
 		if (!ft_strcmp(str, argv[i]))
