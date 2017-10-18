@@ -14,23 +14,12 @@
 
 int		find_ext_to_end(char *argv)
 {
-	int		i;
 	char	*ptr;
 	char	*cor;
 
-	i = 0;
 	cor = ".cor";
-	ptr = argv;
-	if ((ft_strlen(argv)) < 4)
-		return (1);
-	while (argv[i] != '\0')
-	{
-		ptr++;
-		i++;
-	}
-	ptr -= 4;
-	if (!ft_strcmp(cor, ptr))
-		return (0);
+	ptr = ft_strrchr(argv,'.');
+	if (ft_strcmp(ptr, cor);
 	return (1);
 }
 

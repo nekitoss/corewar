@@ -58,9 +58,9 @@ void	valid_filename(char **argv, t_arg *ptr)
 	{
 		if (!ft_strcmp("-n", argv[i]))
 			fl++;
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 0)
+		else if (!find_ext_to_end(argv[i]) && fl == 0)
 			sv_path_player(argv[i], ptr, &fl);
-		else if (argv[i][0] != '.' && !find_ext_to_end(argv[i]) && fl == 2)
+		else if (!find_ext_to_end(argv[i]) && fl == 2)
 			sv_path_player(argv[i], ptr, &fl);
 		else if (fl == 1)
 			sv_number_player(argv[i], ptr, &fl);
