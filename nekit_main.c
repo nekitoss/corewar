@@ -500,20 +500,8 @@ void				set_next_ex(size_t *next_execution_at, int value)
 	(*next_execution_at) = (*next_execution_at) + value;
 	// printf("set_next execution at = %4zu\n", *pc);
 }
-
-/*void				init_my_player_and_process(t_core *ls)
+void				my_read_code(t_core *ls)
 {
-	ls->num_of_players = 1;
-	ls->players = (t_player **)ft_memalloc(sizeof(t_player *) * ls->num_of_players);
-	(ls->players)[0] = (t_player *)ft_memalloc(sizeof(t_player));
-	((ls->players)[0])->name = ft_strdup("my_name");
-	(ls->players)[0]->comment = ft_strdup("some_unusefull comment");
-	(ls->players)[0]->num = -1;
-	ls->cycle_to_die = CYCLE_TO_DIE;
-	ls->next_cycle_to_die = ls->cycle_to_die;
-
-
-
 	int fd = open("/nfs/2016/m/mpochuka/pool/corewar/src/test.cor", O_RDONLY);
 	size_t file_size = lseek(fd, 0, SEEK_END);
 	size_t offset = lseek(fd, 4 + PROG_NAME_LENGTH + 1 + 3 + sizeof(int) + COMMENT_LENGTH + 1 + 3, 0);
@@ -527,36 +515,8 @@ printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, code_len);
 
 	print_data(tmp, code_len, 32);
 
-	((ls->players)[0])->program_code = (unsigned char *)ft_strnew(code_len);
-	ft_memcpy((void *)(((ls->players)[0])->program_code), tmp, code_len);
-	print_data(	((ls->players)[0])->program_code	, code_len, 32);
-	((ls->players)[0])->size_code = code_len;
-
-	ft_strdel((char **)&tmp);
-
-	// (ls->players)[1] = (t_player *)ft_memalloc(sizeof(t_player));
-	// ((ls->players)[1])->name = ft_strdup("second_player");
-	// (ls->players)[1]->comment = ft_strdup("very_unusefull comment");
-	// (ls->players)[1]->num = -2;
-	// ls->cycle_to_die = CYCLE_TO_DIE;
-	// ls->next_cycle_to_die = ls->cycle_to_die;
-
-	int i = 0;
-
-	while (i < ls->num_of_players)
-	{
-		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
-		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
-		i++;
-	}
-	print_data(ls->field, 64, 64);
-	// ls->processes_list->reg[1] = 65;
-	ls->num_of_processes = ls->num_of_players;
-
-	// add_proc_on_top(ls, MEM_SIZE/2, 255);
-	// clone_proc(ls->processes_list->next, ls->processes_list);
-	printf("end of init\n");
-}*/
+	((ls->players)[0])->program_code = tmp;
+}
 
 void				init_my_player_and_process(t_core *ls)
 {
@@ -566,6 +526,8 @@ void				init_my_player_and_process(t_core *ls)
 	ls->cycle_to_die = CYCLE_TO_DIE;
 	ls->next_cycle_to_die = ls->cycle_to_die;
 	
+	// my_read_code(ls);
+
 	while (i < ls->num_of_players)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
@@ -816,8 +778,8 @@ int					main(int argc, char **argv)
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
 	ls->players = ls->args->player;
 	
-	//init_my_player_and_process(ls);
-	return(10);
+	init_my_player_and_process(ls);
+	// return(10);
 
 	//call visio
 	while (1)
