@@ -240,10 +240,19 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 
 void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 {
+	int what;
+	int where;
+
+	P_COD_B = read_data_block(ls, proc->pc + 1, 1);
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
+	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-
+		convert_param_to_data(proc, 0);
+		convert_param_to_data(proc, 1);
+		what = read_data_block(ls ,(P_PAR[0] + P_PAR[1]), 4);
+		where = P_PAR[2];
+		P_REG[where] = what;
 	}
 	printf("-end_of_try_execute f_ldi at cycle=%zu\n", ls->cycle);
 }
@@ -277,7 +286,7 @@ void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 }
 
 void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
-{
+{//no idxmod
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
@@ -287,7 +296,7 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 }
 
 void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
-{
+{//no idxmod
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
@@ -297,7 +306,7 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 }
 
 void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
-{
+{//no idxmod
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
 	printf("-end_of_try_execute f_lfork at cycle=%zu\n", ls->cycle);
 }
