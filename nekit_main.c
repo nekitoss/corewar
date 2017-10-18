@@ -27,7 +27,7 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_aff(t_core *ls, t_proc *proc, g_my_op *func);
 
-g_my_op				op_tab[17] =
+g_my_op				tab[17] =
 {
 	{0,			0,	{0, 0, 0},												0,	0,		0,	0},
 	{f_live,	1,	{T_DIR, 0, 0},											1,	10,		0,	4},
@@ -589,8 +589,8 @@ void				opcode(t_core *ls, t_proc *proc)
 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
 	{
 		proc->old_pc = proc->pc;
-		((op_tab[(proc->opcode_to_execute)]).func)(ls, proc, &(op_tab[(proc->opcode_to_execute)]));
-		// shift_pc(&(proc->pc), (op_tab[(proc->opcode_to_execute)]).cycles_to_exec);
+		((tab[(proc->opcode_to_execute)]).func)(ls, proc, &(tab[(proc->opcode_to_execute)]));
+		// shift_pc(&(proc->pc), (tab[(proc->opcode_to_execute)]).cycles_to_exec);
 		// shift_pc(&(proc->pc), 1);
 	}
 	else
@@ -603,7 +603,7 @@ void				opcode(t_core *ls, t_proc *proc)
 	proc->opcode_to_execute = opcode;
 	if (opcode < 17 && opcode > 0)
 	{
-		proc->execute_at = ls->cycle + (op_tab[opcode]).cycles_to_exec;
+		proc->execute_at = ls->cycle + (tab[opcode]).cycles_to_exec;
 	}
 	else
 	{
