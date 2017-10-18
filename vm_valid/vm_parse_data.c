@@ -62,7 +62,7 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 	{
 		if (!ft_strcmp(str, argv[i]))
 		{
-			if (i + 1 >= ptr->cnt_player)
+			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of dump\n");
 			if (!valid_val_arg(argv[(i + 1)]))
 			{
