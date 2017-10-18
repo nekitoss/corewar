@@ -52,15 +52,16 @@ short				revert_16_bits_size_t(short num);
 int					revert_32_bits_size_t(int num);
 int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func);
 int					cmp_coding_byte(g_my_op *func, unsigned char coding_byte);
-void				shift_pc(size_t *pc, int value);
+void				shift_pc(size_t *pc, unsigned int value);
 int					read_parameters_and_shift(g_my_op *func, t_proc *proc);
 int					read_non_conv_parameters_and_shift(g_my_op *func, t_proc *proc);
 int					read_data_block(t_core *ls, unsigned int start, int len);
 int					cmp_one_param(g_my_op *func, unsigned char coding_byte, int param_num);
-void				add_proc_on_top(t_core *ls, int pc, int belong_to_player);
+void				add_proc_on_top(t_core *ls, unsigned int pc, int belong_to_player);
 void				clone_proc(t_proc *father, t_proc *son);
 // void				convert_param_to_data(g_my_op *func, t_proc *proc, int par_num);
 void				convert_param_to_data(t_proc *proc, int par_num);
+void				convert_param_to_data_no_idx(t_proc *proc, int par_num);
 unsigned char		ident_param(unsigned char coding_byte, int param_num);
 void				write_data_block(t_proc *proc, int data, unsigned int start, int len);
 void				print_data(unsigned char *str, size_t len, size_t width);
@@ -70,9 +71,8 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int	alive_num;
 	printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);
-	shift_pc(&(proc->pc), 1);
-	alive_num = read_data_block(ls, proc->pc, 4);
-	shift_pc(&(proc->pc), 4);
+	alive_num = read_data_block(ls, proc->pc + 1, 4);
+	shift_pc(&(proc->pc), 5);
 	if (alive_num < 0 && alive_num >= (ls->num_of_players * -1))
 	{
 		alive_num = (alive_num * (-1)) - 1;
