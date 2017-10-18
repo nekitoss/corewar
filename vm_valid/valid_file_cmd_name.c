@@ -16,7 +16,7 @@
 void		valid_flags(t_arg *ptr)
 {
 	if (ptr->fl_dump == 0 && ptr->fl_width == 1)
-		ft_exit("Error: flag width use with flag dump");
+		ft_exit("Error: flag width cannot use with flag dump");
 }
 
 void	srch_num_player(int *num, t_arg *ptr)
@@ -37,7 +37,7 @@ void	srch_num_player(int *num, t_arg *ptr)
 		i++;
 	}
 
-	*num = (num_player * -1);
+	*num = num_player;
 }
 
 void	set_num_player(t_arg *ptr)
@@ -76,12 +76,12 @@ void	valid_filename(char **argv, t_arg *ptr)
 			continue;
 		}
 		else
-			ft_exit("Error: in argument to line, think about this,"
+			ft_exit("Error: invalid argument in command line, think about this,"
 							" my friend\n");
 		i++;
 	}
 	if (fl != 0)
-		ft_exit("Error: in argument to line, think about this,"
+		ft_exit("Error: invalid argument in command line,, think about this,"
 						" my friend)\n");
 }
 
@@ -97,18 +97,18 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 		{
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of width dump\n");
-			if (!valid_val_arg(argv[(i + 1)]))
+			if (!valid_val_arg(argv[(i + 1)], 1))
 			{
 				ptr->fl_width = 1;
 				if (ft_strlen(argv[(i + 1)]) > 10)
 					ft_exit("Error: too big number, my friend\n");
 				num = ft_atoi(argv[(i + 1)]);
 				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
-					ft_exit("Error: too big number, my friend\n");
+					ft_exit("Error: it's not correct number, my friend\n");
 				ptr->width_dump = ft_atoi(argv[(i + 1)]);
 			}
 			else
-				ft_exit("Error: incorrect val dump width, my friend\n");
+				ft_exit("Error: incorrect value of dump width, my friend\n");
 		}
 		i++;
 	}

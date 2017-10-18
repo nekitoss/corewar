@@ -15,6 +15,9 @@ echo "\nONLY WIDTH"
 echo "\nONLY DUMP WITH ZERO"
 ./corewar -dump 0
 
+echo "\nTEST"
+./src/champs/ex.cor -dump 10 -n ./src/champs/ex.cor
+
 # echo ""
 # ./corewar -
 

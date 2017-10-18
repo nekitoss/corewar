@@ -1,7 +1,7 @@
 
 #include "../corewar.h"
 
-int		valid_val_arg(char *argv)
+int		valid_val_arg(char *argv, int fl_dump)
 {
 	int i;
 	int fl;
@@ -23,9 +23,11 @@ int		valid_val_arg(char *argv)
 			return (1);
 		i++;
 	}
-	if (fl == 0)
+	if (fl == 0 && fl_dump == 0)
 		ft_exit("Error: number must be content at "
 		"least one digit, but not zero, my friend, it's not 'Go')\n");
+	else if (fl == 0 && fl_dump == 1)
+		ft_putstr("Warning: It's not comfortable for your eyes)\n");
 	return (0);
 }
 
@@ -40,7 +42,7 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 		{
 			if ((i + 1) < ptr->cnt_arg)
 			{
-				if (valid_val_arg(argv[(i + 1)]))
+				if (valid_val_arg(argv[(i + 1)], 0))
 					ft_exit("Error: not valid arg, my friend\n");
 				if (ft_strlen(argv[(i + 1)]) > 10)
 					ft_exit("Error: too big number, my friend\n");
@@ -55,7 +57,7 @@ void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
 int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 {
 	int i;
-	long int num;
+	size_t num;
 
 	i = 1;
 	while (i < ptr->cnt_arg)
@@ -64,12 +66,12 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 		{
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of dump\n");
-			if (!valid_val_arg(argv[(i + 1)]))
+			if (!valid_val_arg(argv[(i + 1)], 1))
 			{
 				ptr->fl_dump = 1;
 				if (ft_strlen(argv[(i + 1)]) > 10)
 					ft_exit("Error: too big number, my friend\n");
-				num = ft_atoi(argv[(i + 1)]);
+				num = (size_t)ft_atoi(argv[(i + 1)]);
 				if (ft_strcmp(argv[(i + 1)], ft_itoa(num)))
 					ft_exit("Error: to big number, my friend\n");
 				ptr->num_dump = num;
