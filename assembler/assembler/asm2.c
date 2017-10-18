@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 19:15:36 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/18 15:49:39 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char				*check_name(char *str)
 	if (v->count_name != 1)
 		error("Syntax error. \".name\"");
 	check_quotes(str, 1);
+	free(v);
 	return (get_name(ptr));
 }
 
@@ -65,6 +66,7 @@ void				cpy(char **dest, char *str)
 		(*dest)[i] = str[i];
 		i++;
 	}
+	free(str);
 }
 
 char				*check_comment(char *str)
@@ -86,6 +88,7 @@ char				*check_comment(char *str)
 	if (v->count_comment != 1)
 		error("Syntax error. \".comment\"");
 	check_quotes(str, 0);
+	free(v);
 	return (get_name(ptr));
 }
 

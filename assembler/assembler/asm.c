@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:17:46 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/17 21:11:56 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/18 17:13:55 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,18 @@ int				main(int argc, char **argv)
 	make_corfile(mstruc, mstruc->commands, mstruc->labels, argv[argc - 1]);
 	close(fd);
 	free(start);
-	free_lb(mstruc->labels);
-	free_comm(mstruc->commands);
-	free(mstruc);
 	free(file);
-	free(mstruc->head);
-	while (1)
-		;
 	return (0);
+}
+
+void			free_main(t_asm *mstruc)
+{
+	free_lb(mstruc->labels);
+	free(mstruc->labels);
+	free_comm(mstruc->commands);
+	free(mstruc->commands);
+	free(mstruc->head);
+	free(mstruc);
 }
 
 void			free_lb(t_label *lb)

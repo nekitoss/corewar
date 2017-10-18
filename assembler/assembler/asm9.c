@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 19:16:02 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/18 16:53:14 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void		valid_code(t_asm *masm, char *str, t_header *head)
 {
-	valid_head(head, &str);
 	del_com(&str);
+	valid_head(head, &str);
 	while (*str != '\0' && !is_empty(str))
 	{
 		if (!pass_it(str) && check_label(masm, &str))

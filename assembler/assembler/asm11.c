@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:16:04 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/16 19:16:38 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/18 15:44:31 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void		make_corfile(t_asm *masm, t_commands *comm, t_label *lb, char *name)
 	ft_putstr("Writing output program to ");
 	ft_putstr(n);
 	ft_putchar('\n');
+	free(n);
 	close(fdwrite);
 }
 
