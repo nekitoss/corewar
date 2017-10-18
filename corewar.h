@@ -39,13 +39,6 @@ typedef struct		s_arg
 
 }					t_arg;
 
-//######
-
-
-
-
-
-
 typedef struct		s_proc
 {
 	size_t			pc;
