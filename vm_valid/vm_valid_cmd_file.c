@@ -1,0 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vm_valid_cmd_file.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkurchin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/02 20:18:16 by mkurchin          #+#    #+#             */
+/*   Updated: 2017/10/02 20:18:17 by mkurchin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../corewar.h"
+
+int		find_ext_to_end(char *argv)
+{
+	int		i;
+	char	*ptr;
+	char	*cor;
+
+	i = 0;
+	cor = ".cor";
+	ptr = argv;
+	if ((ft_strlen(argv)) < 4)
+		return (1);
+	while (argv[i] != '\0')
+	{
+		ptr++;
+		i++;
+	}
+	ptr -= 4;
+	if (!ft_strcmp(cor, ptr))
+		return (0);
+	return (1);
+}
+
+int		ft_isdigit_str(char *argv)
+{
+	int i;
+
+	i = 0;
+	while (argv[i] != '\0')
+	{
+		if(!(ft_isdigit(argv[i])))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void sv_number_player(char *argv, t_arg *ptr, int *fl)
+{
+	int tmp;
+
+	if (ft_isdigit_str(argv))
+		ft_exit("Not correct value of number player, my friend\n");
+	if (ft_strlen(argv) > 10)
+		ft_exit("Error: too big number, my friend, are you joke?)\n");
+	tmp = ft_atoi(argv);
+	if (tmp > MAX_PLAYERS || tmp <= 0)
+		ft_exit("Not correct number player\n");
+	ptr->num[ptr->cnt_player] = tmp;
+	(*fl)++;
+}
+
+void 	sv_path_player(char *argv, t_arg *ptr, int *fl)
+{
+	if (ptr->cnt_player <= 3)
+		ptr->path_players[ptr->cnt_player] = ft_strdup(argv);
+	if (ptr->cnt_player > 3)
+		ft_exit("Too many champions, it's not football) my friend\n");
+	ptr->cnt_player++;
+	if (*fl == 2)
+		(*fl) = 0;
+}
+
+void		hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+	int cnt;
+
+	i = 1;
+	while (i < ptr->cnt_arg)
+	{
+		if (!ft_strcmp(str, argv[i]))
+			cnt++;
+		i++;
+	}
+	if (cnt == 1)
+		ptr->fl_visual = 1;
+	else if (cnt > 1)
+		ft_exit("Error: too many flags\n");
+}
