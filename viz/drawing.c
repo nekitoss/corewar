@@ -75,8 +75,8 @@ void    draw_cycle(t_core *core)
     while (i < core->num_of_players)
     {
         set_last_alive(i + 1, core->players[i]->last_live);
-        set_live_in_current(i + 1, core->players[i]->sum_lives);
-        arr[i] = core->players[i]->sum_lives;
+        set_live_in_current(i + 1, core->players[i]->sum_lives_in_current_period);
+        arr[i] = core->players[i]->sum_lives_in_current_period;
         i++;
     }
     while (i < 4)

@@ -1,8 +1,8 @@
 #ifndef NCURSES_VIZ_H
 #define NCURSES_VIZ_H
 
-#include "../corewar.h"
 #include <curses.h>
+#include "../corewar.h"
 
 /*
  * start_draw(t_arg*) - draws initial map
@@ -34,7 +34,7 @@ int x_b;
 int colors[4];
 int pos;
 
-void    start_draw(t_arg *list);
+void    start_draw(t_core *list);
 void    fill_memory(void);
 void    n_run(void);
 void    n_pause(void);
