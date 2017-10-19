@@ -5,7 +5,6 @@
 #include "op.h"
 #include <errno.h>
 
-
 typedef struct		s_player
 {
 	char			*name;
