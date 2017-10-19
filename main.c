@@ -37,6 +37,7 @@ void for_test(t_arg *ptr)
 //		printf("---------------------%i-----------------------\n", i);
 //		printf("\n");
 //	}
+	ptr = NULL;
 }
 
 void	vm_sort_player(t_arg *ptr)
