@@ -62,6 +62,12 @@ void	vm_sort_player(t_arg *ptr)
 		}
 		i++;
 	}
+	i = 0;
+	while (i < ptr->cnt_player)
+	{
+		ptr->player[i]->num *= -1;
+		i++;
+	}
 }
 
 void	vm_show_usage(void)
