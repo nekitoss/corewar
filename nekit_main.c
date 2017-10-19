@@ -1,4 +1,4 @@
-#define VIZU 0
+#define VIZU 1
 
 #include "corewar.h"
 
@@ -925,7 +925,7 @@ int					main(int argc, char **argv)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
 	vm_sort_player(ls->args);
-	for_test(ls->args);
+	// for_test(ls->args);
 
 
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
