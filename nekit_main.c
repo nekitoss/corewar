@@ -1,4 +1,4 @@
-#define VIZU 0
+#define VIZU 1
 
 #include "corewar.h"
 
@@ -672,7 +672,7 @@ void				init_my_player_and_process(t_core *ls)
 	while (i < ls->num_of_players)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
-		ft_memcpy((ls->field), ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
+		ft_memcpy(&(ls->field)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
 		i++;
 	}
 	
