@@ -78,11 +78,10 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 	if (alive_num < 0 && alive_num >= (ls->num_of_players * -1))
 	{
 		alive_num = (alive_num * (-1)) - 1;
-		(((ls->players)[alive_num])->sum_lives_in_current_period)++; 
+		(((ls->players)[alive_num])->sum_lives_in_current_period)++;
 		((ls->players)[alive_num])->last_live = ls->cycle;
 		if (debug) {printf("PLAYER_%d  IS ALIIIIIIIIVE!\n", (alive_num + 1) * -1);}
 	}
-
 	(ls->gen_lives_in_current_period)++;
 	proc->is_alive = TRUE;
 	if (debug) {printf("-end_of_try_execute f_live at cycle=%zu\n", ls->cycle);}
@@ -668,6 +667,7 @@ void				set_initial_code_color(char *colors, int pl_num, int len)
 	{
 		*colors = pl_num;
 		colors++;
+		i++;
 	}
 }
 
@@ -685,7 +685,7 @@ void				init_my_player_and_process(t_core *ls)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
 		ft_memcpy(&(ls->field)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
-		// set_initial_code_color(&(ls->colors)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->num, ((ls->players)[i])->size_code);
+		set_initial_code_color(&(ls->colors)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->num, ((ls->players)[i])->size_code);
 		i++;
 	}
 	
@@ -880,8 +880,8 @@ void				empty_player_lives(t_core *ls)
 	i = 0;
 	while (i < ls->num_of_players)
 	{
-		((ls->players)[i])->sum_lives_in_current_period = 0;
 		((ls->players)[i])->sum_lives_in_previous_period = ((ls->players)[i])->sum_lives_in_current_period;
+		((ls->players)[i])->sum_lives_in_current_period = 0;
 		i++;
 	}
 }
