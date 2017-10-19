@@ -21,13 +21,20 @@ SRC = nekit_main.c\
 		./vm_valid/vm_parse_data.c\
 		./vm_valid/vm_save_data_bot.c\
 		./vm_valid/vm_valid_cmd_file.c\
-		./vm_valid/vm_valid_file_data.c
+		./vm_valid/vm_valid_file_data.c\
+		./viz/bots_draw.c\
+		./viz/drawing.c\
+		./viz/fill_memory.c\
+		./viz/pause.c\
+		./viz/set_values.c\
+		./viz/set_values_2.c\
+		./viz/start_draw.c
 
 OBJ = $(SRC:.c=.o)
 
 LIBOBJ = libft/*.o
 
-INC = -I ./ -I ./libft/
+INC = -I ./ -I ./libft/ -I ./viz/
 
 LIB = -L ./libft -lft
 
@@ -37,7 +44,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(LIBMAKE) all
-	@$(CC) $(FLAGS) $(INC) $(LIB) $(OBJ) -o $(NAME)
+	@$(CC) $(FLAGS) $(INC) $(LIB) $(OBJ) -lncurses -o $(NAME)
 	@echo  "\033[32mCompiled and created Corewar (VM) binary\033[0m"
 
 %.o: %.c

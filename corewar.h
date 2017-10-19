@@ -4,8 +4,6 @@
 #include "libft/libft.h"
 #include "op.h"
 #include <errno.h>
- #include "viz/viz.h"
-
 
 typedef struct		s_player
 {
@@ -20,8 +18,6 @@ typedef struct		s_player
 	int				fd;
 	int				size_code;
 }					t_player;
-
-//####mkurchin
 
 typedef struct		s_arg
 {
@@ -104,6 +100,9 @@ typedef struct		s_op
 	int				label_size;
 }					t_op;
 
+#if VIZU
+#include "viz/viz.h"
+#endif
 
 int			ft_exit(char *str);
 void		vm_init_struct(t_arg **ptr);

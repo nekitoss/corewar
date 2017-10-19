@@ -10,11 +10,11 @@ void    draw_field(t_core *core)
     while (i < MEM_SIZE)
     {
         t = (int)(core->colors[i]) * -1;
-        if (t)
-            attron(COLOR_PAIR(t + 1));
+//        if (t)
+//            attron(COLOR_PAIR(t + 1));
         mvprintw(y, x, "%.2x", core->field[i]);
-        if (t)
-            attroff(COLOR_PAIR(t + 1));
+//        if (t)
+//            attroff(COLOR_PAIR(t + 1));
         x += 3;
         if (x >= 195)
         {
@@ -54,9 +54,9 @@ void    draw_carriage(t_core *core)
     while (temp)
     {
         get_yx(yx, temp->pc);
-        attron(COLOR_PAIR(temp->belong_to_player + 9));
+        attron(COLOR_PAIR(temp->belong_to_player * -1 + 9));
         mvprintw(yx[0], yx[1], "%.2x", core->field[temp->pc]);
-        attroff(COLOR_PAIR(temp->belong_to_player + 9));
+        attroff(COLOR_PAIR(temp->belong_to_player * -1 + 9));
         refresh();
         temp = temp->next;
     }
@@ -66,6 +66,7 @@ void    draw_cycle(t_core *core)
 {
     int     i;
     int     arr[4];
+    int     arr1[4];
 
     i = 0;
     draw_field(core);
@@ -75,14 +76,20 @@ void    draw_cycle(t_core *core)
     while (i < core->num_of_players)
     {
         set_last_alive(i + 1, core->players[i]->last_live);
-        set_live_in_current(i + 1, core->players[i]->sum_lives);
-        arr[i] = core->players[i]->sum_lives;
+        set_live_in_current(i + 1, core->players[i]->sum_lives_in_current_period);
+        arr[i] = core->players[i]->sum_lives_in_current_period;
+        arr1[i] = core->players[i]->sum_lives_in_previous_period;
         i++;
     }
     while (i < 4)
-        arr[i++] = 0;
+    {
+        arr[i] = 0;
+        arr1[i] = 0;
+        i++;
+    }
     set_cycle_to_die(core->cycle_to_die);
     set_current_breakdown(arr[0], arr[1], arr[2], arr[3]);
+    set_last_breakdown(arr1[0], arr1[1], arr1[2], arr1[3]);
 }
 
 int    draw_paused(int *paused, t_core *core, unsigned int *cs)
