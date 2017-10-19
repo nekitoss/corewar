@@ -6,7 +6,7 @@
 #    By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/01 18:31:34 by yrobotko          #+#    #+#              #
-#    Updated: 2017/08/21 17:35:47 by yrobotko         ###   ########.fr        #
+#    Updated: 2017/10/19 17:04:54 by yrobotko         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -108,8 +108,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: fclean
-	make	
+re: fclean all	
 
 norm:
 	norminette ft_*.c libft.h

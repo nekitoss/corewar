@@ -6,7 +6,7 @@
 #    By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/08 19:01:12 by yrobotko          #+#    #+#              #
-#    Updated: 2017/10/16 14:23:04 by yrobotko         ###   ########.fr        #
+#    Updated: 2017/10/19 17:03:55 by yrobotko         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,5 @@ fclean: clean
 	$(DEL) $(NAME)
 	$(DEL) libft.a
 	$(DEL) libft/libft.a
-re:	fclean
-	make
+re:	fclean all
 
