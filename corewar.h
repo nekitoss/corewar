@@ -4,7 +4,6 @@
 #include "libft/libft.h"
 #include "op.h"
 #include <errno.h>
-// #include "viz/viz.h"
 
 
 typedef struct		s_player
@@ -104,6 +103,7 @@ typedef struct		s_op
 	int				label_size;
 }					t_op;
 
+#include "viz/viz.h"
 
 int			ft_exit(char *str);
 void		vm_init_struct(t_arg **ptr);
