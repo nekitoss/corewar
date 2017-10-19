@@ -83,11 +83,11 @@ void    draw_cycle(t_core *core)
     }
     while (i < 4)
     {
-        arr[i++] = 0;
-        arr1[i++] = 0;
+        arr[i] = 0;
+        arr1[i] = 0;
+        i++;
     }
     set_cycle_to_die(core->cycle_to_die);
-    mvprintw(80, 0, "%d\n", core->players[0]->sum_lives_in_current_period);
     set_current_breakdown(arr[0], arr[1], arr[2], arr[3]);
     set_last_breakdown(arr1[0], arr1[1], arr1[2], arr1[3]);
 }
