@@ -8,7 +8,7 @@
 #define P_REG (proc->reg)
 #define P_COD_B (proc->coding_byte)
 
-
+int debug = FALSE;
 
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_ld(t_core *ls, t_proc *proc, g_my_op *func);
@@ -918,7 +918,7 @@ int					main(int argc, char **argv)
 	ls->players = ls->args->player;
 	
 	 init_my_player_and_process(ls);
-
+ls->args->fl_dump = FALSE;
 	//call visio
     start_draw(ls);
 	while (1)
