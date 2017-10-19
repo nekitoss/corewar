@@ -4,7 +4,7 @@
 #include "libft/libft.h"
 #include "op.h"
 #include <errno.h>
-// #include "viz/viz.h"
+ #include "viz/viz.h"
 
 
 typedef struct		s_player
