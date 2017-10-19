@@ -26,6 +26,7 @@ void for_test(t_arg *ptr)
 	printf("number of players%i\n", ptr->cnt_player);
 	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
 	printf("width flag->%i num->%i\n", ptr->fl_width, ptr->width_dump);
+	printf("visual flag->%i\n", ptr->fl_visual);
 	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
 	while (i < ptr->cnt_player)
 	{

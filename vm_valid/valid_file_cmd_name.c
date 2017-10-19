@@ -16,7 +16,7 @@
 void		valid_flags(t_arg *ptr)
 {
 	if (ptr->fl_dump == 0 && ptr->fl_width == 1)
-		ft_exit("Error: flag width cannot use with flag dump");
+		ft_exit("Error: flag width cannot use without flag dump");
 }
 
 void	srch_num_player(int *num, t_arg *ptr)
@@ -53,6 +53,30 @@ void	set_num_player(t_arg *ptr)
 	}
 }
 
+int		ft_parse_cmd_line(t_arg *ptr, char **argv, int *fl, int *i)
+{
+	if (!ft_strcmp("-n", argv[*i]))
+		(*fl)++;
+	else if (!find_ext_to_end(argv[*i]) && *fl == 0)
+		sv_path_player(argv[*i], ptr, fl);
+	else if (!find_ext_to_end(argv[*i]) && *fl == 2)
+		sv_path_player(argv[*i], ptr, fl);
+	else if (*fl == 1)
+		sv_number_player(argv[*i], ptr, fl);
+	else if (!ft_strcmp("-dump", argv[*i]) || !ft_strcmp("-w", argv[*i]))
+	{
+		(*i) += 2;
+		return (3);
+	}
+	else if (!ft_strcmp("-v", argv[*i]))
+	{
+		(*i)++;
+		return (3);
+	}
+	else
+		ft_exit("Error: invalid argument in cmd line, think about this\n");
+	return (0);
+}
 void	valid_filename(char **argv, t_arg *ptr)
 {
 	int i;
@@ -62,27 +86,13 @@ void	valid_filename(char **argv, t_arg *ptr)
 	i = 1;
 	while (i < ptr->cnt_arg)
 	{
-		if (!ft_strcmp("-n", argv[i]))
-			fl++;
-		else if (!find_ext_to_end(argv[i]) && fl == 0)
-			sv_path_player(argv[i], ptr, &fl);
-		else if (!find_ext_to_end(argv[i]) && fl == 2)
-			sv_path_player(argv[i], ptr, &fl);
-		else if (fl == 1)
-			sv_number_player(argv[i], ptr, &fl);
-		else if (!ft_strcmp("-dump", argv[i]) || !ft_strcmp("-w", argv[i]))
-		{
-			i += 2;
+		if ((ft_parse_cmd_line(ptr, argv , &fl, &i)) == 3)
 			continue;
-		}
-		else
-			ft_exit("Error: invalid argument in command line, think about this,"
-							" my friend\n");
 		i++;
 	}
 	if (fl != 0)
-		ft_exit("Error: invalid argument in command line,, think about this,"
-						" my friend)\n");
+		ft_exit("Error: invalid argument in cmd line,think about this,"
+			"my friend\n");
 }
 
 void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
@@ -98,7 +108,7 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of width dump\n");
 			if (!valid_val_arg(argv[(i + 1)], &cur))
-				ft_save_val(ptr, argv, i, &cur);
+				ft_save_val_width(ptr, argv, i, &cur);
 			else
 				ft_exit("Error: incorrect value of dump width, my friend\n");
 		}
