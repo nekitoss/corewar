@@ -55,7 +55,7 @@ void    set_current_breakdown(int a, int b, int c, int d)
     refresh();
 }
 
-void    set_last_breakdown(int a, int b, int c, int d)
+void    set_last_breakdown(double a, double b, double c, double d)
 {
     int     first;
     int     second;
@@ -72,9 +72,9 @@ void    set_last_breakdown(int a, int b, int c, int d)
             mvprintw(pos + 6, x_s + 2 + i++, "-");
         return ;
     }
-    first = (float)a / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
-    second = (float)b / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
-    third = (float)c / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
+    first = a / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
+    second = b / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
+    third = c / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
     if (d)
         fourth = 60 - (first + second + third);
     else

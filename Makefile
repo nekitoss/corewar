@@ -44,7 +44,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(LIBMAKE) all
-	@$(CC) $(FLAGS) $(INC) $(LIB) $(OBJ) -o $(NAME)
+	@$(CC) $(FLAGS) $(INC) $(LIB) $(OBJ) -lncurses -o $(NAME)
 	@echo  "\033[32mCompiled and created Corewar (VM) binary\033[0m"
 
 %.o: %.c

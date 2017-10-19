@@ -810,6 +810,7 @@ void				game_end(t_core *ls)
 	if (debug) {printf("GAME_ENDED on cycle %zu\n", ls->cycle);
 	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);}
 	//free structure
+    end_draw();
 	exit (-1);
 }
 
@@ -921,6 +922,7 @@ int					main(int argc, char **argv)
 ls->args->fl_dump = FALSE;
 	//call visio
     start_draw(ls);
+
 	while (1)
 	{
 		// printf("cycle=%06zu\n", ls->cycle);
@@ -933,8 +935,8 @@ ls->args->fl_dump = FALSE;
 			current_process = current_process->next;
 		}
 		//call visio
+        drawing(ls);
 		(ls->cycle)++;
 	}
-
 	return (0);
 }

@@ -45,7 +45,7 @@ void    bots_draw(t_arg *list);
 void    set_last_alive(int bot, int cycle);
 void    set_live_in_current(int bot, int n);
 void    set_current_breakdown(int a, int b, int c, int d);
-void    set_last_breakdown(int a, int b, int c, int d);
+void    set_last_breakdown(double a, double b, double c, double d);
 void    draw_constants(void);
 void    set_cycle_to_die(int n);
 void    end_draw(void);
