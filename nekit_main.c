@@ -1,3 +1,5 @@
+#define VIZU 0
+
 #include "corewar.h"
 
 #define OCTET 8
@@ -810,7 +812,10 @@ void				game_end(t_core *ls)
 	if (debug) {printf("GAME_ENDED on cycle %zu\n", ls->cycle);
 	printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);}
 	//free structure
-    end_draw();
+#if VIZU
+	if (ls->args->fl_visual == 1)
+		end_draw();
+#endif
 	exit (-1);
 }
 
@@ -907,12 +912,7 @@ int					main(int argc, char **argv)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
 	vm_sort_player(ls->args);
-	for_test(ls->args);
-	// if (ls->args->fl_visual == 1)// turn on fl_visual
-	// {
-	// 	start_draw(ls->args);
-	// 	end_draw();
-	// }
+	// for_test(ls->args);
 
 
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
@@ -920,9 +920,11 @@ int					main(int argc, char **argv)
 	
 	 init_my_player_and_process(ls);
 ls->args->fl_dump = FALSE;
-	//call visio
-    start_draw(ls);
-
+ls->args->fl_visual = TRUE;
+#if VIZU
+	if (ls->args->fl_visual == 1)
+		start_draw(ls);
+#endif
 	while (1)
 	{
 		// printf("cycle=%06zu\n", ls->cycle);
@@ -934,8 +936,10 @@ ls->args->fl_dump = FALSE;
 				opcode(ls, current_process);
 			current_process = current_process->next;
 		}
-		//call visio
-        drawing(ls);
+#if VIZU
+		if (ls->args->fl_visual == 1)
+			drawing(ls);
+#endif
 		(ls->cycle)++;
 	}
 	return (0);

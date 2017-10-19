@@ -103,7 +103,9 @@ typedef struct		s_op
 	int				label_size;
 }					t_op;
 
+#ifdef VIZU
 #include "viz/viz.h"
+#endif
 
 int			ft_exit(char *str);
 void		vm_init_struct(t_arg **ptr);

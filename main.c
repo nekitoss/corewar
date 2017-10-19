@@ -19,25 +19,24 @@ void 	ft_exit_name_file(t_player *player, char *str1, char *str2)
 
 void for_test(t_arg *ptr)
 {
-//	int i;
-//
-//	i = 0;
-//	printf("--->switch off this function in main file, funciton - 'for test(void)'\n\n");
-//	printf("number of players%i\n", ptr->cnt_player);
-//	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
-//	printf("width flag->%i num->%i\n", ptr->fl_width, ptr->width_dump);
-//	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
-//	while (i < ptr->cnt_player)
-//	{
-//		printf("name->%s\n", ptr->player[i]->name);
-//		printf("comment->%s\n", ptr->player[i]->comment);
-//		printf("number->%i\n", ptr->player[i]->num);
-//		i++;
-//		printf("\n");
-//		printf("---------------------%i-----------------------\n", i);
-//		printf("\n");
-//	}
-	ptr = NULL;
+	int i;
+
+	i = 0;
+	printf("--->switch off this function in main file, funciton - 'for test(void)'\n\n");
+	printf("number of players%i\n", ptr->cnt_player);
+	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
+	printf("width flag->%i num->%i\n", ptr->fl_width, ptr->width_dump);
+	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
+	while (i < ptr->cnt_player)
+	{
+		printf("name->%s\n", ptr->player[i]->name);
+		printf("comment->%s\n", ptr->player[i]->comment);
+		printf("number->%i\n", ptr->player[i]->num);
+		i++;
+		printf("\n");
+		printf("---------------------%i-----------------------\n", i);
+		printf("\n");
+	}
 }
 
 void	vm_sort_player(t_arg *ptr)
