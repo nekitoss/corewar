@@ -50,7 +50,7 @@ void sv_number_player(char *argv, t_arg *ptr, int *fl)
 		ft_exit("Error: too big number, my friend, are you joke?)\n");
 	tmp = ft_atoi(argv);
 	if (tmp > MAX_PLAYERS || tmp <= 0)
-		ft_exit("Not correct number player\n");
+		ft_exit("Not correct number of player\n");
 	ptr->num[ptr->cnt_player] = tmp;
 	(*fl)++;
 }

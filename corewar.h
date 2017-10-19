@@ -131,7 +131,7 @@ void		for_test(t_arg *ptr);
 void		vm_sort_player(t_arg *ptr);
 void		vm_show_usage(void);
 void		valid_flags(t_arg *ptr);
-void		ft_save_val(t_arg *ptr, char **argv, int i, char **cur);
+void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
 
 
 

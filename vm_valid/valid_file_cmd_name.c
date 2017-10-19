@@ -108,7 +108,7 @@ void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str)
 			if (i + 1 >= ptr->cnt_arg)
 				ft_exit("Error: incorrect value of width dump\n");
 			if (!valid_val_arg(argv[(i + 1)], &cur))
-				ft_save_val(ptr, argv, i, &cur);
+				ft_save_val_width(ptr, argv, i, &cur);
 			else
 				ft_exit("Error: incorrect value of dump width, my friend\n");
 		}
