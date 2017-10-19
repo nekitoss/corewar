@@ -659,6 +659,18 @@ if (debug) {printf("file_size=%zu; offset=%zu; len=%zu\n", file_size, offset, co
 	((ls->players)[0])->program_code = tmp;
 }
 
+void				set_initial_code_color(char *colors, int pl_num, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		*colors = pl_num;
+		colors++;
+	}
+}
+
 void				init_my_player_and_process(t_core *ls)
 {
 	int i = 0;
@@ -673,6 +685,7 @@ void				init_my_player_and_process(t_core *ls)
 	{
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
 		ft_memcpy(&(ls->field)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
+		// set_initial_code_color(&(ls->colors)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->num, ((ls->players)[i])->size_code);
 		i++;
 	}
 	
@@ -680,7 +693,7 @@ void				init_my_player_and_process(t_core *ls)
 	ls->num_of_processes = ls->num_of_players;
 	// printf("end of init\n\n");
 
-	// print_data(ls->field, MEM_SIZE, 64);
+	// print_data((unsigned char *)ls->colors, MEM_SIZE, 64);
 }
 
 
@@ -919,8 +932,8 @@ int					main(int argc, char **argv)
 	ls->players = ls->args->player;
 	
 	 init_my_player_and_process(ls);
-ls->args->fl_dump = FALSE;
-ls->args->fl_visual = TRUE;
+// ls->args->fl_dump = FALSE;
+// ls->args->fl_visual = TRUE;
 #if VIZU
 	if (ls->args->fl_visual == 1)
 		start_draw(ls);

@@ -20,8 +20,6 @@ typedef struct		s_player
 	int				size_code;
 }					t_player;
 
-//####mkurchin
-
 typedef struct		s_arg
 {
 	int			cnt_arg;
@@ -103,7 +101,7 @@ typedef struct		s_op
 	int				label_size;
 }					t_op;
 
-#ifdef VIZU
+#if VIZU
 #include "viz/viz.h"
 #endif
 
