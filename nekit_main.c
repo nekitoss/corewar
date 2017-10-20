@@ -121,10 +121,14 @@ if (debug) {printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, pro
 	{
 		convert_param_to_data(proc, 0);
 		what = P_PAR[0];
-		convert_param_to_data(proc, 1);
-		where = ((P_PAR[1] % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+		if (ident_param(P_COD_B, 1) & T_REG)
+			P_REG[P_PAR[1]] = what;
+		else
+		{
+			where = ((P_PAR[1] % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+			write_data_block(proc, what, where, 4);
+		}
 		// print_data(ls->field, MEM_SIZE, 64);
-		write_data_block(proc, what, where, 4);
 	}
 	if (debug) {printf("-end_of_try_execute f_st at cycle=%zu\n", ls->cycle);}
 // print_data(ls->field, MEM_SIZE, 64);
@@ -251,10 +255,10 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 
 	if (debug) {printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->pc, func->function_num);}
 	if (proc->carry)
-	{
 		where = read_data_block(ls, proc->pc + 1, 2);
-		shift_pc(&(proc->pc), where);
-	}
+	else
+		where = 2;
+	shift_pc(&(proc->pc), where);
 	if (debug) {printf("-end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);}
 }
 
@@ -927,7 +931,7 @@ int					main(int argc, char **argv)
 	vm_sort_player(ls->args);
 	// for_test(ls->args);
 
-	exit(0);
+	// exit(0);
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
 	ls->players = ls->args->player;
 	
