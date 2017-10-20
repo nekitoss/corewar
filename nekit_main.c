@@ -10,7 +10,7 @@
 #define P_REG (proc->reg)
 #define P_COD_B (proc->coding_byte)
 
-int debug = FALSE;
+int debug = 1;
 
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_ld(t_core *ls, t_proc *proc, g_my_op *func);
@@ -274,7 +274,7 @@ void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data(proc, 0);
 		convert_param_to_data(proc, 1);
-		what = read_data_block(ls ,(P_PAR[0] + P_PAR[1]), 4);
+		what = read_data_block(ls ,((int)proc->old_pc + ((P_PAR[0] + P_PAR[1]) % IDX_MOD)), 4);
 		where = P_PAR[2];
 		P_REG[where] = what;
 	}
@@ -958,6 +958,8 @@ int					main(int argc, char **argv)
 	 init_my_player_and_process(ls);
 // ls->args->fl_dump = FALSE;
 // ls->args->fl_visual = TRUE;
+	 if (ls->args->fl_visual == 1)
+	 	debug = 0;
 #if VIZU
 	if (ls->args->fl_visual == 1)
 		start_draw(ls);
