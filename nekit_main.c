@@ -257,7 +257,7 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 	if (proc->carry)
 		where = read_data_block(ls, proc->pc + 1, 2);
 	else
-		where = 2;
+		where = 3;
 	shift_pc(&(proc->pc), where);
 	if (debug) {printf("-end_of_try_execute f_zjmp at cycle=%zu\n", ls->cycle);}
 }
@@ -690,6 +690,11 @@ void				init_my_player_and_process(t_core *ls)
 		add_proc_on_top(ls, (i * (MEM_SIZE / ls->num_of_players)), ((ls->players)[i])->num);
 		ft_memcpy(&(ls->field)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->program_code, ((ls->players)[i])->size_code);
 		set_initial_code_color(&(ls->colors)[(i * (MEM_SIZE / ls->num_of_players))], ((ls->players)[i])->num, ((ls->players)[i])->size_code);
+		ls->processes_list->opcode_to_execute = *(((ls->players)[i])->program_code);
+		if (ls->processes_list->opcode_to_execute < 17 && ls->processes_list->opcode_to_execute > 0)
+		{
+			ls->processes_list->execute_at = ls->cycle + (tab[(ls->processes_list->opcode_to_execute)]).cycles_to_exec;
+		}
 		i++;
 	}
 	
@@ -700,36 +705,51 @@ void				init_my_player_and_process(t_core *ls)
 	// print_data((unsigned char *)ls->colors, MEM_SIZE, 64);
 }
 
+// void				opcode(t_core *ls, t_proc *proc)
+// {
+// 	unsigned char opcode;
 
+// 	opcode = read_data_block(ls, proc->pc, 1);
+// 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
+// 	{
+// 		proc->old_pc = proc->pc;
+// 		((tab[(proc->opcode_to_execute)]).func)(ls, proc, &(tab[(proc->opcode_to_execute)]));
+// 	}
+// 	else
+// 	{
+// 		shift_pc(&(proc->pc), 1);
+// 	}
+	
+// 	if (opcode < 17 && opcode > 0)
+// 	{
+// 		proc->execute_at = ls->cycle + (tab[opcode]).cycles_to_exec;
+// 	}
+// 	else
+// 	{
+// 		proc->execute_at = ls->cycle + 1;
+// 		// shift_pc(&(proc->pc), 1);
+// 	}
+// 	proc->opcode_to_execute = opcode;
+// }
 
 void				opcode(t_core *ls, t_proc *proc)
 {
-	unsigned char opcode;
-
 	if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
 	{
 		proc->old_pc = proc->pc;
 		((tab[(proc->opcode_to_execute)]).func)(ls, proc, &(tab[(proc->opcode_to_execute)]));
-		// shift_pc(&(proc->pc), (tab[(proc->opcode_to_execute)]).cycles_to_exec);
-		// shift_pc(&(proc->pc), 1);
+		proc->opcode_to_execute = read_data_block(ls, proc->pc, 1);
+		if (proc->opcode_to_execute < 17 && proc->opcode_to_execute > 0)
+			proc->execute_at = ls->cycle + (tab[proc->opcode_to_execute]).cycles_to_exec;
+		else
+			proc->execute_at = ls->cycle + 1;
 	}
 	else
 	{
-// printf("incorrect opcode\n");
-		// shift_pc(&(proc->pc), 1);
-	}
-	opcode = read_data_block(ls, proc->pc, 1);
-// printf("opcode=%d=%#02x\n", opcode, opcode);
-	proc->opcode_to_execute = opcode;
-	if (opcode < 17 && opcode > 0)
-	{
-		proc->execute_at = ls->cycle + (tab[opcode]).cycles_to_exec;
-	}
-	else
-	{
-		proc->execute_at = ls->cycle + 1;
 		shift_pc(&(proc->pc), 1);
+		proc->execute_at = ls->cycle + 1;
 	}
+	
 }
 
 int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func)
