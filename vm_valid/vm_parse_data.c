@@ -80,6 +80,8 @@ void	ft_save_val_dump(t_arg *ptr, char **argv, int i, char **cur)
 		num = (size_t)ft_atoi(*cur);
 		if (ft_strcmp(*cur, ft_itoa(num)))
 			ft_exit("Error: to big number, my friend\n");
+		if (num > 2147483647)
+			ft_exit("Error: to big number, my friend\n");
 		ptr->num_dump = num;
 	}
 	else

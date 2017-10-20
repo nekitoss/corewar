@@ -927,7 +927,7 @@ int					main(int argc, char **argv)
 	vm_sort_player(ls->args);
 	// for_test(ls->args);
 
-
+	exit(0);
 // printf("MEM_SIZE=%d\n", MEM_SIZE);
 	ls->players = ls->args->player;
 	

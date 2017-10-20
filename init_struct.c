@@ -56,7 +56,7 @@ int 	vm_init_struct_player(t_arg **ptr)
 		(*ptr)->player[i]->last_live = 0;
 		(*ptr)->player[i]->sum_lives_in_current_period = 0;
 		(*ptr)->player[i]->sum_lives_in_previous_period = 0;
-		(*ptr)->player[i]->num = ((*ptr)->num[i] * -1);
+		(*ptr)->player[i]->num = ((*ptr)->num[i]);
 		(*ptr)->player[i]->fd = 0;
 		(*ptr)->player[i]->size_code = 0;
 		i++;
