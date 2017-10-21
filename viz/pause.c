@@ -20,5 +20,6 @@ void    n_pause(void)
 
 void    end_draw(void)
 {
+    getch();
     endwin();
 }

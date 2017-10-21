@@ -34,7 +34,7 @@ void    draw_frame(void)
 void    initial_values(void)
 {
     draw_frame();
-    fill_memory();
+    //fill_memory();
     attron(A_BOLD);
     mvprintw(4, x_s + 2, "Cycles/second limit : ");
     mvprintw(7, x_s + 2, "Cycle : ");
@@ -58,7 +58,7 @@ void    start_draw(t_core *core)
     initial_values();
     set_cycles_per_second(0);
     set_cycle(0);
-    set_processes(0);
+    set_processes(core->num_of_processes);
     set_all_lives(0);
     bots_draw(list);
     attron(A_BOLD);
@@ -74,5 +74,7 @@ void    start_draw(t_core *core)
     init_pair(11, COLOR_WHITE, COLOR_BLUE);
     init_pair(12, COLOR_WHITE, COLOR_RED);
     init_pair(13, COLOR_WHITE, COLOR_CYAN);
+    draw_field(core);
+    draw_carriage(core);
     refresh();
 }

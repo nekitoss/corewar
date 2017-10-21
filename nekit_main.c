@@ -975,11 +975,11 @@ int					main(int argc, char **argv)
 				opcode(ls, current_process);
 			current_process = current_process->next;
 		}
-#if VIZU
-		if (ls->args->fl_visual == 1)
-			drawing(ls);
-#endif
 		(ls->cycle)++;
+#if VIZU
+        if (ls->args->fl_visual == 1)
+            drawing(ls);
+#endif
 	}
 	return (0);
 }

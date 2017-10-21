@@ -73,6 +73,7 @@ void    draw_cycle(t_core *core)
     draw_carriage(core);
     set_cycle(core->cycle);
     set_processes(core->num_of_processes);
+    set_all_lives(core->gen_lives_in_current_period);
     while (i < core->num_of_players)
     {
         set_last_alive(i + 1, core->players[i]->last_live);
@@ -116,8 +117,12 @@ int    draw_paused(int *paused, t_core *core, unsigned int *cs)
             *cs -= (*cs > 1) ? 1 : 0;
         else if (c == 113)
             *cs -= (*cs > 10) ? 10 : 0;
-        else if (c == 101 || c == 114)
-            *cs += (c == 101) ? 1 : 10;
+        else if (c == 101)
+            *cs += (*cs < 2000) ? 1 : 0;
+        else if (c == 114)
+            *cs += (*cs < 1991) ? 10 : 0;
+        else if (c == 116)
+            *cs = 2000;
     }
     return 0;
 }
@@ -142,6 +147,7 @@ void    drawing(t_core *core)
     else if (c == 115)
     {
         draw_cycle(core);
+        n_pause();
         paused = 1;
         return;
     }
@@ -149,8 +155,12 @@ void    drawing(t_core *core)
         cs -= (cs > 1) ? 1 : 0;
     else if (c == 113)
         cs -= (cs > 10) ? 10 : 0;
-    else if (c == 101 || c == 114)
-        cs += (c == 101) ? 1 : 10;
+    else if (c == 101)
+        cs += (cs < 2000) ? 1 : 0;
+    else if (c == 114)
+        cs += (cs < 1991) ? 10 : 0;
+    else if (c == 116)
+        cs = 2000;
     set_cycles_per_second(cs);
     draw_cycle(core);
     usleep(1000000 / cs);

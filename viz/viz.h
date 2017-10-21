@@ -51,5 +51,7 @@ void    set_cycle_to_die(int n);
 void    end_draw(void);
 void    set_all_lives(int n);
 void    drawing(t_core *core);
+void    draw_carriage(t_core *core);
+void    draw_field(t_core *core);
 
 #endif
