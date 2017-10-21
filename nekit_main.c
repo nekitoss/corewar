@@ -959,7 +959,7 @@ int					main(int argc, char **argv)
 // ls->args->fl_dump = FALSE;
 // ls->args->fl_visual = TRUE;
 	 if (ls->args->fl_visual == 1)
-	 	debug = 0;
+		debug = 0;
 #if VIZU
 	if (ls->args->fl_visual == 1)
 		start_draw(ls);
@@ -977,8 +977,8 @@ int					main(int argc, char **argv)
 		}
 		(ls->cycle)++;
 #if VIZU
-        if (ls->args->fl_visual == 1)
-            drawing(ls);
+		if (ls->args->fl_visual == 1)
+			drawing(ls);
 #endif
 	}
 	return (0);
