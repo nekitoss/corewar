@@ -306,9 +306,10 @@ void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int where;
 
+	shift_pc(&(proc->pc), 3);
 	if (debug) {printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->old_pc, func->function_num);}
 	where = read_data_block(ls, proc->old_pc + 1, 2);
-	where = ((int)proc->old_pc + where) % IDX_MOD;
+	where = (int)proc->old_pc + (where % IDX_MOD);
 	add_proc_on_top(ls, where, proc->belong_to_player);
 	clone_proc(proc, ls->processes_list);
 	if (debug) {printf("-end_of_try_execute f_fork at cycle=%zu\n", ls->cycle);}
@@ -597,6 +598,8 @@ int					read_data_block(t_core *ls, unsigned int start, int len)
 		res = (int)read_2_byte(ls, start);
 	else if (len == 4)
 		res = read_4_byte(ls, start);
+	else if (len == 0)
+		res = 0;
 	else
 		my_deb("wrong len in read data block");
 	return (res);
@@ -750,7 +753,6 @@ void				opcode(t_core *ls, t_proc *proc)
 		shift_pc(&(proc->pc), 1);
 		proc->execute_at = ls->cycle + 1;
 	}
-	
 }
 
 int					check_coding_byte(t_core *ls, t_proc *proc, g_my_op *func)
@@ -809,7 +811,7 @@ void				add_proc_on_top(t_core *ls, unsigned int pc, int belong_to_player)
 	new = ft_memalloc(sizeof(t_proc));
 	new->reg[1] = belong_to_player;
 	new->next = ls->processes_list;
-	new->pc = pc;
+	new->pc = pc % MEM_SIZE;
 	new->belong_to_player = belong_to_player;
 	new->ls = ls;
 	new->execute_at = ls->cycle;
@@ -823,8 +825,12 @@ void				clone_proc(t_proc *father, t_proc *son)
 		ft_memcpy(son->reg, father->reg, (REG_NUMBER + 1) * sizeof(*(father->reg)));
 		son->is_alive = father->is_alive;
 		son->carry = father->carry;
-		son->execute_at = father->ls->cycle + 1;
-		// son->opcode = read_data_block(father->ls, son->pc, 1);
+		// son->execute_at = father->ls->cycle + 1;
+		son->opcode_to_execute = read_data_block(father->ls, son->pc, 1);
+		if (son->opcode_to_execute < 17 && son->opcode_to_execute > 0)
+			son->execute_at = father->ls->cycle + (tab[son->opcode_to_execute]).cycles_to_exec;
+		else
+			son->execute_at = father->ls->cycle + 1;
 		son->belong_to_player = father->belong_to_player;
 	}
 }
@@ -914,10 +920,13 @@ void				empty_player_lives(t_core *ls)
 void				armageddon(t_core *ls)
 {
 	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
+	{
 		print_data(ls->field, MEM_SIZE, ls->args->width_dump);
+		exit (-1);
+	}
 	if (ls->cycle == ls->next_cycle_to_die)
 	{
-		if (ls->gen_lives_in_current_period >= NBR_LIVE || ls->nbr_of_checks >= MAX_CHECKS)
+		if (ls->gen_lives_in_current_period >= NBR_LIVE || ls->nbr_of_checks >= MAX_CHECKS - 1)
 		{
 			if (ls->cycle_to_die > CYCLE_DELTA)
 			{
@@ -958,8 +967,11 @@ int					main(int argc, char **argv)
 	
 	 init_my_player_and_process(ls);
 // ls->args->fl_dump = FALSE;
+	 // ls->args->fl_dump = TRUE;
+	 // ls->args->width_dump = 64;
+	 // ls->args->num_dump = 27436;
 // ls->args->fl_visual = TRUE;
-	 if (ls->args->fl_visual == 1)
+	 // if (ls->args->fl_visual == 1)
 		debug = 0;
 #if VIZU
 	if (ls->args->fl_visual == 1)
