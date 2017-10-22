@@ -348,7 +348,7 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data_no_idx(proc, 0);
 		convert_param_to_data_no_idx(proc, 1);
-		what = read_data_block(ls ,(P_PAR[0] + P_PAR[1]), 4);
+		what = read_data_block(ls ,(int)proc->old_pc + (P_PAR[0] + P_PAR[1]), 4);
 		where = P_PAR[2];
 		P_REG[where] = what;
 	}
