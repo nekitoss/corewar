@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:06:44 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/17 19:16:58 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/20 20:03:42 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void		check_reg(char **s)
 			error("Parameter error");
 		(*s)++;
 	}
-	if (fft_atoi(str) > 99)
+	if (fft_atoi(str) > 99 || fft_atoi(str) == 0) 
 		error("Incorect register number");
 }
 
