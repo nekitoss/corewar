@@ -132,7 +132,13 @@ void    drawing(t_core *core)
     int c;
     static unsigned int cs = 50;
     static int paused = 1;
+    static int first = 1;
 
+    if (first)
+    {
+        first = 0;
+        return;
+    }
     if (paused)
         if (draw_paused(&paused, core, &cs))
             return;
