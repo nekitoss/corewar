@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/22 16:54:40 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/18 17:09:18 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/23 18:39:35 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,13 @@ long long				fft_atoi(const char *str);
 void					free_lb(t_label *lb);
 void					free_comm(t_commands *comm);
 void					free_main(t_asm *mstruc);
+int						ft_stcmp1(char *s1, char *s2);
+int						is_command1(char *s);
+int						label_or_comm(char *s);
+int						no_quote(char *s);
+void					skip_it(char **s);
+char					*check_name_alfa(char *str);
+char					*check_comment_alfa(char *str);
+void					del_only_comments(char *s, char	*name, char *comment);
 
 #endif

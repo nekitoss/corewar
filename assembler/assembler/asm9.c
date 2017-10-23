@@ -14,8 +14,8 @@
 
 void		valid_code(t_asm *masm, char *str, t_header *head)
 {
-	del_com(&str);
 	valid_head(head, &str);
+	del_com(&str);
 	while (*str != '\0' && !is_empty(str))
 	{
 		if (!pass_it(str) && check_label(masm, &str))

@@ -44,7 +44,7 @@ char				*check_name(char *str)
 	{
 		ptr = prev;
 		v->count_name++;
-		prev += 5;
+		skip_it(&prev);
 		prev = ft_strstr(prev, ".name");
 	}
 	if (v->count_name != 1)
@@ -82,7 +82,7 @@ char				*check_comment(char *str)
 	{
 		ptr = prev;
 		v->count_comment++;
-		prev += 8;
+		skip_it(&prev);
 		prev = ft_strstr(prev, ".comment");
 	}
 	if (v->count_comment != 1)
@@ -97,6 +97,7 @@ void				valid_head(t_header *head, char **str)
 	char			*t;
 	int				i;
 
+	del_only_comments(*str, NULL, NULL);
 	t = head->prog_name;
 	cpy(&t, check_name(*str));
 	if (ft_strlen(t) > 128)
