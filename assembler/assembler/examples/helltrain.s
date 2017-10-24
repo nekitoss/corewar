@@ -1,12 +1,8 @@
 #by zaz, still not as good as rainbowdash though
 #2013#%#%#%#%#
-
 .name 		"helltrain"
 .comment	"choo-choo, motherf*****s !"##
-##dsf				
-
-
-
+##dsf
 entry:
 	sti		r1, %:beegees_gen, %1
 	sti		r1, %:beegees, %1

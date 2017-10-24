@@ -2,8 +2,7 @@
 #dfgdgf"
 .comment "Ha
 
-, Ha, Ha, stayiiiiin' aliiiiiiiiiive" #thrth
-	
+, Ha, Ha, stayiiiiin' aliiiiiiiiiive" #thrth	
 sti	r1, %:live, %1			;change live by the right value
 sti	r1, %:live2, %1			;change live by the right value
 ld	%1, r3

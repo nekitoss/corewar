@@ -96,12 +96,8 @@ void				del_only_comments(char *s, char *name, char *comment)
 			while (*s != '\n')
 				*s++ = ' ';
 		else if (label_or_comm(s))
-		{
-			while (*s != '\n')
-				s++;
-			s++;
-		}
-		else
+			break ;
+		else if (*s != ' ' && *s != '\t' && *s != '\n')
 			error("ERROR. This is not name or comment");
 		s++;
 	}
