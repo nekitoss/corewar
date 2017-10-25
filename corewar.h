@@ -43,11 +43,12 @@ typedef struct		s_proc
 	char			carry;
 	size_t			execute_at;
 	unsigned char	opcode_to_execute;
-	// int				wrong_params;
+	size_t			alive_at;
 	char			belong_to_player;
 	unsigned char	coding_byte;
 	size_t			old_pc;
 	int				par[3];
+	size_t			number;
 	struct s_core	*ls;
 	struct s_proc	*next;
 }					t_proc;

@@ -85,6 +85,7 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 	(ls->gen_lives_in_current_period)++;
 	proc->is_alive = TRUE;
+	proc->alive_at = ls->cycle;
 	if (debug & 32) {printf("-end_of_try_execute f_live at cycle=%zu\n", ls->cycle);}
 }
 
@@ -897,7 +898,7 @@ int					calculate_processes_and_0lives(t_proc *proc)
 	return (sum);
 }
 
-int					kill_processes(t_proc **head)
+int					kill_processes(t_proc **head, t_core *ls)
 {
 	t_proc	*ptr;
 	t_proc	*tmp;
@@ -910,12 +911,14 @@ int					kill_processes(t_proc **head)
 			tmp = ptr;
 			*head = ptr->next;
 			ptr = *head;
+			if (debug & 8) {printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n", tmp->number, ls->cycle - tmp->alive_at, ls->cycle_to_die);}
 			ft_strdel((char **)&(tmp));
 		}
 		else if (ptr->next && !(ptr->next->is_alive))
 		{
 			tmp = ptr->next;
 			ptr->next = ptr->next->next;
+			if (debug & 8) {printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n", tmp->number, ls->cycle - tmp->alive_at, ls->cycle_to_die);}
 			ft_memdel((void **)&(tmp));
 		}
 		else
@@ -962,7 +965,7 @@ void				armageddon(t_core *ls)
 		ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
 		ls->gen_lives_in_current_period = 0;
 		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
-		ls->num_of_processes = kill_processes(&(ls->processes_list));
+		ls->num_of_processes = kill_processes(&(ls->processes_list), ls);
 		if (!(ls->num_of_processes))
 			game_end(ls);
 	}
@@ -991,7 +994,7 @@ int					main(int argc, char **argv)
 	 // ls->args->width_dump = 64;
 	 // ls->args->num_dump = 27436;
 // ls->args->fl_visual = TRUE;
-	debug = 4;
+	debug = 10;
 	if (ls->args->fl_visual == 1)
 		debug = 0;
 #if VIZU
