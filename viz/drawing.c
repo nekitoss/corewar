@@ -167,5 +167,6 @@ void    drawing(t_core *core)
         cs = 2000;
     set_cycles_per_second(cs);
     draw_cycle(core);
-    usleep(1000000 / cs);
+	if (cs != 2000)
+    	usleep(1000000 / cs);
 }
