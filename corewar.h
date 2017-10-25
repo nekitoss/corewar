@@ -23,9 +23,11 @@ typedef struct		s_arg
 {
 	int			cnt_arg;
 	int			fl_dump;
+	int			fl_debug;
 	int			fl_visual;
 	int			fl_width;
 	size_t		num_dump;
+	size_t		num_debug;
 	int			width_dump;
 	int			cnt_player;
 	t_player	**player;
@@ -133,6 +135,7 @@ void		vm_sort_player(t_arg *ptr);
 void		vm_show_usage(void);
 void		valid_flags(t_arg *ptr);
 void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
+int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
 
 
 
