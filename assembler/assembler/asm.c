@@ -6,7 +6,7 @@
 /*   By: yrobotko <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/16 14:17:46 by yrobotko          #+#    #+#             */
-/*   Updated: 2017/10/18 17:13:55 by yrobotko         ###   ########.fr       */
+/*   Updated: 2017/10/25 17:20:08 by yrobotko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int				main(int argc, char **argv)
 	t_asm		*mstruc;
 	char		*start;
 
-	if (argc <= 1)
+	if (argc != 2)
 		error("No filename. Usage: ./asm filename.");
 	fd = check_file_name(argv[argc - 1]);
 	file = read_file(fd);
