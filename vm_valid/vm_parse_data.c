@@ -118,6 +118,7 @@ void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 	hndl_cmd_arg_dump(argv, ptr, "-dump");
 	hndl_cmd_arg_debug(argv, ptr, "-debug");
 	hndl_cmd_arg_visual(argv, ptr, "-v");
+	hndl_cmd_arg_music(argv, ptr, "-m");
 	hndl_cmd_arg_wide(argv, ptr, "-w");
 	hndl_cmd_arg_n(argv, ptr);
 	valid_filename(argv, ptr);

@@ -12,6 +12,25 @@
 
 #include "../corewar.h"
 
+void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+	int cnt;
+
+	i = 1;
+	cnt = 0;
+	while (i < ptr->cnt_arg)
+	{
+		if (!ft_strcmp(str, argv[i]))
+			cnt++;
+		i++;
+	}
+	if (cnt == 1)
+		ptr->fl_visual = 1;
+	else if (cnt > 1)
+		ft_exit("Error: too many flags\n");
+}
+
 
 void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 {
