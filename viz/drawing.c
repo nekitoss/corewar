@@ -9,12 +9,10 @@ void    draw_field(t_core *core)
 
     while (i < MEM_SIZE)
     {
-        t = (int)(core->colors[i]) * -1;
-        if (t)
-            attron(COLOR_PAIR(t + 1));
+        t = (int)(core->colors[i]) ? (int)(core->colors[i]) * -1 : 6;
+        attron(COLOR_PAIR(t + 1));
         mvprintw(y, x, "%.2x", core->field[i]);
-        if (t)
-            attroff(COLOR_PAIR(t + 1));
+        attroff(COLOR_PAIR(t + 1));
         x += 3;
         if (x >= 195)
         {
