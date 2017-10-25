@@ -65,7 +65,8 @@ int		ft_parse_cmd_line(t_arg *ptr, char **argv, int *fl, int *i)
 		sv_path_player(argv[*i], ptr, fl);
 	else if (*fl == 1)
 		sv_number_player(argv[*i], ptr, fl);
-	else if (!ft_strcmp("-dump", argv[*i]) || !ft_strcmp("-w", argv[*i]))
+	else if (!ft_strcmp("-dump", argv[*i]) || !ft_strcmp("-w", argv[*i]) ||
+			!ft_strcmp("-debug", argv[*i]))
 	{
 		(*i) += 2;
 		return (3);
