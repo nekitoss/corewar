@@ -26,6 +26,8 @@ typedef struct		s_arg
 	int			fl_debug;
 	int			fl_visual;
 	int			fl_width;
+	int			fl_original;
+	int			fl_music;
 	size_t		num_dump;
 	size_t		num_debug;
 	int			width_dump;
@@ -134,6 +136,7 @@ void		valid_flags(t_arg *ptr);
 void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
 int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
+void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
 
 
 

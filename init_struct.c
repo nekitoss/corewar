@@ -20,6 +20,8 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr)->fl_debug = 0;
 	(*ptr)->fl_visual = 0;
 	(*ptr)->fl_width = 0;
+	(*ptr)->fl_original = 0;
+	(*ptr)->fl_music = 0;
 	(*ptr)->num_dump = 0;
 	(*ptr)->num_debug = 0;
 	(*ptr)->width_dump = 8;
