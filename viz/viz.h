@@ -3,6 +3,7 @@
 
 #include <curses.h>
 #include "../corewar.h"
+#include <signal.h>
 
 /*
  * start_draw(t_arg*) - draws initial map

@@ -45,6 +45,7 @@ void    initial_values(void)
 
 void    start_draw(t_core *core)
 {
+    system("afplay song.mp3 &");
     y = 68;
     x_s = 197;
     x_b = 264;

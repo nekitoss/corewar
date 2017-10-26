@@ -4,6 +4,7 @@
 #include "libft/libft.h"
 #include "op.h"
 #include <errno.h>
+#include <stdlib.h>
 
 typedef struct		s_player
 {
