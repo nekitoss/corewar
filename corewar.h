@@ -72,7 +72,6 @@ typedef struct		s_core
 	unsigned char	field[MEM_SIZE];
 	char			colors[MEM_SIZE];
 	size_t			pr_cnt;
-	// char			changes[MEM_SIZE];
 	t_proc			*processes_list;
 	t_arg			*args;
 }					t_core;
@@ -115,7 +114,7 @@ t_arg		*vm_valid(int argc, char **argv);
 void		valid_filename(char **argv, t_arg *ptr);
 void		sv_path_player(char *argv, t_arg *ptr, int *fl);
 int			find_ext_to_end(char *argv);
-void sv_number_player(char *argv, t_arg *ptr, int *fl);
+void		sv_number_player(char *argv, t_arg *ptr, int *fl);
 void		set_num_player(t_arg *ptr);
 int			vm_valid_data_file(t_arg *ptr);
 int			vm_init_struct_player(t_arg **ptr);
