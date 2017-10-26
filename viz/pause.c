@@ -20,7 +20,12 @@ void    n_pause(void)
 
 void    end_draw(t_player *player)
 {
-    mvprintw(80, 0, "The winner is: player %d, \"%s\"", player->num, player->name);
+    attron(A_BOLD);
+    attron(COLOR_PAIR(player->num * -1 + 1));
+    mvprintw(64, x_s + 2, "The winner is: player %d, \"%s\"", player->num * -1, player->name);
+    attroff(COLOR_PAIR(player->num * -1 + 1));
+    mvprintw(65, x_s + 2, "Press any key to exit");
+    attroff(A_BOLD);
     nodelay(stdscr, false);
     getch();
     endwin();
