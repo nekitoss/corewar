@@ -131,7 +131,12 @@ void    drawing(t_core *core)
     static unsigned int cs = 50;
     static int paused = 1;
     static int first = 1;
+    static int counter;
 
+    counter++;
+    if (counter < cs / 30 && !paused)
+        return;
+    counter = 0;
     if (first)
     {
         first = 0;
@@ -167,6 +172,5 @@ void    drawing(t_core *core)
         cs = 2000;
     set_cycles_per_second(cs);
     draw_cycle(core);
-	if (cs != 2000)
-    	usleep(1000000 / cs);
+    usleep(1000000 / cs);
 }
