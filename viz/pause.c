@@ -28,6 +28,6 @@ void    end_draw(t_player *player)
     attroff(A_BOLD);
     nodelay(stdscr, false);
     getch();
-    system("killall afplay");
+    // system("killall afplay");
     endwin();
 }
