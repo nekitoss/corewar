@@ -877,8 +877,8 @@ void				game_end(t_core *ls)
 		}
 		i++;
 	}//можно сделать указание что игрок выиграл не сказав лайв сплясать от макс чекс
-	// if (ls->args->fl_visual == 0) {printf("GAME_ENDED on cycle %zu\n", ls->cycle);
-	// printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);}
+	if (ls->args->fl_visual == 0) {printf("GAME_ENDED on cycle %zu\n", ls->cycle);
+		printf("The winner is: player %d, \"%s\"\n", winner_num, ((ls->players)[(winner_num - 1)])->name);}
 	//free structure
 	
 #if VIZU
@@ -958,7 +958,8 @@ void				armageddon(t_core *ls)
 			if (ls->cycle_to_die > CYCLE_DELTA)
 			{
 				ls->cycle_to_die -= CYCLE_DELTA;
-				// if (ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
+				print_die = 1;
+				if (ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
 				ls->nbr_of_checks = 0;
 			}
 			else
@@ -980,26 +981,18 @@ int					main(int argc, char **argv)
 {
 	t_core	*ls;
 	t_proc	*current_process;
-// printf("idx_mod = %d\n", IDX_MOD);
-	ls = ft_memalloc(sizeof(t_core));
 
+	ls = ft_memalloc(sizeof(t_core));
 	if(argc == 1)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
 	vm_sort_player(ls->args);
 	// for_test(ls->args);
 
-	// exit(0);
-// printf("MEM_SIZE=%d\n", MEM_SIZE);
 	ls->players = ls->args->player;
-	
-	 init_my_player_and_process(ls);
-// ls->args->fl_dump = FALSE;
-	 // ls->args->fl_dump = TRUE;
-	 // ls->args->width_dump = 64;
-	 // ls->args->num_dump = 27436;
-// ls->args->fl_visual = TRUE;
-// introd
+	init_my_player_and_process(ls);
+
+	// introduce()
 	if (ls->args->fl_visual == 1)
 		ls->args->num_debug = 0;
 #if VIZU
@@ -1022,7 +1015,6 @@ int					main(int argc, char **argv)
 		if (ls->args->fl_visual == 1)
 			drawing(ls);
 #endif
-		if (ls->cycle == ls->next_cycle_to_die && ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
 		(ls->cycle)++;
 	}
 	return (0);
