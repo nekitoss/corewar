@@ -262,7 +262,7 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 
 	if (ls->args->num_debug & 32) {printf("-s_exec cycle=%zu; pc=%zu; function_num=%d\n",ls->cycle, proc->old_pc, func->function_num);}
 	if (proc->carry)
-		where = read_data_block(ls, proc->old_pc + 1, 2);
+		where = read_data_block(ls, proc->old_pc + 1, 2) % IDX_MOD;
 	else
 		where = 3;
 	if (ls->args->num_debug & 4) {printf("P%5zu | zjmp %d %s\n", proc->number, read_data_block(ls, proc->old_pc + 1, 2), ((proc->carry) ? "OK" : "FAILED"));}
