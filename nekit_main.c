@@ -955,7 +955,7 @@ void				armageddon(t_core *ls)
 			if (ls->cycle_to_die > CYCLE_DELTA)
 			{
 				ls->cycle_to_die -= CYCLE_DELTA;
-				if (ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
+				// if (ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
 				ls->nbr_of_checks = 0;
 			}
 			else
@@ -997,6 +997,7 @@ int					main(int argc, char **argv)
 	 // ls->args->num_dump = 27436;
 // ls->args->fl_visual = TRUE;
 	// printf("deb_flag = %d\n", );// ls->args->num_debug = 10;
+// introd
 	if (ls->args->fl_visual == 1)
 		ls->args->num_debug = 0;
 #if VIZU
@@ -1019,6 +1020,7 @@ int					main(int argc, char **argv)
 		if (ls->args->fl_visual == 1)
 			drawing(ls);
 #endif
+		if (ls->cycle == ls->next_cycle_to_die && ls->args->num_debug & 2) {printf("Cycle to die is now %zu\n", ls->cycle_to_die);}
 		(ls->cycle)++;
 	}
 	return (0);
