@@ -338,7 +338,10 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 		convert_param_to_data_no_idx(proc, 0);
-		what = (ls->args->fl_original ? ((int)((short)(((P_PAR[0]) >> 16) & 0xffff))) : P_PAR[0]);
+		if (ls->args->fl_original && ident_param(P_COD_B, 0) & T_IND)
+			what = ((int)((short)(((P_PAR[0]) >> 16) & 0xffff)));
+		else
+			what = P_PAR[0];
 		where = P_PAR[1];
 		P_REG[where] = what;
 		if (!what)
@@ -996,7 +999,6 @@ int					main(int argc, char **argv)
 	 // ls->args->width_dump = 64;
 	 // ls->args->num_dump = 27436;
 // ls->args->fl_visual = TRUE;
-	// printf("deb_flag = %d\n", );// ls->args->num_debug = 10;
 // introd
 	if (ls->args->fl_visual == 1)
 		ls->args->num_debug = 0;
