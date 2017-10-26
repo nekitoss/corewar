@@ -7,3 +7,4 @@
 cmake-build-debug
 corewar
 *.out.txt
+.nfs*

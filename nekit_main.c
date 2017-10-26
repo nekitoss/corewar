@@ -338,9 +338,7 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
 		convert_param_to_data_no_idx(proc, 0);
-		what = ((int)((short)(((P_PAR[0]) >> 16) & 0xffff)));
-		// what = P_PAR[0];
-		// what = (ls->args->fl_origin ? ((int)((short)(((P_PAR[0]) >> 16) & 0xffff))) : P_PAR[0]);
+		what = (ls->args->fl_original ? ((int)((short)(((P_PAR[0]) >> 16) & 0xffff))) : P_PAR[0]);
 		where = P_PAR[1];
 		P_REG[where] = what;
 		if (!what)
@@ -1007,7 +1005,7 @@ int					main(int argc, char **argv)
 #endif
 	while (1)
 	{
-		if (ls->args->num_debug & 2) {printf("It is now cycle %zu\n", ls->cycle);}
+		if (ls->args->num_debug & 2 && ls->cycle) {printf("It is now cycle %zu\n", ls->cycle);}
 		armageddon(ls);
 		current_process =  ls->processes_list;
 		while (current_process)
