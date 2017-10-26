@@ -46,8 +46,6 @@ void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 			ft_exit("Error: to big number for debug number, my friend\n");
 		if (num > 2147483647)
 			ft_exit("Error: to big number for debug number, my friend\n");
-		if (num == 0)
-			ft_exit("Error: number can't be zero for debug flag, my friend\n");
 		ptr->num_debug = num;
 	}
 	else
