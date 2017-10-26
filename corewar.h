@@ -70,6 +70,7 @@ typedef struct		s_core
 	int				num_of_processes;
 	unsigned char	field[MEM_SIZE];
 	char			colors[MEM_SIZE];
+	size_t			pr_cnt;
 	// char			changes[MEM_SIZE];
 	t_proc			*processes_list;
 	t_arg			*args;
