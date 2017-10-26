@@ -33,6 +33,8 @@ typedef struct		s_arg
 	t_player	**player;
 	char		*path_players[5];
 	int			num[4];
+	int			n;
+
 }					t_arg;
 
 typedef struct		s_proc

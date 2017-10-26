@@ -17,9 +17,11 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr) = (t_arg*)malloc(sizeof(t_arg));
 	(*ptr)->cnt_arg = 0;
 	(*ptr)->fl_dump = 0;
+	(*ptr)->fl_debug = 0;
 	(*ptr)->fl_visual = 0;
 	(*ptr)->fl_width = 0;
 	(*ptr)->num_dump = 0;
+	(*ptr)->num_debug = 0;
 	(*ptr)->width_dump = 8;
 	(*ptr)->cnt_player = 0;
 	(*ptr)->path_players[0] = NULL;
@@ -32,7 +34,6 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr)->num[1] = 0;
 	(*ptr)->num[2] = 0;
 	(*ptr)->num[3] = 0;
-
 }
 
 int 	vm_init_struct_player(t_arg **ptr)

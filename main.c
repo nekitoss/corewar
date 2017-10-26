@@ -83,13 +83,12 @@ void	vm_show_usage(void)
 	ft_putstr("-n N         : set number of player\n");
 	ft_putstr("-debug N     : Verbosity levels, can be added together to enable"
 					  " several\n");
-	ft_putstr("- 0 : Show only essentials\n");
-	ft_putstr("- 1 : Show lives\n");
-	ft_putstr("- 2 : Show cycles\n");
-	ft_putstr("- 4 : Show operations (Params are NOT litteral ...)\n");
-	ft_putstr("- 8 : Show deaths\n");
-	ft_putstr("- 16 : Show PC movements (Except for jumps)\n");
-	ft_putstr("#### NCURSES OUTPUT MODE ########################################"
+	ft_putstr("			- 0 : Show only essentials\n");
+	ft_putstr("			- 1 : Show lives\n");
+	ft_putstr("			- 2 : Show cycles\n");
+	ft_putstr("			- 4 : Show operations (Params are NOT litteral ...)\n");
+	ft_putstr("			- 8 : Show deaths\n");
+		ft_putstr("#### NCURSES OUTPUT MODE ########################################"
 			"###############\n");
 	ft_putstr("-v           : Ncurses output mode\n");
 	ft_putstr("#################################################################"
