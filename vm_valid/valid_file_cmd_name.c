@@ -71,7 +71,8 @@ int		ft_parse_cmd_line(t_arg *ptr, char **argv, int *fl, int *i)
 		(*i) += 2;
 		return (3);
 	}
-	else if (!ft_strcmp("-v", argv[*i]) || !ft_strcmp("-m", argv[*i]))
+	else if (!ft_strcmp("-v", argv[*i]) || !ft_strcmp("-m", argv[*i]) ||
+		!ft_strcmp("-o", argv[*i]))
 	{
 		(*i)++;
 		return (3);
