@@ -27,6 +27,8 @@ void for_test(t_arg *ptr)
 	printf("dump flag->%i num->%zu\n", ptr->fl_dump, ptr->num_dump);
 	printf("debug flag->%i num->%zu\n", ptr->fl_debug, ptr->num_debug);
 	printf("width flag->%i num->%i\n", ptr->fl_width, ptr->width_dump);
+	printf("original flag->%i\n", ptr->fl_original);
+	printf("music flag->%i\n", ptr->fl_music);
 	printf("visual flag->%i\n", ptr->fl_visual);
 	printf("++++++++++++++++++++++++++++++++++++++++++++\n");
 	while (i < ptr->cnt_player)
@@ -73,17 +75,27 @@ void	vm_sort_player(t_arg *ptr)
 
 void	vm_show_usage(void)
 {
-	ft_putstr("Usage: ./corewar [-dump nbr_cycles [-w width]] [-v] [[-n number]"
+	ft_putstr("Usage: ./corewar [-dump nbr_cycles [-w width]] [-debug [number]] [-m] [-v] [-o] [[-n number]"
 			" champion1.cor] ...\n\n");
-	write(1, "#### TEXT OUTPUT MODE ###########################################"
-			"###############\n", 82);
-	write(1, "-dump N      : Dumps memory after N cycles then exits\n", 55);
-	write(1, "-w N         : wide of dumps memory, in octets\n", 48);
-	write(1, "#### NCURSES OUTPUT MODE ########################################"
-			"###############\n", 82);
-	write(1, "-v           : Ncurses output mode\n", 36);
-	write(1, "#################################################################"
-			"###############\n", 82);
+	ft_putstr("#### TEXT OUTPUT MODE ###########################################"
+			"###############\n");
+	ft_putstr("-dump N      : Dumps memory after N cycles then exits\n");
+	ft_putstr("-w N         : wide of dumps memory, in octets\n");
+	ft_putstr("-m           : enable music\n");
+	ft_putstr("-o           : make corewar like original\n");
+	ft_putstr("-n N         : set number of player\n");
+	ft_putstr("-debug N     : Verbosity levels, can be added together to enable"
+					  " several\n");
+	ft_putstr("     - 0 : Show only essentials\n");
+	ft_putstr("		- 1 : Show lives\n");
+	ft_putstr("		- 2 : Show cycles\n");
+	ft_putstr("		- 4 : Show operations (Params are NOT litteral ...)\n");
+	ft_putstr("		- 8 : Show deaths\n");
+		ft_putstr("#### NCURSES OUTPUT MODE ########################################"
+			"###############\n");
+	ft_putstr("-v           : Ncurses output mode\n");
+	ft_putstr("#################################################################"
+			"###############\n");
 	exit(0);
 }
 

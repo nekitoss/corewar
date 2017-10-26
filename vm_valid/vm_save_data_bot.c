@@ -12,6 +12,45 @@
 
 #include "../corewar.h"
 
+void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+	int cnt;
+
+	i = 1;
+	cnt = 0;
+	while (i < ptr->cnt_arg)
+	{
+		if (!ft_strcmp(str, argv[i]))
+			cnt++;
+		i++;
+	}
+	if (cnt == 1)
+		ptr->fl_original = 1;
+	else if (cnt > 1)
+		ft_exit("Error: too many flags\n");
+}
+
+
+void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str)
+{
+	int i;
+	int cnt;
+
+	i = 1;
+	cnt = 0;
+	while (i < ptr->cnt_arg)
+	{
+		if (!ft_strcmp(str, argv[i]))
+			cnt++;
+		i++;
+	}
+	if (cnt == 1)
+		ptr->fl_music = 1;
+	else if (cnt > 1)
+		ft_exit("Error: too many flags\n");
+}
+
 
 void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 {
@@ -27,8 +66,6 @@ void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 			ft_exit("Error: to big number for debug number, my friend\n");
 		if (num > 2147483647)
 			ft_exit("Error: to big number for debug number, my friend\n");
-		if (num == 0)
-			ft_exit("Error: number can't be zero for debug flag, my friend\n");
 		ptr->num_debug = num;
 	}
 	else

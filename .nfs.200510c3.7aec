@@ -26,8 +26,6 @@ typedef struct		s_arg
 	int			fl_debug;
 	int			fl_visual;
 	int			fl_width;
-	int			fl_original;
-	int			fl_music;
 	size_t		num_dump;
 	size_t		num_debug;
 	int			width_dump;
@@ -35,6 +33,8 @@ typedef struct		s_arg
 	t_player	**player;
 	char		*path_players[5];
 	int			num[4];
+	int			n;
+
 }					t_arg;
 
 typedef struct		s_proc
@@ -45,12 +45,11 @@ typedef struct		s_proc
 	char			carry;
 	size_t			execute_at;
 	unsigned char	opcode_to_execute;
-	size_t			alive_at;
+	// int				wrong_params;
 	char			belong_to_player;
 	unsigned char	coding_byte;
 	size_t			old_pc;
 	int				par[3];
-	size_t			number;
 	struct s_core	*ls;
 	struct s_proc	*next;
 }					t_proc;
@@ -70,7 +69,6 @@ typedef struct		s_core
 	int				num_of_processes;
 	unsigned char	field[MEM_SIZE];
 	char			colors[MEM_SIZE];
-	size_t			pr_cnt;
 	// char			changes[MEM_SIZE];
 	t_proc			*processes_list;
 	t_arg			*args;
@@ -138,7 +136,6 @@ void		valid_flags(t_arg *ptr);
 void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
 int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
-void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
 
 
 
