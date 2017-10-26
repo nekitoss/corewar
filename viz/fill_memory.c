@@ -34,6 +34,7 @@ void    draw_constants(void)
 {
     mvprintw(pos + 8, x_s + 2, "CYCLE_TO_DIE : %d", CYCLE_TO_DIE);
     mvprintw(pos + 10, x_s + 2, "CYCLE_DELTA : %d", CYCLE_DELTA);
+
     mvprintw(pos + 12, x_s + 2, "NBR_LIVE : %d", NBR_LIVE);
     mvprintw(pos + 14, x_s + 2, "MAX_CHECKS : %d", MAX_CHECKS);
 }

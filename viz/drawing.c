@@ -131,10 +131,10 @@ void    drawing(t_core *core)
     static unsigned int cs = 50;
     static int paused = 1;
     static int first = 1;
-    static int counter;
+    static unsigned int counter;
 
     counter++;
-    if (counter < cs / 30 && !(unsigned int)paused)
+    if (counter < cs / 30 && !paused)
         return;
     counter = 0;
     if (first)
