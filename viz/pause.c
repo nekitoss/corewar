@@ -18,8 +18,10 @@ void    n_pause(void)
     attroff(A_BOLD);
 }
 
-void    end_draw(void)
+void    end_draw(t_player *player)
 {
+    mvprintw(80, 0, "The winner is: player %d, \"%s\"", player->num, player->name);
+    nodelay(stdscr, false);
     getch();
     endwin();
 }

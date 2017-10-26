@@ -48,7 +48,7 @@ void    set_current_breakdown(int a, int b, int c, int d);
 void    set_last_breakdown(double a, double b, double c, double d);
 void    draw_constants(void);
 void    set_cycle_to_die(int n);
-void    end_draw(void);
+void    end_draw(t_player *player);
 void    set_all_lives(int n);
 void    drawing(t_core *core);
 void    draw_carriage(t_core *core);

@@ -880,7 +880,7 @@ void				game_end(t_core *ls)
 	
 #if VIZU
 	if (ls->args->fl_visual == 1)
-		end_draw();
+		end_draw((ls->players)[(winner_num - 1)]);
 #endif
 	exit (-1);
 }
