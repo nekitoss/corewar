@@ -56,6 +56,10 @@ void	initial_values(void)
 
 void	start_draw_2(t_core *core)
 {
+    attron(A_BOLD);
+    mvprintw(g_pos + 2, g_x_s + 2, "Live breakdown for current period : ");
+    mvprintw(g_pos + 5, g_x_s + 2, "Live breakdown for last period : ");
+    attroff(A_BOLD);
 	set_current_breakdown(0, 0, 0, 0);
 	set_last_breakdown(0, 0, 0, 0);
 	attron(A_BOLD);
@@ -80,8 +84,12 @@ void	start_draw(t_core *core)
 	g_y = 68;
 	g_x_s = 197;
 	g_x_b = 264;
-	signal(SIGINT, stop_and_exit);
-	system("afplay song.mp3 &");
+    g_m = core->args->fl_music;
+    if (g_m)
+    {
+        signal(SIGINT, stop_and_exit);
+        system("afplay song.mp3 &");
+    }
 	initscr();
 	noecho();
 	curs_set(0);
@@ -94,9 +102,5 @@ void	start_draw(t_core *core)
 	set_processes(core->num_of_processes);
 	set_all_lives(0);
 	bots_draw(list);
-	attron(A_BOLD);
-	mvprintw(g_pos + 2, g_x_s + 2, "Live breakdown for current period : ");
-	mvprintw(g_pos + 5, g_x_s + 2, "Live breakdown for last period : ");
-	attroff(A_BOLD);
 	start_draw_2(core);
 }

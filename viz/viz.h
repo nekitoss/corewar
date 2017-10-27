@@ -22,6 +22,7 @@ int g_x_s;
 int g_x_b;
 int g_colors[4];
 int g_pos;
+int g_m;
 
 void	start_draw(t_core *list);
 void	n_run(void);
