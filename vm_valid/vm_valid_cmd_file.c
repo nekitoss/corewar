@@ -12,13 +12,13 @@
 
 #include "../corewar.h"
 
-int		find_ext_to_end(char *argv)
+int			find_ext_to_end(char *argv)
 {
 	char	*ptr;
 	char	*cor;
 
 	cor = ".cor";
-	ptr = ft_strrchr(argv,'.');
+	ptr = ft_strrchr(argv, '.');
 	if (ptr == NULL)
 		return (1);
 	if (!ft_strcmp(ptr, cor))
@@ -26,24 +26,24 @@ int		find_ext_to_end(char *argv)
 	return (1);
 }
 
-int		ft_isdigit_str(char *argv)
+int			ft_isdigit_str(char *argv)
 {
 	int i;
 
 	i = 0;
 	while (argv[i] != '\0')
 	{
-		if(!(ft_isdigit(argv[i])))
+		if (!(ft_isdigit(argv[i])))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void sv_number_player(char *argv, t_arg *ptr, int *fl)
+void		sv_number_player(char *argv, t_arg *ptr, int *fl)
 {
-	int tmp;
-	size_t num;
+	int		tmp;
+	size_t	num;
 
 	if (ft_isdigit_str(argv))
 		ft_exit("Not correct value of number player, my friend\n");
@@ -61,7 +61,7 @@ void sv_number_player(char *argv, t_arg *ptr, int *fl)
 	(*fl)++;
 }
 
-void 	sv_path_player(char *argv, t_arg *ptr, int *fl)
+void		sv_path_player(char *argv, t_arg *ptr, int *fl)
 {
 	if (ptr->cnt_player <= 3)
 		ptr->path_players[ptr->cnt_player] = ft_strdup(argv);

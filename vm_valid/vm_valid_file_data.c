@@ -33,18 +33,22 @@ void	vm_check_file_structure(t_player *player)
 		ft_exit("Error lseek\n");
 	if (offset == 0)
 	{
-		// insert free func!!!
+		free_core(player);
 		ft_exit_name_file(player, "Error: file too small: ", " it's "
 		"empty my friend\n");
 	}
 	else if (offset < 4 )
-		ft_exit_name_file(player, "Error: file too small: ", "have'not magic number\n");
+		ft_exit_name_file(player, "Error: file too small: ", "have'not magic nu"
+			"mber\n");
 	else if (offset < 132 && offset > 4)
-		ft_exit_name_file(player, "Error: file too small: ", "have'not correct name\n");
+		ft_exit_name_file(player, "Error: file too small: ", "have'not correct "
+			"name\n");
 	else if (offset < 140 && offset > 136)
-		ft_exit_name_file(player, "Error: file too small: ", "have'not size code\n");
+		ft_exit_name_file(player, "Error: file too small: ", "have'not size cod"
+			"e\n");
 	else if (offset > 140 && offset < 2192)
-		ft_exit_name_file(player, "Error: file too small: ", "have'not comment\n");
+		ft_exit_name_file(player, "Error: file too small: ", "have'not comment"
+			"\n");
 }
 
 void	vm_read_bot_data(t_player *player)
@@ -69,7 +73,7 @@ void	vm_read_bot(t_arg *ptr, int i)
 	vm_read_bot_data(ptr->player[i]);
 }
 
-int     vm_valid_data_file(t_arg *ptr)
+int		vm_valid_data_file(t_arg *ptr)
 {
 	int i;
 
@@ -81,4 +85,3 @@ int     vm_valid_data_file(t_arg *ptr)
 	}
 	return (0);
 }
-

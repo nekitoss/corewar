@@ -12,7 +12,7 @@
 
 #include "../corewar.h"
 
-void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str)
+void	hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str)
 {
 	int i;
 	int cnt;
@@ -31,8 +31,7 @@ void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str)
 		ft_exit("Error: too many flags\n");
 }
 
-
-void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str)
+void	hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str)
 {
 	int i;
 	int cnt;
@@ -50,7 +49,6 @@ void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str)
 	else if (cnt > 1)
 		ft_exit("Error: too many flags\n");
 }
-
 
 void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 {
@@ -74,9 +72,9 @@ void	ft_save_val_debug(t_arg *ptr, char **argv, int i, char **cur)
 
 int		hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str)
 {
-	int i;
+	int		i;
+	char	*cur;
 
-	char *cur;
 	i = 1;
 	while (i < ptr->cnt_arg)
 	{
@@ -96,13 +94,13 @@ int		hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str)
 	return (0);
 }
 
-void 	vm_hndl_code(t_player *player, int fd)
+void	vm_hndl_code(t_player *player, int fd)
 {
-	char buffer[CHAMP_MAX_SIZE + 1];
-	long int offset;
+	char		buffer[CHAMP_MAX_SIZE + 1];
+	long int	offset;
 
 	buffer[CHAMP_MAX_SIZE] = '\0';
-	offset = lseek(fd,0,SEEK_END);
+	offset = lseek(fd, 0, SEEK_END);
 	if ((offset - 2192) != player->size_code)
 	{
 		ft_exit_name_file(player, "Error file: ",
@@ -110,14 +108,11 @@ void 	vm_hndl_code(t_player *player, int fd)
 	}
 	else if (offset > 2874)
 		ft_exit_size_code(player, "File ", " has too large a code (",
-						  " bytes > 682 bytes)\n");
+			" bytes > 682 bytes)\n");
 	lseek(fd, 2192, SEEK_SET);
-	read (fd, buffer, player->size_code);
+	read(fd, buffer, player->size_code);
 	player->program_code = (unsigned char *)malloc(sizeof(char) *
 		(player->size_code) + 1);
 	player->program_code[(player->size_code)] = '\0';
 	ft_memcpy((void*)player->program_code, buffer, player->size_code);
 }
-
-
-

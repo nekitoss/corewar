@@ -1,54 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vm_parse_data.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkurchin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/10/27 20:52:36 by mkurchin          #+#    #+#             */
+/*   Updated: 2017/10/27 20:52:37 by mkurchin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../corewar.h"
-
-int		valid_val_arg(char *argv, char **cur)
-{
-	*cur = argv;
-	while (**cur != '\0')
-	{
-		if (ft_isdigit(**cur))
-		{
-			if (**cur == '0')
-			{
-				(*cur)++;
-				continue;
-			}
-			break;
-		}
-		else
-			return (1);
-	}
-	if (**cur == '\0')
-	{
-		(*cur)--;
-		return(0);
-	}
-	return (0);
-}
-
-void	hndl_cmd_arg_n(char **argv, t_arg *ptr)
-{
-	int i;
-	char *cur;
-
-	i = 0;
-	while (i < ptr->cnt_arg)
-	{
-		if (!ft_strcmp("-n",argv[i]))
-		{
-			if ((i + 1) < ptr->cnt_arg)
-			{
-				if (valid_val_arg(argv[(i + 1)], &cur))
-					ft_exit("Error: not valid arg, my friend\n");
-				if (ft_strlen(argv[(i + 1)]) > 10)
-					ft_exit("Error: too big number, my friend\n");
-			}
-			else
-				ft_exit("Error: incorrect value of number player\n");
-		}
-		i++;
-	}
-}
 
 void	ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur)
 {
@@ -92,9 +54,9 @@ void	ft_save_val_dump(t_arg *ptr, char **argv, int i, char **cur)
 
 int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 {
-	int i;
+	int		i;
+	char	*cur;
 
-	char *cur;
 	i = 1;
 	while (i < ptr->cnt_arg)
 	{
@@ -114,7 +76,7 @@ int		hndl_cmd_arg_dump(char **argv, t_arg *ptr, char *str)
 	return (0);
 }
 
-void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
+void	vm_valid_arg(int argc, char **argv, t_arg *ptr)
 {
 	ptr->cnt_arg = argc;
 	hndl_cmd_arg_dump(argv, ptr, "-dump");
@@ -128,7 +90,6 @@ void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 	valid_flags(ptr);
 	set_num_player(ptr);
 	srch_dublicate_num_player(ptr);
-
 }
 
 t_arg	*vm_valid(int argc, char **argv)
@@ -139,6 +100,5 @@ t_arg	*vm_valid(int argc, char **argv)
 	vm_valid_arg(argc, argv, ptr);
 	vm_init_struct_player(&ptr);
 	vm_valid_data_file(ptr);
-
 	return (ptr);
 }
