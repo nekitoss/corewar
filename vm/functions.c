@@ -1,4 +1,4 @@
-#include "corewar.h"
+#include "../corewar.h"
 
 void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 {

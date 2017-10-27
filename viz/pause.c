@@ -31,7 +31,10 @@ void    end_draw(t_player *player)
 {
     attron(A_BOLD);
     attron(COLOR_PAIR(player->num * -1 + 1));
-    mvprintw(64, x_s + 2, "The winner is: player %d, \"%s\"", player->num * -1, player->name);
+    if (ft_strlen(player->name) > 34)
+        mvprintw(64, x_s + 2, "The winner is: player %d, \"%.32s...", player->num, player->name);
+    else
+        mvprintw(64, x_s + 2, "The winner is: player %d, \"%.34s\"", player->num, player->name);
     attroff(COLOR_PAIR(player->num * -1 + 1));
     mvprintw(65, x_s + 2, "Press any key to exit");
     attroff(A_BOLD);
