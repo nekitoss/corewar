@@ -94,8 +94,9 @@ typedef struct		s_my_op
 	char			type_of_params[3];
 	char			function_num;
 	int				cycles_to_exec;
-	char			is_codage;
+	// char			is_codage;
 	char			bytes_for_tdir;
+	char			*name;
 }					g_my_op;
 
 

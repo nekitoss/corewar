@@ -4,26 +4,26 @@
 
 g_my_op				g_tab[17] =
 {
-	{0, 0, {0, 0, 0}, 0, 0, 0, 0},
-	{f_live, 1, {T_DIR, 0, 0}, 1, 10, 0, 4},
-	{f_ld, 2, {T_DIR | T_IND, T_REG, 0}, 2, 5, 1, 4},
-	{f_st, 2, {T_REG, T_IND | T_REG, 0}, 3, 5, 1, 0},
-	{f_add, 3, {T_REG, T_REG, T_REG}, 4, 10, 1, 0},
-	{f_sub, 3, {T_REG, T_REG, T_REG}, 5, 10, 1, 0},
+	{0, 0, {0, 0, 0}, 0, 0, 0, ""},
+	{f_live, 1, {T_DIR, 0, 0}, 1, 10, 4, "live"},
+	{f_ld, 2, {T_DIR | T_IND, T_REG, 0}, 2, 5, 4, "ld"},
+	{f_st, 2, {T_REG, T_IND | T_REG, 0}, 3, 5, 0, "st"},
+	{f_add, 3, {T_REG, T_REG, T_REG}, 4, 10, 0, "add"},
+	{f_sub, 3, {T_REG, T_REG, T_REG}, 5, 10, 0, "sub"},
 	{f_and, 3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},
-		6, 6, 1, 4},
+		6, 6, 4, "and"},
 	{f_or, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},
-		7, 6, 1, 4},
+		7, 6, 4, "or"},
 	{f_xor, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},
-		8, 6, 1, 4},
-	{f_zjmp, 1, {T_DIR, 0, 0}, 9, 20, 0, 2},
-	{f_ldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 10, 25, 1, 2},
-	{f_sti, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25, 1, 2},
-	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 0, 2},
-	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 1, 4},
-	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 1, 2},
-	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 0, 2},
-	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 1, 0}
+		8, 6, 4, "xor"},
+	{f_zjmp, 1, {T_DIR, 0, 0}, 9, 20, 2, "zjmp"},
+	{f_ldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 10, 25, 2, "ldi"},
+	{f_sti, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25, 2, "sti"},
+	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 2, "fork"},
+	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 4, "lld"},
+	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 2, "lldi"},
+	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 2, "lfork"},
+	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 0, "aff"}
 };
 
 void				convert_param_to_data(t_proc *proc, int par_num)
