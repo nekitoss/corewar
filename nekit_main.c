@@ -335,6 +335,30 @@ void				print_winner(t_core *ls, int winner_num)
 	ft_putendl("\"");
 }
 
+
+void				free_players(t_core *ls)
+{
+	int i;
+
+	i = 0;
+	while (i < ls->num_of_players)
+	{
+		ft_strdel(&(((ls->players)[i])->name));
+		ft_strdel(&(((ls->players)[i])->comment));
+		free(((ls->players)[i])->program_code);
+		ft_strdel(&(((ls->players)[i])->path_player));
+	}
+	free(ls->players);
+}
+
+
+void				free_core(t_core *ls)
+{
+	if (ls->players)
+		free_players(ls);
+	// if (ls->)
+}
+
 void				game_end(t_core *ls)
 {
 	int		i;
@@ -355,11 +379,9 @@ void				game_end(t_core *ls)
 	}
 	if (ls->args->fl_visual == 0)
 		print_winner(ls, winner_num);
-	//free structure
-#if VIZU
+	free_core(ls);
 	if (ls->args->fl_visual == 1)
 		end_draw((ls->players)[(winner_num - 1)]);
-#endif
 	exit(-1);
 }
 
@@ -377,15 +399,18 @@ int					calculate_processes_and_0lives(t_proc *proc)
 	return (sum);
 }
 
-void				debug_8(size_t a, size_t b, size_t c)
+void				debug_8(t_core *ls, size_t a, size_t b, size_t c)
 {
-	ft_putstr("Process ");
-	ft_putnbr_u(a);
-	ft_putstr(" hasn't lived for ");
-	ft_putnbr_u(b);
-	ft_putstr(" cycles (CTD ");
-	ft_putnbr_u(c + CYCLE_DELTA);
-	ft_putendl(")");
+	if (ls->args->num_debug & 8)
+	{
+		ft_putstr("Process ");
+		ft_putnbr_u(a);
+		ft_putstr(" hasn't lived for ");
+		ft_putnbr_u(b);
+		ft_putstr(" cycles (CTD ");
+		ft_putnbr_u(c + CYCLE_DELTA);
+		ft_putendl(")");
+	}
 }
 
 int					kill_processes(t_proc **head, t_core *ls)
@@ -401,16 +426,14 @@ int					kill_processes(t_proc **head, t_core *ls)
 			t = ptr;
 			*head = ptr->next;
 			ptr = *head;
-			if (ls->args->num_debug & 8)
-				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			debug_8(ls, t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
 			ft_strdel((char **)&(t));
 		}
 		else if (ptr->next && !(ptr->next->is_alive))
 		{
 			t = ptr->next;
 			ptr->next = ptr->next->next;
-			if (ls->args->num_debug & 8)
-				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			debug_8(ls, t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
 			ft_memdel((void **)&(t));
 		}
 		else
@@ -431,6 +454,12 @@ void				empty_player_lives(t_core *ls)
 		((ls->players)[i])->sum_lives_in_current_period = 0;
 		i++;
 	}
+	ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
+	ls->gen_lives_in_current_period = 0;
+	ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
+	ls->num_of_processes = kill_processes(&(ls->processes_list), ls);
+	if (!(ls->num_of_processes))
+		game_end(ls);
 }
 
 void				debug_2_1(size_t a)
@@ -472,21 +501,11 @@ void				armageddon(t_core *ls)
 		else
 			(ls->nbr_of_checks)++;
 		empty_player_lives(ls);
-		ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
-		ls->gen_lives_in_current_period = 0;
-		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
-		ls->num_of_processes = kill_processes(&(ls->processes_list), ls);
-		if (!(ls->num_of_processes))
-			game_end(ls);
 	}
 }
 
-int					main(int argc, char **argv)
+void				preparate(t_core *ls, int argc, char **argv)
 {
-	t_core	*ls;
-	t_proc	*current_process;
-
-	ls = ft_memalloc(sizeof(t_core));
 	if (argc == 1)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
@@ -496,10 +515,17 @@ int					main(int argc, char **argv)
 	// introduce()
 	if (ls->args->fl_visual == 1)
 		ls->args->num_debug = 0;
-#if VIZU
+}
+
+int					main(int argc, char **argv)
+{
+	t_core	*ls;
+	t_proc	*current_process;
+
+	ls = ft_memalloc(sizeof(t_core));
+	preparate(ls, argc, argv);
 	if (ls->args->fl_visual == 1)
 		start_draw(ls);
-#endif
 	while (1)
 	{
 		if (ls->args->num_debug & 2 && ls->cycle)
@@ -512,10 +538,8 @@ int					main(int argc, char **argv)
 				opcode(ls, current_process);
 			current_process = current_process->next;
 		}
-#if VIZU
 		if (ls->args->fl_visual == 1)
 			drawing(ls);
-#endif
 		(ls->cycle)++;
 	}
 	return (0);
