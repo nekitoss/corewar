@@ -80,7 +80,6 @@ void				preparate(t_core *ls, int argc, char **argv)
 	if (argc == 1)
 		vm_show_usage();
 	ls->args = vm_valid(argc, argv);
-	for_test(ls->args);
 	vm_sort_player(ls->args);
 	ls->players = ls->args->player;
 	init_my_player_and_process(ls);
