@@ -1,5 +1,3 @@
-#define VIZU 1
-
 #include "corewar.h"
 
 g_my_op				g_tab[17] =
@@ -345,18 +343,35 @@ void				free_players(t_core *ls)
 	{
 		ft_strdel(&(((ls->players)[i])->name));
 		ft_strdel(&(((ls->players)[i])->comment));
-		free(((ls->players)[i])->program_code);
+		if (((ls->players)[i])->program_code)
+			free(((ls->players)[i])->program_code);
 		ft_strdel(&(((ls->players)[i])->path_player));
 	}
 	free(ls->players);
+	ls->players = NULL;
 }
 
+void				free_proc(t_proc *pr)
+{
+	if (pr->next)
+		free_proc(pr->next);
+	free(pr);
+}
 
 void				free_core(t_core *ls)
 {
-	if (ls->players)
-		free_players(ls);
-	// if (ls->)
+	if (ls)
+	{
+		if (ls->players)
+			free_players(ls);
+		if (ls->processes_list)
+			free_proc(ls->processes_list);
+		ls->processes_list = NULL;
+		if (ls->args)
+			free(ls->args);
+		ls->args = NULL;
+		free(ls);
+	}
 }
 
 void				game_end(t_core *ls)
@@ -379,10 +394,11 @@ void				game_end(t_core *ls)
 	}
 	if (ls->args->fl_visual == 0)
 		print_winner(ls, winner_num);
-	free_core(ls);
+
 	if (ls->args->fl_visual == 1)
 		end_draw((ls->players)[(winner_num - 1)]);
-	exit(-1);
+	free_core(ls);
+	exit(0);
 }
 
 int					calculate_processes_and_0lives(t_proc *proc)
@@ -481,7 +497,8 @@ void				armageddon(t_core *ls)
 	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
 	{
 		print_data(ls->field, MEM_SIZE, ls->args->width_dump);
-		exit(-1);
+		free_core(ls);
+		exit(0);
 	}
 	if (ls->cycle == ls->next_cycle_to_die)
 	{
@@ -512,7 +529,6 @@ void				preparate(t_core *ls, int argc, char **argv)
 	vm_sort_player(ls->args);
 	ls->players = ls->args->player;
 	init_my_player_and_process(ls);
-	// introduce()
 	if (ls->args->fl_visual == 1)
 		ls->args->num_debug = 0;
 }
