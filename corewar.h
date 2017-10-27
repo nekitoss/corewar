@@ -94,8 +94,8 @@ typedef struct		s_my_op
 	char			type_of_params[3];
 	char			function_num;
 	int				cycles_to_exec;
-	char			is_codage;
 	char			bytes_for_tdir;
+	char			*name;
 }					g_my_op;
 
 
@@ -130,49 +130,37 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func);
 void				f_aff(t_core *ls, t_proc *proc, g_my_op *func);
 
-
-
-#if VIZU
 #include "viz/viz.h"
-#endif
 
-int			ft_exit(char *str);
-void		vm_init_struct(t_arg **ptr);
-t_arg		*vm_valid(int argc, char **argv);
-void		valid_filename(char **argv, t_arg *ptr);
-void		sv_path_player(char *argv, t_arg *ptr, int *fl);
-int			find_ext_to_end(char *argv);
-void		sv_number_player(char *argv, t_arg *ptr, int *fl);
-void		set_num_player(t_arg *ptr);
-int			vm_valid_data_file(t_arg *ptr);
-int			vm_init_struct_player(t_arg **ptr);
-void		vm_check_magic_byte(int fd);
-void		vm_check_null(int fd, int num);
-void		vm_hndl_name(t_player *player, int fd);
-void		vm_hndl_comment(t_player *player, int fd);
-void		vm_hndl_size_code(t_player *player, int fd);
-void		vm_hndl_code(t_player *player, int fd);
-void		ft_exit_name_file(t_player *player, char *str1, char *str2);
-void		ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3);
-void		hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str);
-void		hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str);
-int			valid_val_arg(char *argv, char **cur);
-// int ft_exit(char *str)
-// void 	ft_exit_name_file(t_player *player, char *str1, char *str2)
-void		for_test(t_arg *ptr);
-void		vm_sort_player(t_arg *ptr);
-void		vm_show_usage(void);
-void		valid_flags(t_arg *ptr);
-void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
-int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
-void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
-void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
-void		srch_dublicate_num_player(t_arg *ptr);
-int			ft_parse_cmd_line(t_arg *ptr, char **argv, int *fl, int *i);
-void		hndl_cmd_arg_n(char **argv, t_arg *ptr);
-int			valid_val_arg(char *argv, char **cur);
-
-
+int					ft_exit(char *str);
+void				vm_init_struct(t_arg **ptr);
+t_arg				*vm_valid(int argc, char **argv);
+void				valid_filename(char **argv, t_arg *ptr);
+void				sv_path_player(char *argv, t_arg *ptr, int *fl);
+int					find_ext_to_end(char *argv);
+void				sv_number_player(char *argv, t_arg *ptr, int *fl);
+void				set_num_player(t_arg *ptr);
+int					vm_valid_data_file(t_arg *ptr);
+int					vm_init_struct_player(t_arg **ptr);
+void				vm_check_magic_byte(int fd);
+void				vm_check_null(int fd, int num);
+void				vm_hndl_name(t_player *player, int fd);
+void				vm_hndl_comment(t_player *player, int fd);
+void				vm_hndl_size_code(t_player *player, int fd);
+void				vm_hndl_code(t_player *player, int fd);
+void				ft_exit_name_file(t_player *player, char *str1, char *str2);
+void				ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3);
+void				hndl_cmd_arg_visual(char **argv, t_arg *ptr, char *str);
+void				hndl_cmd_arg_wide(char **argv, t_arg *ptr, char *str);
+int					valid_val_arg(char *argv, char **cur);
+void				for_test(t_arg *ptr);
+void				vm_sort_player(t_arg *ptr);
+void				vm_show_usage(void);
+void				valid_flags(t_arg *ptr);
+void				ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
+int					hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
+void				hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
+void				hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
 void				convert_param_to_data(t_proc *proc, int par_num);
 void				convert_param_to_data_no_idx(t_proc *proc, int par_num);
 unsigned char		ident_param(unsigned char coding_byte, int param_num);
@@ -199,4 +187,14 @@ int					calculate_processes_and_0lives(t_proc *proc);
 int					kill_processes(t_proc **head, t_core *ls);
 void				empty_player_lives(t_core *ls);
 void				armageddon(t_core *ls);
+void				hex_print(unsigned char val);
+void				print_winner(t_core *ls, int winner_num);
+void				free_players(t_core *ls);
+void				free_proc(t_proc *pr);
+void				free_core(t_core *ls);
+void				debug_8(t_core *ls, size_t a, size_t b, size_t c);
+void				debug_2_1(size_t a);
+void				debug_2_2(size_t a);
+void				preparate(t_core *ls, int argc, char **argv);
+
 #endif

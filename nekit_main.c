@@ -1,29 +1,28 @@
-#define VIZU 1
-
 #include "corewar.h"
 
 g_my_op				g_tab[17] =
 {
-	{0, 0, {0, 0, 0}, 0, 0, 0, 0},
-	{f_live, 1, {T_DIR, 0, 0}, 1, 10, 0, 4},
-	{f_ld, 2, {T_DIR | T_IND, T_REG, 0}, 2, 5, 1, 4},
-	{f_st, 2, {T_REG, T_IND | T_REG, 0}, 3, 5, 1, 0},
-	{f_add, 3, {T_REG, T_REG, T_REG}, 4, 10, 1, 0},
-	{f_sub, 3, {T_REG, T_REG, T_REG}, 5, 10, 1, 0},
+	{0, 0, {0, 0, 0}, 0, 0, 0, ""},
+	{f_live, 1, {T_DIR, 0, 0}, 1, 10, 4, "live"},
+	{f_ld, 2, {T_DIR | T_IND, T_REG, 0}, 2, 5, 4, "ld"},
+	{f_st, 2, {T_REG, T_IND | T_REG, 0}, 3, 5, 0, "st"},
+	{f_add, 3, {T_REG, T_REG, T_REG}, 4, 10, 0, "add"},
+	{f_sub, 3, {T_REG, T_REG, T_REG}, 5, 10, 0, "sub"},
 	{f_and, 3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG},
-		6, 6, 1, 4},
+		6, 6, 4, "and"},
 	{f_or, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},
-		7, 6, 1, 4},
+		7, 6, 4, "or"},
 	{f_xor, 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG},
-		8, 6, 1, 4},
-	{f_zjmp, 1, {T_DIR, 0, 0}, 9, 20, 0, 2},
-	{f_ldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 10, 25, 1, 2},
-	{f_sti, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25, 1, 2},
-	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 0, 2},
-	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 1, 4},
-	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 1, 2},
-	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 0, 2},
-	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 1, 0}
+		8, 6, 4, "xor"},
+	{f_zjmp, 1, {T_DIR, 0, 0}, 9, 20, 2, "zjmp"},
+	{f_ldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 10, 25, 2, "ldi"},
+	{f_sti, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25, 2, "sti"},
+	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 2, "fork"},
+	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 4, "lld"},
+	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 2,
+		"lldi"},
+	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 2, "lfork"},
+	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 0, "aff"}
 };
 
 void				convert_param_to_data(t_proc *proc, int par_num)
@@ -201,11 +200,11 @@ void				print_data(unsigned char *str, size_t len, size_t width)
 	while (i < len)
 	{
 		if (i != 0 && i % width == 0)
-			printf("\n");
-		printf(" %02x", str[i]);
+			ft_putendl("");
+		hex_print(str[i]);
 		i++;
 	}
-	printf("\n");
+	ft_putendl("");
 }
 
 void				shift_pc(size_t *pc, unsigned int value)
@@ -322,6 +321,59 @@ void				clone_proc(t_proc *father, t_proc *son)
 	}
 }
 
+void				print_winner(t_core *ls, int winner_num)
+{
+	ft_putstr("GAME_ENDED on cycle");
+	ft_putnbr_u(ls->cycle);
+	ft_putendl("");
+	ft_putstr("The winner is: player ");
+	ft_putnbr(winner_num);
+	ft_putstr(", \"");
+	ft_putstr(((ls->players)[(winner_num - 1)])->name);
+	ft_putendl("\"");
+}
+
+
+void				free_players(t_core *ls)
+{
+	int i;
+
+	i = 0;
+	while (i < ls->num_of_players)
+	{
+		ft_strdel(&(((ls->players)[i])->name));
+		ft_strdel(&(((ls->players)[i])->comment));
+		if (((ls->players)[i])->program_code)
+			free(((ls->players)[i])->program_code);
+		ft_strdel(&(((ls->players)[i])->path_player));
+	}
+	free(ls->players);
+	ls->players = NULL;
+}
+
+void				free_proc(t_proc *pr)
+{
+	if (pr->next)
+		free_proc(pr->next);
+	free(pr);
+}
+
+void				free_core(t_core *ls)
+{
+	if (ls)
+	{
+		if (ls->players)
+			free_players(ls);
+		if (ls->processes_list)
+			free_proc(ls->processes_list);
+		ls->processes_list = NULL;
+		if (ls->args)
+			free(ls->args);
+		ls->args = NULL;
+		free(ls);
+	}
+}
+
 void				game_end(t_core *ls)
 {
 	int		i;
@@ -341,17 +393,12 @@ void				game_end(t_core *ls)
 		i++;
 	}
 	if (ls->args->fl_visual == 0)
-	{
-		printf("GAME_ENDED on cycle %zu\n", ls->cycle);
-		printf("The winner is: player %d, \"%s\"\n",
-			winner_num, ((ls->players)[(winner_num - 1)])->name);
-	}
-	//free structure
-#if VIZU
+		print_winner(ls, winner_num);
+
 	if (ls->args->fl_visual == 1)
 		end_draw((ls->players)[(winner_num - 1)]);
-#endif
-	exit(-1);
+	free_core(ls);
+	exit(0);
 }
 
 int					calculate_processes_and_0lives(t_proc *proc)
@@ -368,33 +415,42 @@ int					calculate_processes_and_0lives(t_proc *proc)
 	return (sum);
 }
 
+void				debug_8(t_core *ls, size_t a, size_t b, size_t c)
+{
+	if (ls->args->num_debug & 8)
+	{
+		ft_putstr("Process ");
+		ft_putnbr_u(a);
+		ft_putstr(" hasn't lived for ");
+		ft_putnbr_u(b);
+		ft_putstr(" cycles (CTD ");
+		ft_putnbr_u(c + CYCLE_DELTA);
+		ft_putendl(")");
+	}
+}
+
 int					kill_processes(t_proc **head, t_core *ls)
 {
 	t_proc	*ptr;
-	t_proc	*tmp;
+	t_proc	*t;
 
 	ptr = *head;
 	while (ptr)
 	{
 		if (ptr == *head && !(ptr->is_alive))
 		{
-			tmp = ptr;
+			t = ptr;
 			*head = ptr->next;
 			ptr = *head;
-			if (ls->args->num_debug & 8)
-				printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
-					tmp->number, ls->cycle - tmp->alive_at, ls->cycle_to_die);
-			ft_strdel((char **)&(tmp));
+			debug_8(ls, t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			ft_strdel((char **)&(t));
 		}
 		else if (ptr->next && !(ptr->next->is_alive))
 		{
-			tmp = ptr->next;
+			t = ptr->next;
 			ptr->next = ptr->next->next;
-			if (ls->args->num_debug & 8)
-				printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
-					tmp->number, ls->cycle - tmp->alive_at,
-					ls->cycle_to_die + CYCLE_DELTA);
-			ft_memdel((void **)&(tmp));
+			debug_8(ls, t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			ft_memdel((void **)&(t));
 		}
 		else
 			ptr = ptr->next;
@@ -414,6 +470,26 @@ void				empty_player_lives(t_core *ls)
 		((ls->players)[i])->sum_lives_in_current_period = 0;
 		i++;
 	}
+	ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
+	ls->gen_lives_in_current_period = 0;
+	ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
+	ls->num_of_processes = kill_processes(&(ls->processes_list), ls);
+	if (!(ls->num_of_processes))
+		game_end(ls);
+}
+
+void				debug_2_1(size_t a)
+{
+	ft_putstr("It is now cycle ");
+	ft_putnbr(a);
+	ft_putendl("");
+}
+
+void				debug_2_2(size_t a)
+{
+	ft_putstr("Cycle to die is now ");
+	ft_putnbr(a);
+	ft_putendl("");
 }
 
 void				armageddon(t_core *ls)
@@ -421,7 +497,8 @@ void				armageddon(t_core *ls)
 	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
 	{
 		print_data(ls->field, MEM_SIZE, ls->args->width_dump);
-		exit(-1);
+		free_core(ls);
+		exit(0);
 	}
 	if (ls->cycle == ls->next_cycle_to_die)
 	{
@@ -432,7 +509,7 @@ void				armageddon(t_core *ls)
 			{
 				ls->cycle_to_die -= CYCLE_DELTA;
 				if (ls->args->num_debug & 2)
-					printf("Cycle to die is now %zu\n", ls->cycle_to_die);
+					debug_2_2(ls->cycle_to_die);
 				ls->nbr_of_checks = 0;
 			}
 			else
@@ -441,13 +518,20 @@ void				armageddon(t_core *ls)
 		else
 			(ls->nbr_of_checks)++;
 		empty_player_lives(ls);
-		ls->gen_lives_in_previous_period = ls->gen_lives_in_current_period;
-		ls->gen_lives_in_current_period = 0;
-		ls->next_cycle_to_die = ls->cycle + ls->cycle_to_die;
-		ls->num_of_processes = kill_processes(&(ls->processes_list), ls);
-		if (!(ls->num_of_processes))
-			game_end(ls);
 	}
+}
+
+void				preparate(t_core *ls, int argc, char **argv)
+{
+	if (argc == 1)
+		vm_show_usage();
+	ls->args = vm_valid(argc, argv);
+	for_test(ls->args);
+	vm_sort_player(ls->args);
+	ls->players = ls->args->player;
+	init_my_player_and_process(ls);
+	if (ls->args->fl_visual == 1)
+		ls->args->num_debug = 0;
 }
 
 int					main(int argc, char **argv)
@@ -456,24 +540,13 @@ int					main(int argc, char **argv)
 	t_proc	*current_process;
 
 	ls = ft_memalloc(sizeof(t_core));
-	if (argc == 1)
-		vm_show_usage();
-	ls->args = vm_valid(argc, argv);
-	for_test(ls->args);
-	vm_sort_player(ls->args);
-	ls->players = ls->args->player;
-	init_my_player_and_process(ls);
-	// introduce()
-	if (ls->args->fl_visual == 1)
-		ls->args->num_debug = 0;
-#if VIZU
+	preparate(ls, argc, argv);
 	if (ls->args->fl_visual == 1)
 		start_draw(ls);
-#endif
 	while (1)
 	{
 		if (ls->args->num_debug & 2 && ls->cycle)
-			printf("It is now cycle %zu\n", ls->cycle);
+			debug_2_1(ls->cycle);
 		armageddon(ls);
 		current_process = ls->processes_list;
 		while (current_process)
@@ -482,10 +555,8 @@ int					main(int argc, char **argv)
 				opcode(ls, current_process);
 			current_process = current_process->next;
 		}
-#if VIZU
 		if (ls->args->fl_visual == 1)
 			drawing(ls);
-#endif
 		(ls->cycle)++;
 	}
 	return (0);
