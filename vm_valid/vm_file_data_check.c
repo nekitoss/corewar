@@ -19,11 +19,11 @@ void	vm_check_magic_byte(int fd)
 
 	magic_byte = 4085508608;
 	if (lseek(fd, 0, 0) < 0)
-		ft_exit("Error lseek");
+		ft_exit("Error lseek\n");
 	if ((read(fd, &num, 4)) < 0)
-		ft_exit("Error: cannot read file");
+		ft_exit("Error: cannot read file\n");
 	if (magic_byte != num)
-		ft_exit("Error in magic byte, my friend!");
+		ft_exit("Error in magic byte, my friend!\n");
 }
 
 void 	vm_check_null(int fd, int fl)

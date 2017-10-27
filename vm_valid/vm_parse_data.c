@@ -62,6 +62,8 @@ void	ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur)
 		num = (size_t)ft_atoi(*cur);
 		if (ft_strcmp(*cur, ft_itoa(num)))
 			ft_exit("Error: to big number, my friend\n");
+		if (num == 0)
+			ft_exit("Error: number must be not zero, my friend\n");
 		ptr->width_dump = num;
 	}
 	else
@@ -125,6 +127,8 @@ void		vm_valid_arg(int argc, char **argv, t_arg *ptr)
 	valid_filename(argv, ptr);
 	valid_flags(ptr);
 	set_num_player(ptr);
+	srch_dublicate_num_player(ptr);
+
 }
 
 t_arg	*vm_valid(int argc, char **argv)

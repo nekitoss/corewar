@@ -167,6 +167,7 @@ void		ft_save_val_width(t_arg *ptr, char **argv, int i, char **cur);
 int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
+void		srch_dublicate_num_player(t_arg *ptr);
 
 
 void				convert_param_to_data(t_proc *proc, int par_num);

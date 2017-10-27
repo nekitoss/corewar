@@ -16,7 +16,7 @@
 void		valid_flags(t_arg *ptr)
 {
 	if (ptr->fl_dump == 0 && ptr->fl_width == 1)
-		ft_exit("Error: flag width cannot use without flag dump");
+		ft_exit("Error: flag width cannot use without flag dump\n");
 	if (ptr->cnt_player == 0)
 		vm_show_usage();
 }
@@ -38,7 +38,6 @@ void	srch_num_player(int *num, t_arg *ptr)
 		}
 		i++;
 	}
-
 	*num = num_player;
 }
 
@@ -49,7 +48,7 @@ void	set_num_player(t_arg *ptr)
 	i = 0;
 	while (i < ptr->cnt_player)
 	{
-		if (ptr->num[i] == 0)
+		if (ptr->num[i] == 0 )
 			srch_num_player(&(ptr->num[i]), ptr);
 		i++;
 	}
