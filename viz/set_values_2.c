@@ -112,12 +112,12 @@ void	set_last_breakdown(double a, double b, double c, double d)
 	int		i;
 
 	i = 1;
-	mvprintw(pos + 6, x_s + 2, "[");
-	mvprintw(pos + 6, x_s + 2 + 61, "]");
+	mvprintw(g_pos + 6, g_x_s + 2, "[");
+	mvprintw(g_pos + 6, g_x_s + 2 + 61, "]");
 	if (!a && !b && !c && !d)
 	{
 		while (i <= 60)
-			mvprintw(pos + 6, x_s + 2 + i++, "-");
+			mvprintw(g_pos + 6, g_x_s + 2 + i++, "-");
 		return ;
 	}
 	first = a / ((a + b + c + d) == 0 ? 1 : (a + b + c + d)) * 60 + 0.5;
