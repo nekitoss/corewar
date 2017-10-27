@@ -54,10 +54,13 @@ LIB = -L ./libft -lft
 
 LIBMAKE = make -C libft/
 
+MAKEASM = make -C assembler/
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(LIBMAKE) all
+	@$(MAKEASM) all
 	@$(CC) $(FLAGS) $(INC) $(LIB) $(OBJ) -lncurses -o $(NAME)
 	@echo  "\033[32mCompiled and created Corewar (VM) binary\033[0m"
 
@@ -65,10 +68,12 @@ $(NAME): $(OBJ)
 	@$(CC) $(INC) $(FAST) $(FLAGS) -c -o $@ $<
 
 clean: libclean
+	@$(MAKEASM) clean
 	@rm -f $(OBJ)
 	@echo "\033[01;31mCorewar (VM) object files deleted\033[0m"
 
 fclean: libfclean clean
+	@$(MAKEASM) fclean
 	@rm -rf *.dSYM
 	@rm -f $(NAME) a.out
 	@echo "\033[01;31mCorewar (VM) binary file deleted\033[0m"
