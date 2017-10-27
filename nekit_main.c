@@ -22,7 +22,7 @@ g_my_op				g_tab[17] =
 	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 2, "fork"},
 	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 4, "lld"},
 	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 2,
-																		"lldi"},
+		"lldi"},
 	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 2, "lfork"},
 	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 0, "aff"}
 };
@@ -202,12 +202,11 @@ void				print_data(unsigned char *str, size_t len, size_t width)
 	while (i < len)
 	{
 		if (i != 0 && i % width == 0)
-			ft_putendl(""); // printf("\n");
-		// printf(" %02x", str[i]);
+			ft_putendl("");
 		hex_print(str[i]);
 		i++;
 	}
-	ft_putendl("");// printf("\n");
+	ft_putendl("");
 }
 
 void				shift_pc(size_t *pc, unsigned int value)
@@ -403,7 +402,6 @@ int					kill_processes(t_proc **head, t_core *ls)
 			*head = ptr->next;
 			ptr = *head;
 			if (ls->args->num_debug & 8)
-				// printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
 				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
 			ft_strdel((char **)&(t));
 		}
@@ -412,7 +410,6 @@ int					kill_processes(t_proc **head, t_core *ls)
 			t = ptr->next;
 			ptr->next = ptr->next->next;
 			if (ls->args->num_debug & 8)
-				// printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
 				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
 			ft_memdel((void **)&(t));
 		}
@@ -466,7 +463,7 @@ void				armageddon(t_core *ls)
 			{
 				ls->cycle_to_die -= CYCLE_DELTA;
 				if (ls->args->num_debug & 2)
-					debug_2_2(ls->cycle_to_die);// printf("Cycle to die is now %zu\n", ls->cycle_to_die);
+					debug_2_2(ls->cycle_to_die);
 				ls->nbr_of_checks = 0;
 			}
 			else
@@ -506,7 +503,7 @@ int					main(int argc, char **argv)
 	while (1)
 	{
 		if (ls->args->num_debug & 2 && ls->cycle)
-			debug_2_1(ls->cycle);// printf("It is now cycle %zu\n", ls->cycle);
+			debug_2_1(ls->cycle);
 		armageddon(ls);
 		current_process = ls->processes_list;
 		while (current_process)
