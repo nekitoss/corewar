@@ -38,12 +38,11 @@ void	vm_init_struct(t_arg **ptr)
 	(*ptr)->num[3] = 0;
 }
 
-int 	vm_init_struct_player(t_arg **ptr)
+int		vm_init_struct_player(t_arg **ptr)
 {
 	int i;
-	
-	i = 0;
 
+	i = 0;
 	(*ptr)->player = (t_player**)malloc(sizeof(t_player*) * 4);
 	if ((*ptr)->player == NULL)
 		ft_exit("Could not allocation memory");

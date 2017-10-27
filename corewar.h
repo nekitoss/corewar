@@ -168,6 +168,9 @@ int			hndl_cmd_arg_debug(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_music(char **argv, t_arg *ptr, char *str);
 void		hndl_cmd_arg_original(char **argv, t_arg *ptr, char *str);
 void		srch_dublicate_num_player(t_arg *ptr);
+int			ft_parse_cmd_line(t_arg *ptr, char **argv, int *fl, int *i);
+void		hndl_cmd_arg_n(char **argv, t_arg *ptr);
+int			valid_val_arg(char *argv, char **cur);
 
 
 void				convert_param_to_data(t_proc *proc, int par_num);
