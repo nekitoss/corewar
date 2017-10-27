@@ -32,9 +32,12 @@ void	n_pause(void)
 
 void	stop_and_exit(int signal)
 {
-	if (signal != 2)
-		return ;
-	system("killall afplay");
+    if (g_m)
+    {
+        if (signal != 2)
+            return ;
+        system("killall afplay");
+    }
 	endwin();
 	exit(-1);
 }
