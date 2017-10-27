@@ -31,7 +31,8 @@ SRC = nekit_main.c\
 		./viz/start_draw.c\
 		./viz/help.c\
 		./vm/functions.c\
-		./vm/hex_print.c
+		./vm/hex_print.c\
+		./vm_valid/vm_parse_data2.c
 
 OBJ = $(SRC:.c=.o)
 

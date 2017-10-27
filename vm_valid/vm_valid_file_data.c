@@ -33,7 +33,6 @@ void	vm_check_file_structure(t_player *player)
 		ft_exit("Error lseek\n");
 	if (offset == 0)
 	{
-		free_core(player);
 		ft_exit_name_file(player, "Error: file too small: ", " it's "
 		"empty my friend\n");
 	}
