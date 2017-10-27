@@ -20,7 +20,8 @@ void    n_pause(void)
 
 void    stop_and_exit(int signal)
 {
-    signal = 0;
+    if (signal != 2)
+        return;
     system("killall afplay");
     endwin();
     exit(-1);
@@ -36,5 +37,5 @@ void    end_draw(t_player *player)
     attroff(A_BOLD);
     nodelay(stdscr, false);
     getch();
-    stop_and_exit(0);
+    stop_and_exit(2);
 }
