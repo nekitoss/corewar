@@ -18,6 +18,14 @@ void    n_pause(void)
     attroff(A_BOLD);
 }
 
+void    stop_and_exit(int signal)
+{
+    signal = 0;
+    system("killall afplay");
+    endwin();
+    exit(-1);
+}
+
 void    end_draw(t_player *player)
 {
     attron(A_BOLD);
@@ -28,6 +36,5 @@ void    end_draw(t_player *player)
     attroff(A_BOLD);
     nodelay(stdscr, false);
     getch();
-    // system("killall afplay");
-    endwin();
+    stop_and_exit(0);
 }
