@@ -21,7 +21,8 @@ g_my_op				g_tab[17] =
 	{f_sti, 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25, 2, "sti"},
 	{f_fork, 1, {T_DIR, 0, 0}, 12, 800, 2, "fork"},
 	{f_lld, 2, {T_DIR | T_IND, T_REG, 0}, 13, 10, 4, "lld"},
-	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 2, "lldi"},
+	{f_lldi, 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50, 2,
+																		"lldi"},
 	{f_lfork, 1, {T_DIR, 0, 0}, 15, 1000, 2, "lfork"},
 	{f_aff, 1, {T_REG, 0, 0}, 16, 2, 0, "aff"}
 };
@@ -201,11 +202,12 @@ void				print_data(unsigned char *str, size_t len, size_t width)
 	while (i < len)
 	{
 		if (i != 0 && i % width == 0)
-			printf("\n");
-		printf(" %02x", str[i]);
+			ft_putendl(""); // printf("\n");
+		// printf(" %02x", str[i]);
+		hex_print(str[i]);
 		i++;
 	}
-	printf("\n");
+	ft_putendl("");// printf("\n");
 }
 
 void				shift_pc(size_t *pc, unsigned int value)
@@ -322,6 +324,18 @@ void				clone_proc(t_proc *father, t_proc *son)
 	}
 }
 
+void				print_winner(t_core *ls, int winner_num)
+{
+	ft_putstr("GAME_ENDED on cycle");
+	ft_putnbr_u(ls->cycle);
+	ft_putendl("");
+	ft_putstr("The winner is: player ");
+	ft_putnbr(winner_num);
+	ft_putstr(", \"");
+	ft_putstr(((ls->players)[(winner_num - 1)])->name);
+	ft_putendl("\"");
+}
+
 void				game_end(t_core *ls)
 {
 	int		i;
@@ -341,11 +355,7 @@ void				game_end(t_core *ls)
 		i++;
 	}
 	if (ls->args->fl_visual == 0)
-	{
-		printf("GAME_ENDED on cycle %zu\n", ls->cycle);
-		printf("The winner is: player %d, \"%s\"\n",
-			winner_num, ((ls->players)[(winner_num - 1)])->name);
-	}
+		print_winner(ls, winner_num);
 	//free structure
 #if VIZU
 	if (ls->args->fl_visual == 1)
@@ -368,33 +378,43 @@ int					calculate_processes_and_0lives(t_proc *proc)
 	return (sum);
 }
 
+void				debug_8(size_t a, size_t b, size_t c)
+{
+	ft_putstr("Process ");
+	ft_putnbr_u(a);
+	ft_putstr(" hasn't lived for ");
+	ft_putnbr_u(b);
+	ft_putstr(" cycles (CTD ");
+	ft_putnbr_u(c + CYCLE_DELTA);
+	ft_putendl(")");
+}
+
 int					kill_processes(t_proc **head, t_core *ls)
 {
 	t_proc	*ptr;
-	t_proc	*tmp;
+	t_proc	*t;
 
 	ptr = *head;
 	while (ptr)
 	{
 		if (ptr == *head && !(ptr->is_alive))
 		{
-			tmp = ptr;
+			t = ptr;
 			*head = ptr->next;
 			ptr = *head;
 			if (ls->args->num_debug & 8)
-				printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
-					tmp->number, ls->cycle - tmp->alive_at, ls->cycle_to_die);
-			ft_strdel((char **)&(tmp));
+				// printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
+				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			ft_strdel((char **)&(t));
 		}
 		else if (ptr->next && !(ptr->next->is_alive))
 		{
-			tmp = ptr->next;
+			t = ptr->next;
 			ptr->next = ptr->next->next;
 			if (ls->args->num_debug & 8)
-				printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
-					tmp->number, ls->cycle - tmp->alive_at,
-					ls->cycle_to_die + CYCLE_DELTA);
-			ft_memdel((void **)&(tmp));
+				// printf("Process %zu hasn't lived for %zu cycles (CTD %zu)\n",
+				debug_8(t->number, ls->cycle - t->alive_at, ls->cycle_to_die);
+			ft_memdel((void **)&(t));
 		}
 		else
 			ptr = ptr->next;
@@ -416,6 +436,20 @@ void				empty_player_lives(t_core *ls)
 	}
 }
 
+void				debug_2_1(size_t a)
+{
+	ft_putstr("It is now cycle ");
+	ft_putnbr(a);
+	ft_putendl("");
+}
+
+void				debug_2_2(size_t a)
+{
+	ft_putstr("Cycle to die is now ");
+	ft_putnbr(a);
+	ft_putendl("");
+}
+
 void				armageddon(t_core *ls)
 {
 	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
@@ -432,7 +466,7 @@ void				armageddon(t_core *ls)
 			{
 				ls->cycle_to_die -= CYCLE_DELTA;
 				if (ls->args->num_debug & 2)
-					printf("Cycle to die is now %zu\n", ls->cycle_to_die);
+					debug_2_2(ls->cycle_to_die);// printf("Cycle to die is now %zu\n", ls->cycle_to_die);
 				ls->nbr_of_checks = 0;
 			}
 			else
@@ -472,7 +506,7 @@ int					main(int argc, char **argv)
 	while (1)
 	{
 		if (ls->args->num_debug & 2 && ls->cycle)
-			printf("It is now cycle %zu\n", ls->cycle);
+			debug_2_1(ls->cycle);// printf("It is now cycle %zu\n", ls->cycle);
 		armageddon(ls);
 		current_process = ls->processes_list;
 		while (current_process)

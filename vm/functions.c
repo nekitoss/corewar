@@ -28,34 +28,23 @@ void				debug_4(t_proc *proc, g_my_op *func, int r)
 	ft_putnbr_u(proc->number);
 	ft_putstr(" | ");
 	ft_putstr(func->name);
-	
 	ft_putchar(' ');
 	(r & 1) ? ft_putchar('r') : 0;
-	ft_putnbr(P_PAR[0])
+	ft_putnbr(P_PAR[0]);
 	if (func->function_num == 9)
 		ft_putstr((proc->carry) ? " OK" : " FAILED");
 	if (func->num_of_params > 1)
 	{
 		ft_putchar(' ');
 		(r & 2) ? ft_putchar('r') : 0;
-		ft_putnbr(P_PAR[1])
+		ft_putnbr(P_PAR[1]);
 	}
 	if (func->num_of_params > 2)
 	{
 		ft_putchar(' ');
 		(r & 4) ? ft_putchar('r') : 0;
-		ft_putnbr(P_PAR[2])
+		ft_putnbr(P_PAR[2]);
 	}
-	ft_putendl("");
-}
-
-void				debug_1()
-{
-	ft_putstr("");
-	ft_putstr("");
-	ft_putstr("");
-	ft_putstr("");
-	ft_putstr("");
 	ft_putendl("");
 }
 
@@ -73,13 +62,12 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 		alive_num = (alive_num * (-1)) - 1;
 		(((ls->players)[alive_num])->sum_lives_in_current_period)++;
 		((ls->players)[alive_num])->last_live = ls->cycle;
-		if (ls->args->num_debug & 1)// {printf("Player %d (%s) is said to be alive\n", 
+		if (ls->args->num_debug & 1)// {printf("Player %d (%s) is said to be alive\n",
 			debug_1((alive_num + 1) * -1, ((ls->players)[alive_num])->name);
 	}
 	(ls->gen_lives_in_current_period)++;
 	proc->is_alive = TRUE;
 	proc->alive_at = ls->cycle;
-
 }
 
 void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
@@ -108,13 +96,13 @@ void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 {
 	int what;
 	int where;
-	int tmp;
 
 	P_COD_B = read_data_block(ls, proc->old_pc + 1, 1);
 	shift_pc(&(proc->pc), 2);
 	if (read_non_conv_parameters_and_shift(func, proc))
 	{
-		tmp = P_PAR[0];
+		if (ls->args->num_debug & 4)// {printf("P%5zu | %s r%d %d\n", proc->number, func->name, tmp, P_PAR[1]);}
+			debug_4(proc, func, 1);
 		convert_param_to_data(proc, 0);
 		what = P_PAR[0];
 		if (ident_param(P_COD_B, 1) & T_REG)
@@ -124,8 +112,6 @@ void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 			where = ((P_PAR[1] % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
 			write_data_block(proc, what, where, 4);
 		}
-		if (ls->args->num_debug & 4)// {printf("P%5zu | %s r%d %d\n", proc->number, func->name, tmp, P_PAR[1]);}
-			debug_4(proc, func, 1);
 	}
 }
 
@@ -252,6 +238,7 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 		where = read_data_block(ls, proc->old_pc + 1, 2) % IDX_MOD;
 	else
 		where = 3;
+	P_PAR[0] = read_data_block(ls, proc->old_pc + 1, 2) % IDX_MOD;
 	if (ls->args->num_debug & 4)// {printf("P%5zu | %s %d %s\n", proc->number, func->name, read_data_block(ls, proc->old_pc + 1, 2), ((proc->carry) ? "OK" : "FAILED"));}
 		debug_4(proc, func, 0);
 	shift_pc(&(proc->pc), where);
@@ -268,12 +255,13 @@ void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data(proc, 0);
 		convert_param_to_data(proc, 1);
-		what = read_data_block(ls ,((int)proc->old_pc + ((P_PAR[0] + P_PAR[1]) % IDX_MOD)), 4);
+		what = read_data_block(ls,
+				((int)proc->old_pc + ((P_PAR[0] + P_PAR[1]) % IDX_MOD)), 4);
 		where = P_PAR[2];
 		P_REG[where] = what;
 		if (ls->args->num_debug & 4)// {printf("P%5zu | %s %d %d r%d\n", proc->number, func->name, P_PAR[0], P_PAR[1], P_PAR[2]);
-		debug_4(proc, func, 4);
-						{printf("       | -> load from %d + %d = %d (with pc and mod %d)\n", P_PAR[0], P_PAR[1], P_PAR[0] + P_PAR[1], ((int)proc->old_pc + ((P_PAR[0] + P_PAR[1]) % IDX_MOD)));}
+			debug_4(proc, func, 4);
+						// {printf("       | -> load from %d + %d = %d (with pc and mod %d)\n", P_PAR[0], P_PAR[1], P_PAR[0] + P_PAR[1], ((int)proc->old_pc + ((P_PAR[0] + P_PAR[1]) % IDX_MOD)));}
 	}
 }
 
@@ -289,11 +277,12 @@ void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
 		what = P_REG[P_PAR[0]];
 		convert_param_to_data(proc, 1);
 		convert_param_to_data(proc, 2);
-		where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD) + (int)proc->old_pc) % MEM_SIZE;
+		where = (((P_PAR[1] + P_PAR[2]) % IDX_MOD)
+					+ (int)proc->old_pc) % MEM_SIZE;
 		write_data_block(proc, what, where, 4);
 		if (ls->args->num_debug & 4)// {printf("P%5zu | %s r%d %d %d\n", proc->number, func->name, P_PAR[0], P_PAR[1], P_PAR[2]);
 			debug_4(proc, func, 1);
-						{printf("       | -> store to %d + %d = %d (with pc and mod %d)\n", P_PAR[1], P_PAR[2], P_PAR[1] + P_PAR[2], ((int)proc->old_pc + ((P_PAR[1] + P_PAR[2]) % IDX_MOD)));}
+						// {printf("       | -> store to %d + %d = %d (with pc and mod %d)\n", P_PAR[1], P_PAR[2], P_PAR[1] + P_PAR[2], ((int)proc->old_pc + ((P_PAR[1] + P_PAR[2]) % IDX_MOD)));}
 	}
 }
 
@@ -303,6 +292,7 @@ void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
 
 	shift_pc(&(proc->pc), 3);
 	where = read_data_block(ls, proc->old_pc + 1, 2);
+	P_PAR[0] = where;
 	if (ls->args->num_debug & 4)// {printf("P%5zu | %s %d ", proc->number, func->name, where);}
 		debug_4(proc, func, 0);
 	where = (int)proc->old_pc + (where % IDX_MOD);
@@ -347,12 +337,13 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 	{
 		convert_param_to_data(proc, 0);
 		convert_param_to_data(proc, 1);
-		what = read_data_block(ls ,(int)proc->old_pc + (P_PAR[0] + P_PAR[1]), 4);
+		what = read_data_block(ls,
+				(int)proc->old_pc + (P_PAR[0] + P_PAR[1]), 4);
 		where = P_PAR[2];
 		P_REG[where] = what;
 		if (ls->args->num_debug & 4)// {printf("P%5zu | %s %d %d r%d\n", proc->number, func->name, P_PAR[0], P_PAR[1], P_PAR[2]);
 			debug_4(proc, func, 4);
-						{printf("       |  -> load from %d + %d = %d (with pc %d)\n", P_PAR[0], P_PAR[1], P_PAR[0] + P_PAR[1], (int)proc->old_pc + (P_PAR[0] + P_PAR[1]));}
+						// {printf("       |  -> load from %d + %d = %d (with pc %d)\n", P_PAR[0], P_PAR[1], P_PAR[0] + P_PAR[1], (int)proc->old_pc + (P_PAR[0] + P_PAR[1]));}
 	}
 }
 

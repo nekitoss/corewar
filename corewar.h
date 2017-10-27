@@ -196,4 +196,5 @@ int					calculate_processes_and_0lives(t_proc *proc);
 int					kill_processes(t_proc **head, t_core *ls);
 void				empty_player_lives(t_core *ls);
 void				armageddon(t_core *ls);
+void				hex_print(unsigned char val);
 #endif
