@@ -199,5 +199,5 @@ void				debug_8(t_core *ls, size_t a, size_t b, size_t c);
 void				debug_2_1(size_t a);
 void				debug_2_2(size_t a);
 void				preparate(t_core *ls, int argc, char **argv);
-
+void				debug_4(t_proc *proc, g_my_op *func, int r);
 #endif

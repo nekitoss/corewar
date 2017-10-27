@@ -13,7 +13,7 @@ FLAGS = -Wall -Wextra -Werror
 
 NAME = corewar
 
-SRC = nekit_main.c\
+SRC = ./vm/nekit_main.c\
 		main.c\
 		init_struct.c\
 		./vm_valid/valid_file_cmd_name.c\
@@ -30,9 +30,19 @@ SRC = nekit_main.c\
 		./viz/set_values_2.c\
 		./viz/start_draw.c\
 		./viz/help.c\
-		./vm/functions.c\
 		./vm/hex_print.c\
-		./vm_valid/vm_parse_data2.c
+		./vm_valid/vm_parse_data2.c\
+		./vm/func1.c\
+		./vm/func2.c\
+		./vm/func3.c\
+		./vm/func4.c\
+		./vm/func5.c\
+		./vm/func6.c\
+		./vm/func7.c\
+		./vm/func8.c\
+		./vm/func9.c\
+		./vm/func10.c\
+		./vm/func11.c
 
 OBJ = $(SRC:.c=.o)
 
