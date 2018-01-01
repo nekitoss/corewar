@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func5.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:41:02 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:41:03 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:41:02 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:41:03 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ unsigned char		ident_param(unsigned char coding_byte, int param_num)
 	return (coding_byte);
 }
 
-int					calculate_pc_shift(g_my_op *func, unsigned char coding_byte,
+int					calculate_pc_shift(t_my_op *func, unsigned char coding_byte,
 																	int par_num)
 {
 	coding_byte = ident_param(coding_byte, par_num);
@@ -69,7 +69,7 @@ int					calculate_pc_shift(g_my_op *func, unsigned char coding_byte,
 		return (0);
 }
 
-int					read_non_conv_parameters_and_shift(g_my_op *func,
+int					read_non_conv_parameters_and_shift(t_my_op *func,
 															t_proc *proc)
 {
 	int			i;

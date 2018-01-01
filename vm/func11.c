@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func11.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:44:26 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:44:27 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:44:26 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:44:27 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void				armageddon(t_core *ls)
 	if (ls->args->fl_dump && ls->cycle == ls->args->num_dump)
 	{
 		print_data(ls->field, MEM_SIZE, ls->args->width_dump);
-		free_core(ls);
 		exit(0);
 	}
 	if (ls->cycle == ls->next_cycle_to_die)

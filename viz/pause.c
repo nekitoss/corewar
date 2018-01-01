@@ -6,7 +6,7 @@
 /*   By: rhulam <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/27 18:21:54 by rhulam            #+#    #+#             */
-/*   Updated: 2017/10/27 18:22:57 by rhulam           ###   ########.fr       */
+/*   Updated: 2017/10/27 22:20:02 by rhulam           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,16 @@ void	n_pause(void)
 
 void	stop_and_exit(int signal)
 {
-    if (g_m)
-    {
-        if (signal != 2)
-            return ;
-        system("killall afplay");
-    }
+	if (g_m)
+	{
+		if (signal != 2 && signal != -100)
+			return ;
+		system("killall afplay");
+		endwin();
+		if (signal != -100)
+			exit(-1);
+	}
 	endwin();
-	exit(-1);
 }
 
 void	end_draw(t_player *player)
@@ -57,5 +59,5 @@ void	end_draw(t_player *player)
 	attroff(A_BOLD);
 	nodelay(stdscr, false);
 	getch();
-	stop_and_exit(2);
+	stop_and_exit(-100);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func8.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:41:21 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:41:22 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:41:21 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:41:22 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void				set_initial_code_color(char *colors, int pl_num, int len)
 	}
 }
 
-int					cmp_one_param(g_my_op *func, unsigned char coding_byte,
+int					cmp_one_param(t_my_op *func, unsigned char coding_byte,
 																int param_num)
 {
 	if (ident_param(coding_byte, param_num) & func->type_of_params[param_num])

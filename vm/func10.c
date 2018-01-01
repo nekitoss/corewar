@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func10.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:43:31 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:43:31 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:43:31 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:43:31 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void				game_end(t_core *ls)
 		print_winner(ls, winner_num);
 	if (ls->args->fl_visual == 1)
 		end_draw((ls->players)[(winner_num - 1)]);
-	free_core(ls);
 	exit(0);
 }
 

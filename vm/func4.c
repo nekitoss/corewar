@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   func4.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:34:26 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:40:56 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:34:26 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:40:56 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../corewar.h"
 
-void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_lld(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -37,7 +37,7 @@ void				f_lld(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_lldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -57,7 +57,7 @@ void				f_lldi(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_lfork(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int where;
 
@@ -70,7 +70,7 @@ void				f_lfork(t_core *ls, t_proc *proc, g_my_op *func)
 	clone_proc(proc, ls->processes_list);
 }
 
-void				f_aff(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_aff(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 

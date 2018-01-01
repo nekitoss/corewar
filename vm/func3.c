@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   func3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:34:21 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:34:22 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:34:21 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:34:22 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../corewar.h"
 
-void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_xor(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -35,7 +35,7 @@ void				f_xor(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_zjmp(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int where;
 
@@ -49,7 +49,7 @@ void				f_zjmp(t_core *ls, t_proc *proc, g_my_op *func)
 	shift_pc(&(proc->pc), where);
 }
 
-void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_ldi(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -69,7 +69,7 @@ void				f_ldi(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_sti(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -89,7 +89,7 @@ void				f_sti(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_fork(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_fork(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int where;
 

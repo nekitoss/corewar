@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   func2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:34:15 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:34:16 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:34:15 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:34:16 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../corewar.h"
 
-void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_st(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -35,7 +35,7 @@ void				f_st(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_add(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -58,7 +58,7 @@ void				f_add(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_sub(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -81,7 +81,7 @@ void				f_sub(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_and(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;
@@ -104,7 +104,7 @@ void				f_and(t_core *ls, t_proc *proc, g_my_op *func)
 	}
 }
 
-void				f_or(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_or(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;

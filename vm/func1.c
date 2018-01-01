@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpochuka <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nekitoss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/27 21:34:07 by mpochuka          #+#    #+#             */
-/*   Updated: 2017/10/27 21:34:09 by mpochuka         ###   ########.fr       */
+/*   Created: 2017/10/27 21:34:07 by nekitoss          #+#    #+#             */
+/*   Updated: 2017/10/27 21:34:09 by nekitoss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void				put_spaces(size_t num)
 		ft_putstr(" ");
 }
 
-void				debug_4(t_proc *proc, g_my_op *func, int r)
+void				debug_4(t_proc *proc, t_my_op *func, int r)
 {
 	ft_putchar('P');
 	put_spaces(proc->number);
@@ -60,7 +60,7 @@ void				debug_4(t_proc *proc, g_my_op *func, int r)
 	ft_putendl("");
 }
 
-void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_live(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int	alive_num;
 
@@ -82,7 +82,7 @@ void				f_live(t_core *ls, t_proc *proc, g_my_op *func)
 	proc->alive_at = ls->cycle;
 }
 
-void				f_ld(t_core *ls, t_proc *proc, g_my_op *func)
+void				f_ld(t_core *ls, t_proc *proc, t_my_op *func)
 {
 	int what;
 	int where;

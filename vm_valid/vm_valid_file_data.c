@@ -12,7 +12,7 @@
 
 #include "../corewar.h"
 
-void 	ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3)
+void	ft_exit_size_code(t_player *player, char *str1, char *str2, char *str3)
 {
 	char *size_code;
 
@@ -36,7 +36,7 @@ void	vm_check_file_structure(t_player *player)
 		ft_exit_name_file(player, "Error: file too small: ", " it's "
 		"empty my friend\n");
 	}
-	else if (offset < 4 )
+	else if (offset < 4)
 		ft_exit_name_file(player, "Error: file too small: ", "have'not magic nu"
 			"mber\n");
 	else if (offset < 132 && offset > 4)
