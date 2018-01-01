@@ -1,0 +1,10 @@
+*.cor
+*.s
+*.o
+*~
+*DS*
+.idea
+cmake-build-debug
+corewar
+*.out.txt
+.nfs*
